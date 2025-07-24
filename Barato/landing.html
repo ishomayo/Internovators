@@ -580,7 +580,7 @@
         <div class="sidebar">
             <div class="nav-section">
                 <div class="nav-title">Home</div>
-                <a href="landing.html" class="nav-item active" data-page="dashboard">
+                <a href="#" class="nav-item active" data-page="dashboard">
                     <div class="nav-icon">📊</div>
                     Dashboard
                 </a>
@@ -591,15 +591,15 @@
                     <div class="nav-icon">📦</div>
                     Inventory Management
                 </a>
-                <a href="#" class="nav-item" data-page="payroll">
+                <a href="payroll.html" class="nav-item" data-page="payroll">
                     <div class="nav-icon">💰</div>
                     Payroll
                 </a>
-                <a href="#" class="nav-item" data-page="expenses">
+                <a href="expenses.html" class="nav-item" data-page="expenses">
                     <div class="nav-icon">📈</div>
                     Expense Tracker
                 </a>
-                <a href="#" class="nav-item" data-page="support">
+                <a href="support.html" class="nav-item" data-page="support">
                     <div class="nav-icon">💬</div>
                     Communication & Support
                 </a>
@@ -809,20 +809,17 @@
             }
         });
 
-        // Navigation interactions
+        // Navigation interactions - Simplified to allow normal navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                item.classList.add('active');
-                
-                const page = item.dataset.page;
-                if (page !== 'dashboard') {
-                    setTimeout(() => {
-                        addMessage(`You've navigated to ${item.textContent.trim()}. This feature is coming soon! In the meantime, I can help you with questions about this area.`, 'bot');
-                        openChatbot();
-                    }, 300);
+                // Only handle dashboard clicks (no navigation needed)
+                if (item.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
                 }
+                // For all other links with actual hrefs, let the browser navigate normally
+                // Don't prevent default - this allows normal navigation to work
             });
         });
 
@@ -834,4 +831,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
