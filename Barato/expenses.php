@@ -3,7 +3,9 @@
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
   $sql = $db->query("SELECT * FROM expenses");
-  $total_expenses_sql = $db->query("SELECT SUM(amount) AS total_this_month FROM expenses WHERE created_at >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND created_at < DATE_FORMAT(CURRENT_DATE + INTERVAL 1 MONTH, '%Y-%m-01')");
+  $month_expenses_sql = $db->query("SELECT SUM(amount) AS total_this_month FROM expenses WHERE created_at >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND created_at < DATE_FORMAT(CURRENT_DATE + INTERVAL 1 MONTH, '%Y-%m-01')");
+  $total_expenses_sql = $db->query("SELECT SUM(amount) AS total FROM expenses");
+  $categories_sql = $db->query("SELECT DISTINCT category FROM expenses");
 ?>
 
 <!DOCTYPE html>
@@ -72,26 +74,27 @@
 
             <div class="stats-overview">
                 <div class="stat-card">
-                    <div class="stat-value">₱<?php 
+                    <div class="stat-value">
+                        ₱<?php 
                         foreach($total_expenses_sql as $row) { 
+                            ?> 
+                            <?= $row["total"] ?>
+                        <?php } ?>
+                    </div>
+                    <div class="stat-label">Total Expenses</div>
+                    <div class="stat-change stat-increase"></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value">
+                        ₱<?php 
+                        foreach($month_expenses_sql as $row) { 
                             ?> 
                             <?= $row["total_this_month"] ?>
                         <?php } ?>
                     </div>
-                    <div class="stat-label">Total Expenses</div>
-                    <div class="stat-change stat-increase">+5.2% from last month</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-value">₱8,500</div>
                     <div class="stat-label">This Month</div>
                     <div class="stat-change stat-decrease">-12% from last month</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-value">₱15,200</div>
-                    <div class="stat-label">Pending Approvals</div>
-                    <div class="stat-change">3 items waiting</div>
                 </div>
 
                 <div class="stat-card">
@@ -108,11 +111,10 @@
                             <button class="btn-primary" id="openExpenseModal">+ Add Expense</button>
                             <select class="filter-select">
                                 <option>All Categories</option>
-                                <option>Office Supplies</option>
-                                <option>Travel</option>
-                                <option>Marketing</option>
-                                <option>Utilities</option>
-                                <option>Meals</option>
+                                <?php 
+                                    foreach($categories_sql as $row) { ?>
+                                    <option><?= $row["category"] ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                         <input type="text" class="search-bar" placeholder="Search expenses...">
@@ -131,76 +133,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Jun 19, 2025</td>
-                                    <td>Office Supplies - Printer Paper</td>
-                                    <td><span class="category-badge category-office">Office</span></td>
-                                    <td>₱1,250</td>
-                                    <td>📄</td>
+                                <?php
+                                foreach($sql as $row) { ?>
+                                    <tr>
+                                    <td><?= $row["created_at"] ?></td>
+                                    <td><?= $row["description"] ?></td>
+                                    <td><span class="category-badge category-office"><?= $row["category"] ?></span></td>
+                                    <td><?= $row["amount"] ?></td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td>Jun 18, 2025</td>
-                                    <td>Business Trip to Cebu</td>
-                                    <td><span class="category-badge category-travel">Travel</span></td>
-                                    <td>₱8,500</td>
-                                    <td>📄</td>
-                                    <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Jun 17, 2025</td>
-                                    <td>Google Ads Campaign</td>
-                                    <td><span class="category-badge category-marketing">Marketing</span></td>
-                                    <td>₱5,000</td>
-                                    <td>📄</td>
-                                    <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Jun 16, 2025</td>
-                                    <td>Electricity Bill - June</td>
-                                    <td><span class="category-badge category-utilities">Utilities</span></td>
-                                    <td>₱3,200</td>
-                                    <td>📄</td>
-                                    <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Jun 15, 2025</td>
-                                    <td>Team Lunch Meeting</td>
-                                    <td><span class="category-badge category-meals">Meals</span></td>
-                                    <td>₱2,800</td>
-                                    <td>📄</td>
-                                    <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Jun 14, 2025</td>
-                                    <td>Software Subscription - Slack</td>
-                                    <td><span class="category-badge category-office">Office</span></td>
-                                    <td>₱1,500</td>
-                                    <td>📄</td>
-                                    <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Jun 13, 2025</td>
-                                    <td>Taxi to Client Meeting</td>
-                                    <td><span class="category-badge category-travel">Travel</span></td>
-                                    <td>₱450</td>
-                                    <td>📄</td>
-                                    <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
+                                    </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -233,11 +177,10 @@
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem;">Category</label>
                     <select id="expenseCategory" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
-                        <option value="Office">Office Supplies</option>
-                        <option value="Travel">Travel</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Utilities">Utilities</option>
-                        <option value="Meals">Meals</option>
+                        <?php 
+                        foreach($categories_sql as $row) { ?>
+                            <option value="<?= $row["category"] ?>"><?= $row["category"] ?></option>
+                        <?php } ?>
                     </select>
                     <button type="button" id="newCategoryBtn" style="margin-top: 0.5rem;" class="btn-secondary">+ Add New Category</button>
                 </div>
