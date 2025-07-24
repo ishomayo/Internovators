@@ -237,6 +237,13 @@
             max-height: 600px;
         }
 
+        .chat-icons{
+            flex:1;
+            height: 20px;
+            width: 20px;
+            gap: 1rem;
+        }
+
         .message {
             max-width: 70%;
             padding: 1rem 1.5rem;
@@ -245,6 +252,13 @@
             line-height: 1.6;
             animation: messageSlideIn 0.4s ease;
             position: relative;
+        }
+
+        .message.icon{
+            width: 30px;
+            height: 30px;
+            background-color: lightblue;
+            border-radius: 50%;
         }
 
         .message.bot {
@@ -566,6 +580,7 @@
                     </div>
 
                     <div class="chat-messages" id="chatMessages">
+                        <div class="message icon"></div>
                         <div class="message bot">
                             <div>
                                 Hello ka-SangkAI 😀🚀! I'm SangkAI 😎, your Business Support Assistant. I'm here to help you with any questions
