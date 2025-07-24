@@ -1,5 +1,5 @@
 <?php
-// chatbot_endpoint.php
+// knowledge_base.php - Enhanced chatbot with CSV knowledge base
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Configuration
 $apiKey = 'NjdhMGE3OTYtMWYxNi00M2YwLWJlZGYtMTFlZmZkN2EzMzRm';
 $baseUrl = 'https://ai-tools.rev21labs.com/api/v1/ai';
+$csvFile = 'Barato KB - KB.csv'; // Your CSV file path
 
 // Get input
 $input = json_decode(file_get_contents('php://input'), true);
@@ -23,6 +24,69 @@ if (empty($message)) {
     http_response_code(400);
     echo json_encode(['error' => 'Message is required']);
     exit;
+}
+
+/**
+ * Load and search knowledge base from CSV
+ */
+function searchKnowledgeBase($csvFile, $query) {
+    if (!file_exists($csvFile)) {
+        return null;
+    }
+    
+    $knowledgeBase = [];
+    $file = fopen($csvFile, 'r');
+    
+    // Get headers
+    $headers = fgetcsv($file);
+    if (!$headers) {
+        fclose($file);
+        return null;
+    }
+    
+    // Read data
+    while (($row = fgetcsv($file)) !== FALSE) {
+        $knowledgeBase[] = array_combine($headers, $row);
+    }
+    fclose($file);
+    
+    // Search for relevant entries
+    $query = strtolower($query);
+    $matches = [];
+    
+    foreach ($knowledgeBase as $entry) {
+        // Search in question/title field (adjust field names based on your CSV)
+        $question = strtolower($entry['question'] ?? $entry['title'] ?? '');
+        $keywords = strtolower($entry['keywords'] ?? '');
+        $content = strtolower($entry['answer'] ?? $entry['content'] ?? '');
+        
+        // Simple keyword matching (you can make this more sophisticated)
+        if (strpos($question, $query) !== false || 
+            strpos($keywords, $query) !== false ||
+            strpos($content, $query) !== false) {
+            $matches[] = $entry;
+        }
+    }
+    
+    return $matches;
+}
+
+/**
+ * Format knowledge base context for AI
+ */
+function formatKnowledgeContext($matches) {
+    if (empty($matches)) {
+        return '';
+    }
+    
+    $context = "\n\nRelevant information from knowledge base:\n";
+    foreach ($matches as $match) {
+        $question = $match['question'] ?? $match['title'] ?? 'N/A';
+        $answer = $match['answer'] ?? $match['content'] ?? 'N/A';
+        $context .= "Q: $question\nA: $answer\n\n";
+    }
+    
+    return $context;
 }
 
 /**
@@ -58,13 +122,20 @@ function getAiSession($apiKey, $baseUrl) {
 }
 
 /**
- * Send Chat Message
+ * Send Chat Message with Knowledge Base Context
  */
-function sendChatMessage($apiKey, $baseUrl, $sessionId, $content) {
+function sendChatMessage($apiKey, $baseUrl, $sessionId, $content, $knowledgeContext = '') {
     $ch = curl_init();
     
+    // Enhance the message with knowledge base context
+    $enhancedMessage = $content;
+    if (!empty($knowledgeContext)) {
+        $enhancedMessage = "User question: $content" . $knowledgeContext . 
+                          "\n\nPlease answer based on the provided knowledge base information if relevant, otherwise provide a general response.";
+    }
+    
     $postData = json_encode([
-        'content' => $content
+        'content' => $enhancedMessage
     ]);
     
     curl_setopt_array($ch, [
@@ -97,7 +168,11 @@ function sendChatMessage($apiKey, $baseUrl, $sessionId, $content) {
 }
 
 try {
-    // Get session
+    // Search knowledge base first
+    $knowledgeMatches = searchKnowledgeBase($csvFile, $message);
+    $knowledgeContext = formatKnowledgeContext($knowledgeMatches);
+    
+    // Get AI session
     $sessionResponse = getAiSession($apiKey, $baseUrl);
     $sessionId = $sessionResponse['session_id'] ?? $sessionResponse['id'] ?? null;
     
@@ -105,15 +180,16 @@ try {
         throw new Exception('Failed to get session ID from response');
     }
     
-    // Send message
-    $chatResponse = sendChatMessage($apiKey, $baseUrl, $sessionId, $message);
+    // Send message with knowledge context
+    $chatResponse = sendChatMessage($apiKey, $baseUrl, $sessionId, $message, $knowledgeContext);
     
-    // Return response (adjust based on your API's response structure)
+    // Return response
     $botMessage = $chatResponse['response'] ?? $chatResponse['content'] ?? $chatResponse['message'] ?? 'No response received';
     
     echo json_encode([
         'success' => true,
-        'response' => $botMessage
+        'response' => $botMessage,
+        'knowledge_matches' => count($knowledgeMatches ?? [])
     ]);
     
 } catch (Exception $e) {
