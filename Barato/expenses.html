@@ -381,6 +381,7 @@
             padding: 1.5rem;
             border-radius: 12px;
             border: 1px solid #e2e8f0;
+            margin-bottom: 2rem;
         }
 
         .quick-actions h3 {
@@ -449,6 +450,236 @@
         .search-bar:focus {
             outline: none;
             border-color: #4f46e5;
+        }
+
+        /* AI Insights Section */
+        .ai-insights {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-insights::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .ai-icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .ai-refresh-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ai-refresh-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .ai-refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .ai-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .ai-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .ai-insights-list {
+            list-style: none;
+        }
+
+        .ai-insight-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid rgba(255,255,255,0.3);
+        }
+
+        .ai-insight-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .ai-insight-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ai-insight-description {
+            font-size: 13px;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .insight-priority-high {
+            border-left-color: #fbbf24;
+        }
+
+        .insight-priority-medium {
+            border-left-color: #60a5fa;
+        }
+
+        .insight-priority-low {
+            border-left-color: #34d399;
+        }
+
+        .ai-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            color: #fecaca;
+            font-size: 14px;
+        }
+
+        /* API Key Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            margin: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .modal-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-cancel {
+            background: #f8fafc;
+            color: #64748b;
+            padding: 10px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
         }
 
         @media (max-width: 1024px) {
@@ -540,7 +771,6 @@
                     <div class="nav-icon">🚚</div>
                     Logistics & Suppliers
                 </a>
-                
             </div>
         </div>
 
@@ -549,6 +779,29 @@
             <div class="content-header">
                 <h1 class="page-title">📈 Expense Tracker</h1>
                 <p class="page-subtitle">Monitor business expenses, track spending patterns, and manage your budget</p>
+            </div>
+
+            <!-- AI Insights Section -->
+            <div class="ai-insights">
+                <div class="ai-header">
+                    <div class="ai-title">
+                        <div class="ai-icon">🤖</div>
+                        AI Analysis & Insights
+                    </div>
+                    <button class="ai-refresh-btn" id="refresh-insights">
+                        <span>🔄</span>
+                        Generate Insights
+                    </button>
+                </div>
+                <div class="ai-content" id="ai-content">
+                    <div class="ai-loading" id="ai-loading" style="display: none;">
+                        <div class="ai-spinner"></div>
+                        Analyzing your expense data with AI...
+                    </div>
+                    <div id="ai-insights-container">
+                        <p style="opacity: 0.9; font-size: 14px;">Click "Generate Insights" to get AI-powered analysis of your expense patterns and actionable recommendations.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="stats-overview">
@@ -738,7 +991,34 @@
         </div>
     </div>
 
+    <!-- API Key Modal - Removed since we're using expenses.php -->
+    <!-- The API key will be configured on the server side in expenses.php -->
+
     <script>
+        // Sample expense data for AI analysis
+        const expenseData = {
+            totalExpenses: 45230,
+            monthlyExpenses: 8500,
+            pendingApprovals: 15200,
+            budgetRemaining: 32000,
+            categories: {
+                'Office': 2750,
+                'Travel': 8950,
+                'Marketing': 5000,
+                'Utilities': 3200,
+                'Meals': 2800
+            },
+            recentExpenses: [
+                { date: '2025-06-19', description: 'Office Supplies - Printer Paper', category: 'Office', amount: 1250 },
+                { date: '2025-06-18', description: 'Business Trip to Cebu', category: 'Travel', amount: 8500 },
+                { date: '2025-06-17', description: 'Google Ads Campaign', category: 'Marketing', amount: 5000 },
+                { date: '2025-06-16', description: 'Electricity Bill - June', category: 'Utilities', amount: 3200 },
+                { date: '2025-06-15', description: 'Team Lunch Meeting', category: 'Meals', amount: 2800 },
+                { date: '2025-06-14', description: 'Software Subscription - Slack', category: 'Office', amount: 1500 },
+                { date: '2025-06-13', description: 'Taxi to Client Meeting', category: 'Travel', amount: 450 }
+            ]
+        };
+
         // Update time every second
         function updateTime() {
             const now = new Date();
@@ -758,6 +1038,145 @@
 
         updateTime();
         setInterval(updateTime, 1000);
+
+        // Event listeners
+        document.getElementById('refresh-insights').addEventListener('click', generateAIInsights);
+
+        // AI Insights Generation
+        async function generateAIInsights() {
+            const loadingEl = document.getElementById('ai-loading');
+            const contentEl = document.getElementById('ai-insights-container');
+            const refreshBtn = document.getElementById('refresh-insights');
+
+            // Show loading state
+            loadingEl.style.display = 'flex';
+            contentEl.innerHTML = '';
+            refreshBtn.disabled = true;
+            refreshBtn.innerHTML = '<span>⏳</span> Analyzing...';
+
+            try {
+                // Send expense data to expenses.php for AI analysis
+                const response = await fetch('expenses.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'generate_ai_insights',
+                        expenseData: expenseData
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const insights = data.insights || [];
+                    displayInsights(insights);
+                } else {
+                    throw new Error(data.error || 'Failed to generate insights');
+                }
+
+            } catch (error) {
+                console.error('Error generating AI insights:', error);
+                contentEl.innerHTML = `
+                    <div class="ai-error">
+                        <strong>Error generating insights:</strong> ${error.message}
+                        <br><br>
+                        Please make sure your expenses.php file is configured with OpenAI API credentials and try again.
+                    </div>
+                `;
+            } finally {
+                loadingEl.style.display = 'none';
+                refreshBtn.disabled = false;
+                refreshBtn.innerHTML = '<span>🔄</span> Generate Insights';
+            }
+        }
+
+        // Parse AI response into structured insights
+        function parseAIResponse(response) {
+            const insights = [];
+            const sections = response.split(/(?=Priority:|Title:)/);
+            
+            for (let section of sections) {
+                const priorityMatch = section.match(/Priority:\s*(\w+)/);
+                const titleMatch = section.match(/Title:\s*([^\n]+)/);
+                const descriptionMatch = section.match(/Description:\s*([\s\S]+?)(?=Priority:|$)/);
+                
+                if (titleMatch && descriptionMatch) {
+                    insights.push({
+                        priority: priorityMatch ? priorityMatch[1].toLowerCase() : 'medium',
+                        title: titleMatch[1].trim(),
+                        description: descriptionMatch[1].trim()
+                    });
+                }
+            }
+            
+            // Fallback if parsing fails
+            if (insights.length === 0) {
+                const lines = response.split('\n').filter(line => line.trim());
+                let currentInsight = null;
+                
+                for (let line of lines) {
+                    if (line.includes('Priority:') || line.includes('Title:') || line.match(/^\d+\./)) {
+                        if (currentInsight) insights.push(currentInsight);
+                        currentInsight = {
+                            priority: 'medium',
+                            title: line.replace(/Priority:|Title:|\d+\./, '').trim(),
+                            description: ''
+                        };
+                    } else if (currentInsight && line.trim()) {
+                        currentInsight.description += line + ' ';
+                    }
+                }
+                if (currentInsight) insights.push(currentInsight);
+            }
+            
+            return insights;
+        }
+
+        // Display insights in the UI
+        function displayInsights(insights) {
+            const contentEl = document.getElementById('ai-insights-container');
+            
+            if (insights.length === 0) {
+                contentEl.innerHTML = `
+                    <div class="ai-error">
+                        No insights could be generated. Please try again or check your expense data.
+                    </div>
+                `;
+                return;
+            }
+            
+            const insightsList = insights.map(insight => `
+                <div class="ai-insight-item insight-priority-${insight.priority}">
+                    <div class="ai-insight-title">
+                        ${getPriorityIcon(insight.priority)} ${insight.title}
+                    </div>
+                    <div class="ai-insight-description">
+                        ${insight.description}
+                    </div>
+                </div>
+            `).join('');
+            
+            contentEl.innerHTML = `<div class="ai-insights-list">${insightsList}</div>`;
+        }
+
+        // Get priority icon
+        function getPriorityIcon(priority) {
+            switch (priority) {
+                case 'high': return '🔴';
+                case 'medium': return '🟡';
+                case 'low': return '🟢';
+                default: return '🔵';
+            }
+        }
+
+        // Event listeners
+        document.getElementById('refresh-insights').addEventListener('click', generateAIInsights);
 
         // Search functionality
         document.querySelector('.search-bar').addEventListener('input', function (e) {
@@ -803,6 +1222,9 @@
                 alert('Receipt viewer would open here');
             }
         });
+
+        // Close modal when clicking outside - Removed since modal is no longer needed
+        // API key configuration is now handled server-side in expenses.php
     </script>
 </body>
 

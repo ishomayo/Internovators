@@ -247,22 +247,14 @@ function handlePut($pdo) {
 
 function handleDelete($pdo) {
     if (!isset($_GET['id'])) {
-        jsonResponse(['error' => 'Product ID required'], 400);
+        jsonResponse(['error' => 'Missing product ID'], 400);
     }
-    
-    try {
-        // Soft delete - set status to inactive instead of actually deleting
-        $stmt = $pdo->prepare("UPDATE inventory SET status = 'inactive', updated_at = NOW() WHERE id = ?");
-        $result = $stmt->execute([$_GET['id']]);
-        
-        if ($stmt->rowCount() > 0) {
-            jsonResponse(['message' => 'Product deleted successfully']);
-        } else {
-            jsonResponse(['error' => 'Product not found'], 404);
-        }
-        
-    } catch (PDOException $e) {
-        jsonResponse(['error' => 'Database error: ' . $e->getMessage()], 500);
+    $stmt = $pdo->prepare("DELETE FROM inventory WHERE id = ?");
+    $stmt->execute([$_GET['id']]);
+    if ($stmt->rowCount() > 0) {
+        jsonResponse(['message' => 'Product deleted']);
+    } else {
+        jsonResponse(['error' => 'Product not found'], 404);
     }
 }
 
