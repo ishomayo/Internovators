@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
   $db = new PDO("mysql:dbname=barato_db;host=192.168.1.61", "internnovators", "Internnovator123!");
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -128,21 +130,25 @@
                                     <th>Description</th>
                                     <th>Category</th>
                                     <th>Amount</th>
-                                    <th>Receipt</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                foreach($sql as $row) { ?>
-                                    <tr>
-                                    <td><?= $row["created_at"] ?></td>
-                                    <td><?= $row["description"] ?></td>
-                                    <td><span class="category-badge category-office"><?= $row["category"] ?></span></td>
-                                    <td><?= $row["amount"] ?></td>
-                                    <td>
-                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
+                                <?php foreach($sql as $row) { ?>
+                                    <tr data-expense-id="<?= $row["id"] ?>">
+                                        <td hidden><?= $row["id"] ?></td>
+                                        <td><?= $row["created_at"] ?></td>
+                                        <td><?= $row["description"] ?></td>
+                                        <td><span class="category-badge category-office"><?= $row["category"] ?></span></td>
+                                        <td>₱<?= $row["amount"] ?></td>
+                                        <td>
+                                            <button class="btn-secondary edit-btn" style="padding: 4px 8px; font-size: 12px;" 
+                                                    data-expense-id="<?= $row["id"] ?>"
+                                                    data-amount="<?= $row["amount"] ?>"
+                                                    data-category="<?= $row["category"] ?>">
+                                                Edit
+                                            </button>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -154,7 +160,6 @@
                     <div class="chart-container">
                         <div class="chart-title">Expense Breakdown by Category</div>
                         <div class="chart-placeholder">
-                            <iframe src="https://lookerstudio.google.com/reporting/4c947710-c55f-44a7-9a6d-47cbc637183c" frameborder="0"></iframe>
                             📊 Interactive expense chart would be displayed here
                         </div>
                     </div>
@@ -168,31 +173,81 @@
     <div id="expenseModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
         <div style="background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 500px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             <h2 style="margin-bottom: 1.5rem;">Add New Expense</h2>
-            <form id="expenseForm">
+            <form id="expenseForm" action="add-expense.php" method="POST">
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem;">Amount (₱)</label>
-                    <input type="number" id="expenseAmount" required style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    <input name="amount" type="number" min=0 id="expenseAmount" required style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Decription</label>
+                    <input name="description" id="expenseDescription" required style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;" required>
                 </div>
                 
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem;">Category</label>
-                    <select id="expenseCategory" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
-                        <?php 
-                        foreach($categories_sql as $row) { ?>
+                    <select name="category" id="expenseCategory" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <option>Select Category</option>
+                        <?php
+                            $categories_sql = $db->query("SELECT DISTINCT category FROM expenses");
+
+                            foreach($categories_sql as $row) { ?>
                             <option value="<?= $row["category"] ?>"><?= $row["category"] ?></option>
                         <?php } ?>
                     </select>
                     <button type="button" id="newCategoryBtn" style="margin-top: 0.5rem;" class="btn-secondary">+ Add New Category</button>
                 </div>
-
+                
                 <div style="display: none" id="newCategoryInput">
                     <label style="display: block; margin-bottom: 0.5rem;">New Category Name</label>
-                    <input type="text" id="newCategory" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    <input name="newCategory" type="text" id="newCategory" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
                     <button type="button" class="btn-secondary" onclick="closeExpenseModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Add Expense</button>
+                    <input type="submit" class="btn-primary" value="Add Expense" style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;"></input>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Expense Modal -->
+    <div id="editExpenseModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 500px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <h2 style="margin-bottom: 1.5rem;">Edit Expense</h2>
+            <form id="editExpenseForm" action="edit-expense.php" method="POST">
+                <input type="hidden" id="editExpenseId">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Amount (₱)</label>
+                    <input name="amount" type="number" id="editExpenseAmount" min=0 required style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Decription</label>
+                    <input name="description" id="editExpenseDescription" required style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;" required>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Category</label>
+                    <select name="category" id="editExpenseCategory" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <?php 
+                        
+                        $db = new PDO("mysql:dbname=barato_db;host=192.168.1.61", "internnovators", "Internnovator123!");
+                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                        $categories_sql = $db->query("SELECT DISTINCT category FROM expenses");
+
+                        foreach($categories_sql as $row) { ?>
+                            <option value="<?= $row["category"] ?>"><?= $row["category"] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                    <button type="submit" class="btn-danger" onclick="deleteExpense()">Delete Expense</button>
+                    <div>
+                        <button type="submit" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -276,6 +331,20 @@
             document.getElementById('expenseForm').reset();
         }
 
+        // Edit expense functionality
+        function openEditModal(expenseId, amount, category) {
+            document.getElementById('editExpenseModal').style.display = 'block';
+            document.getElementById('editExpenseId').value = expenseId;
+            document.getElementById('editExpenseAmount').value = amount;
+            document.getElementById('editExpenseDescription').value = description;
+            document.getElementById('editExpenseCategory').value = category;
+        }
+
+        function closeEditModal() {
+            document.getElementById('editExpenseModal').style.display = 'none';
+            document.getElementById('editExpenseForm').reset();
+        }
+
         // New category button functionality
         document.getElementById('newCategoryBtn').addEventListener('click', function() {
             const newCategoryInput = document.getElementById('newCategoryInput');
@@ -283,62 +352,140 @@
         });
 
         // Expense form submission
-        document.getElementById('expenseForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // document.getElementById('expenseForm').addEventListener('submit', function(e) {
+        //     const amount = parseFloat(document.getElementById('expenseAmount').value);
+        //     if (amount <= 0) {
+        //         alert('Please enter a positive amount');
+        //         return;
+        //     }
             
-            const amount = parseFloat(document.getElementById('expenseAmount').value);
-            if (amount <= 0) {
-                alert('Please enter a positive amount');
+        //     let category = document.getElementById('expenseCategory').value;
+        //     const newCategory = document.getElementById('newCategory').value.trim();
+            
+        //     if (newCategory) {
+        //         // Check if category already exists (case-insensitive)
+        //         const existingCategories = Array.from(document.getElementById('expenseCategory').options)
+        //             .map(option => option.value.toLowerCase());
+                
+        //         if (existingCategories.includes(newCategory.toLowerCase())) {
+        //             // If category exists, just use the existing category
+        //             category = document.getElementById('expenseCategory').value;
+        //         } else {
+        //             // If it's a new category, add it
+        //             category = newCategory;
+        //             // Add new category to select options
+        //             const option = new Option(newCategory, newCategory);
+        //             document.getElementById('expenseCategory').add(option);
+        //             // Also add to filter select
+        //             const filterOption = new Option(newCategory, newCategory);
+        //             document.querySelector('.filter-select').add(filterOption);
+        //         }
+        //     }
+
+        //     // Create new table row
+        //     const tbody = document.querySelector('.expense-table tbody');
+        //     const newRow = document.createElement('tr');
+        //     const today = new Date();
+            
+        //     newRow.innerHTML = `
+        //         <td>${today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+        //         <td>New Expense Entry</td>
+        //         <td><span class="category-badge category-${category.toLowerCase()}">${category}</span></td>
+        //         <td>₱${amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+        //         <td>📄</td>
+        //         <td>
+        //             <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+        //         </td>
+        //     `;
+            
+        //     tbody.insertBefore(newRow, tbody.firstChild);
+        //     closeExpenseModal();
+        // });
+
+        // Update click handler for edit buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('edit-btn')) {
+                const expenseId = e.target.dataset.expenseId;
+                const amount = e.target.dataset.amount;
+                const category = e.target.dataset.category;
+                openEditModal(expenseId, amount, category);
+            }
+        });
+
+        // Handle edit form submission
+        document.getElementById('editExpenseForm').addEventListener('submit', function(e) {
+            // e.preventDefault();
+            const expenseId = document.getElementById('editExpenseId').value;
+            const amount = document.getElementById('editExpenseAmount').value;
+            const category = document.getElementById('editExpenseCategory').value;
+            const description = document.getElementById('editExpenseDescription').value;
+
+            // fetch('update_expense.php', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/x-www-form-urlencoded',
+            //     },
+            //     body: `id=${expenseId}&amount=${amount}&category=${category}`
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     if (data.success) {
+            //         // Update the row in the table
+            //         const row = document.querySelector(`tr[data-expense-id="${expenseId}"]`);
+            //         row.querySelector('td:nth-child(3) .category-badge').textContent = category;
+            //         row.querySelector('td:nth-child(4)').textContent = `₱${parseFloat(amount).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            //         closeEditModal();
+            //     } else {
+            //         alert('Error updating expense');
+            //     }
+            // })
+            // .catch(error => {
+            //     console.error('Error:', error);
+            //     alert('Error updating expense');
+            // });
+        });
+
+        // Delete expense functionality
+        function deleteExpense() {
+            if (!confirm('Are you sure you want to delete this expense?')) {
                 return;
             }
-            
-            let category = document.getElementById('expenseCategory').value;
-            const newCategory = document.getElementById('newCategory').value.trim();
-            
-            if (newCategory) {
-                // Check if category already exists (case-insensitive)
-                const existingCategories = Array.from(document.getElementById('expenseCategory').options)
-                    .map(option => option.value.toLowerCase());
-                
-                if (existingCategories.includes(newCategory.toLowerCase())) {
-                    // If category exists, just use the existing category
-                    category = document.getElementById('expenseCategory').value;
-                } else {
-                    // If it's a new category, add it
-                    category = newCategory;
-                    // Add new category to select options
-                    const option = new Option(newCategory, newCategory);
-                    document.getElementById('expenseCategory').add(option);
-                    // Also add to filter select
-                    const filterOption = new Option(newCategory, newCategory);
-                    document.querySelector('.filter-select').add(filterOption);
-                }
-            }
 
-            // Create new table row
-            const tbody = document.querySelector('.expense-table tbody');
-            const newRow = document.createElement('tr');
-            const today = new Date();
-            
-            newRow.innerHTML = `
-                <td>${today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                <td>New Expense Entry</td>
-                <td><span class="category-badge category-${category.toLowerCase()}">${category}</span></td>
-                <td>₱${amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-                <td>📄</td>
-                <td>
-                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                </td>
-            `;
-            
-            tbody.insertBefore(newRow, tbody.firstChild);
-            closeExpenseModal();
-        });
+            const expenseId = document.getElementById('editExpenseId').value;
+
+            // fetch('delete_expense.php', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/x-www-form-urlencoded',
+            //     },
+            //     body: `id=${expenseId}`
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     if (data.success) {
+            //         const row = document.querySelector(`tr[data-expense-id="${expenseId}"]`);
+            //         row.remove();
+            //         closeEditModal();
+            //     } else {
+            //         alert('Error deleting expense');
+            //     }
+            // })
+            // .catch(error => {
+            //     console.error('Error:', error);
+            //     alert('Error deleting expense');
+            // });
+        }
 
         // Close modal when clicking outside
         document.getElementById('expenseModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeExpenseModal();
+            }
+        });
+
+        document.getElementById('editExpenseModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
             }
         });
     </script>
