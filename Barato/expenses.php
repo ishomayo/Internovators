@@ -20,6 +20,47 @@
     }
   }
   $budget_percentage = ($remaining_budget / $monthly_budget) * 100;
+
+  // Get expense data grouped by category
+$chart_sql = $db->query("
+    SELECT 
+        category,
+        SUM(amount) as total_amount
+    FROM expenses 
+    GROUP BY category 
+    ORDER BY total_amount DESC
+");
+
+$categories = [];
+$amounts = [];
+$backgroundColors = [];
+$totalExpenses = 0;
+
+// Calculate total first
+$total_query = $db->query("SELECT SUM(amount) as total FROM expenses");
+$total_row = $total_query->fetch(PDO::FETCH_ASSOC);
+$totalExpenses = $total_row['total'];
+
+// Define colors
+$colors = [
+    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
+    '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+];
+
+$colorIndex = 0;
+foreach($chart_sql as $row) {
+    $categories[] = $row['category'];
+    $amounts[] = floatval($row['total_amount']); // Ensure float conversion
+    $backgroundColors[] = $colors[$colorIndex % count($colors)];
+    $colorIndex++;
+}
+
+// Convert to JSON for JavaScript
+$chartData = [
+    'categories' => $categories,
+    'amounts' => $amounts,
+    'colors' => $backgroundColors
+];
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +70,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker - Business Hub</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -114,7 +156,6 @@
                         <?php } ?>
                     </div>
                     <div class="stat-label">This Month</div>
-                    <div class="stat-change stat-decrease">-12% from last month</div>
                 </div>
 
                 <div class="stat-card">
@@ -198,9 +239,7 @@
                 <div class="side-panel">
                     <div class="chart-container">
                         <div class="chart-title">Expense Breakdown by Category</div>
-                        <div class="chart-placeholder">
-                            📊 Interactive expense chart would be displayed here
-                        </div>
+                        <canvas id="expenseChart"></canvas>
                     </div>
 
                 </div>
@@ -522,6 +561,55 @@
         document.getElementById('editExpenseModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeEditModal();
+            }
+        });
+
+        const chartData = <?php echo json_encode($chartData); ?>;
+
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: chartData.categories,
+                datasets: [{
+                    data: chartData.amounts.map(Number), // Ensure numbers
+                    backgroundColor: chartData.colors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: {
+                                size: 12
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = Number(context.raw);
+                                const dataset = context.dataset.data.map(Number);
+                                const sum = dataset.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / sum) * 100).toFixed(1);
+                                
+                                const formattedValue = new Intl.NumberFormat('en-PH', {
+                                    style: 'currency',
+                                    currency: 'PHP',
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(value);
+                                
+                                return `${context.label}: ${formattedValue} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
             }
         });
     </script>

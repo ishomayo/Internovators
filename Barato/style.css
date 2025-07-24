@@ -343,29 +343,27 @@
         }
 
         .chart-container {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
             background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            height: 400px;
         }
 
         .chart-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1e293b;
+            font-size: 1.1rem;
+            font-weight: 500;
             margin-bottom: 1rem;
+            color: #1f2937;
         }
 
-        .chart-placeholder {
-            height: 200px;
-            background: linear-gradient(45deg, #f1f5f9, #e2e8f0);
-            border-radius: 8px;
+        canvas#expenseChart {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #64748b;
-            font-size: 14px;
+            flex-direction: column;
+            height: 320px !important;
+            width: 100% !important;
         }
 
         .quick-actions {
