@@ -385,6 +385,7 @@
     <title>Expense Tracker - Business Hub</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="assets/favicon.ico">
     <style>
         /* AI Insights Section */
         .ai-insights {
