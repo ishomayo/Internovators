@@ -57,12 +57,6 @@
             color: #64748b;
         }
 
-        .user-section {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
         .notification-btn {
             width: 32px;
             height: 32px;
@@ -179,6 +173,7 @@
             flex: 1;
             padding: 2rem;
             background: #f8fafc;
+            position: relative;
         }
 
         .content-header {
@@ -211,20 +206,6 @@
             overflow: hidden;
         }
 
-        .panel-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: between;
-            align-items: center;
-        }
-
-        .panel-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #1e293b;
-        }
-
         .btn-primary {
             background: #4f46e5;
             color: white;
@@ -255,6 +236,21 @@
 
         .btn-secondary:hover {
             background: #f8fafc;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
         }
 
         .inventory-table {
@@ -372,6 +368,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
 
         .action-link:hover {
@@ -404,6 +401,180 @@
         .toolbar-left {
             display: flex;
             gap: 1rem;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e2e8f0;
+            border-top: 2px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+            max-width: 300px;
+        }
+
+        .notification-success {
+            background: #10b981;
+        }
+
+        .notification-error {
+            background: #ef4444;
+        }
+
+        .notification-warning {
+            background: #f59e0b;
+        }
+
+        .notification-info {
+            background: #3b82f6;
+        }
+
+        /* File input styling */
+        .file-input {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-input input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .file-input-label:hover {
+            background: #f8fafc;
         }
 
         @media (max-width: 1024px) {
@@ -495,7 +666,7 @@
                 </a>
                 <a href="support.html" class="nav-item">
                     <div class="nav-icon">💬</div>
-                    Talk with SangkAI
+                    Communication & Support
                 </a>
                 <a href="logistics.html" class="nav-item">
                     <div class="nav-icon">🚚</div>
@@ -515,11 +686,14 @@
                 <div class="main-panel">
                     <div class="toolbar">
                         <div class="toolbar-left">
-                            <button class="btn-primary">+ Add Product</button>
-                            <button class="btn-secondary">Import CSV</button>
-                            <button class="btn-secondary">Export</button>
+                            <button id="addProductBtn" class="btn-primary">+ Add Product</button>
+                            <div class="file-input">
+                                <input type="file" id="csvFileInput" accept=".csv" />
+                                <label for="csvFileInput" class="file-input-label">📄 Import CSV</label>
+                            </div>
+                            <button id="exportBtn" class="btn-secondary">📤 Export</button>
                         </div>
-                        <input type="text" class="search-bar" placeholder="Search products...">
+                        <input type="text" id="searchBar" class="search-bar" placeholder="Search products...">
                     </div>
 
                     <div class="panel-content">
@@ -535,67 +709,8 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Wireless Headphones</td>
-                                    <td>WH-001</td>
-                                    <td>Electronics</td>
-                                    <td>45</td>
-                                    <td><span class="status-badge status-in-stock">In Stock</span></td>
-                                    <td>₱2,500</td>
-                                    <td>
-                                        <button class="btn-secondary"
-                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Coffee Beans Premium</td>
-                                    <td>CB-002</td>
-                                    <td>Food & Beverage</td>
-                                    <td>12</td>
-                                    <td><span class="status-badge status-low-stock">Low Stock</span></td>
-                                    <td>₱850</td>
-                                    <td>
-                                        <button class="btn-secondary"
-                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Office Chair Ergonomic</td>
-                                    <td>OC-003</td>
-                                    <td>Furniture</td>
-                                    <td>0</td>
-                                    <td><span class="status-badge status-out-of-stock">Out of Stock</span></td>
-                                    <td>₱8,500</td>
-                                    <td>
-                                        <button class="btn-secondary"
-                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Smartphone Case</td>
-                                    <td>SC-004</td>
-                                    <td>Accessories</td>
-                                    <td>156</td>
-                                    <td><span class="status-badge status-in-stock">In Stock</span></td>
-                                    <td>₱450</td>
-                                    <td>
-                                        <button class="btn-secondary"
-                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Desk Lamp LED</td>
-                                    <td>DL-005</td>
-                                    <td>Lighting</td>
-                                    <td>23</td>
-                                    <td><span class="status-badge status-in-stock">In Stock</span></td>
-                                    <td>₱1,200</td>
-                                    <td>
-                                        <button class="btn-secondary"
-                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                                    </td>
-                                </tr>
+                            <tbody id="inventoryTableBody">
+                                <!-- Products will be loaded here -->
                             </tbody>
                         </table>
                     </div>
@@ -603,43 +718,43 @@
 
                 <div class="side-panel">
                     <div class="stats-card">
-                        <div class="stat-value">236</div>
+                        <div class="stat-value" id="totalProducts">0</div>
                         <div class="stat-label">Total Products</div>
-                        <div class="stat-change">+12 this month</div>
+                        <div class="stat-change" id="totalProductsChange">Loading...</div>
                     </div>
 
                     <div class="stats-card">
-                        <div class="stat-value">₱2.4M</div>
+                        <div class="stat-value" id="inventoryValue">₱0</div>
                         <div class="stat-label">Inventory Value</div>
-                        <div class="stat-change">+8.5% from last month</div>
+                        <div class="stat-change" id="inventoryValueChange">Loading...</div>
                     </div>
 
                     <div class="stats-card">
-                        <div class="stat-value">15</div>
+                        <div class="stat-value" id="lowStockItems">0</div>
                         <div class="stat-label">Low Stock Items</div>
-                        <div class="stat-change" style="color: #dc2626;">Needs attention</div>
+                        <div class="stat-change" id="lowStockChange">Loading...</div>
                     </div>
 
                     <div class="quick-actions">
                         <h3>Quick Actions</h3>
                         <ul class="action-list">
                             <li class="action-item">
-                                <a href="#" class="action-link">
-                                    📦 Reorder Low Stock Items
+                                <a href="#" class="action-link" onclick="filterLowStock()">
+                                    📦 View Low Stock Items
                                 </a>
                             </li>
                             <li class="action-item">
-                                <a href="#" class="action-link">
+                                <a href="#" class="action-link" onclick="generateReport()">
                                     📊 Generate Inventory Report
                                 </a>
                             </li>
                             <li class="action-item">
-                                <a href="#" class="action-link">
-                                    🏷️ Update Product Prices
+                                <a href="#" class="action-link" onclick="bulkUpdatePrices()">
+                                    🏷️ Bulk Update Prices
                                 </a>
                             </li>
                             <li class="action-item">
-                                <a href="#" class="action-link">
+                                <a href="#" class="action-link" onclick="stockAudit()">
                                     📋 Stock Audit
                                 </a>
                             </li>
@@ -650,74 +765,81 @@
         </div>
     </div>
 
+    <!-- Add/Edit Product Modal -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Product</h3>
+                <button class="modal-close" onclick="closeProductModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <input type="hidden" id="productId" />
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" id="productName" required placeholder="Enter product name">
+                    </div>
+                    <div class="form-group">
+                        <label>SKU *</label>
+                        <input type="text" id="productSku" required placeholder="Enter SKU">
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Food & Beverage">Food & Beverage</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Lighting">Lighting</option>
+                            <option value="Office Supplies">Office Supplies</option>
+                            <option value="Stationery">Stationery</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Books">Books</option>
+                            <option value="Automotive">Automotive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock Quantity *</label>
+                        <input type="number" id="productStock" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₱) *</label>
+                        <input type="number" id="productPrice" min="0" step="0.01" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeProductModal()">Cancel</button>
+                <button class="btn-primary" onclick="saveProduct()">Save Product</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this product? This action cannot be undone.</p>
+                <p><strong id="deleteProductName"></strong></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()">Delete Product</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Search functionality
-        document.querySelector('.search-bar').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('.inventory-table tbody tr');
-            
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchTerm) ? '' : 'none';
-            });
-        });
-        
-        // API Helper Functions with detailed logging
-        async function fetchAPI(endpoint, method = 'GET', data = null) {
-            console.log(`🔄 API Call: ${method} ${endpoint}`);
-            if (data) console.log('📤 Sending data:', data);
-
-            try {
-                const options = {
-                    method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                };
-
-                if (data) {
-                    options.body = JSON.stringify(data);
-                }
-
-                const response = await fetch(endpoint, options);
-                console.log(`📡 Response status: ${response.status}`);
-                console.log(`📡 Response headers:`, [...response.headers.entries()]);
-
-                // Check if response is actually JSON
-                const contentType = response.headers.get('content-type');
-                console.log(`📡 Content-Type: ${contentType}`);
-
-                if (!contentType || !contentType.includes('application/json')) {
-                    const errorText = await response.text();
-                    console.error('❌ Non-JSON response:', errorText);
-
-                    if (errorText.includes('<?php')) {
-                        throw new Error('PHP file is not being processed by the server');
-                    } else if (errorText.includes('Fatal error') || errorText.includes('Parse error')) {
-                        throw new Error('PHP syntax error: ' + errorText.substring(0, 200));
-                    } else if (errorText.includes('404') || errorText.includes('Not Found')) {
-                        throw new Error(`API endpoint not found: ${endpoint}`);
-                    } else {
-                        throw new Error('Server returned HTML instead of JSON: ' + errorText.substring(0, 200));
-                    }
-                }
-
-                const result = await response.json();
-                console.log(`✅ API Response:`, result);
-
-                if (!response.ok) {
-                    throw new Error(result.error || `HTTP ${response.status}: ${response.statusText}`);
-                }
-
-                return result;
-
-            } catch (error) {
-                console.error('❌ API Error:', error);
-                showNotification('Error: ' + error.message, 'error');
-                return null;
-            }
-        }
+        // Global variables
+        let currentProducts = [];
+        let isLoading = false;
+        let deleteProductId = null;
+        let isEditMode = false;
 
         // Update time every second
         function updateTime() {
@@ -739,267 +861,131 @@
             }
         }
 
-        // Global variables
-        let currentProducts = [];
-        let isLoading = false;
-
-        // Load inventory data from backend with extensive logging
-        async function loadInventoryData() {
-            if (isLoading) {
-                console.log('⏳ Already loading, skipping...');
-                return;
-            }
-            isLoading = true;
-
-            console.log('🔄 Starting to load inventory data...');
-            showLoadingState();
-
+        // API Helper Functions
+        async function fetchAPI(endpoint, method = 'GET', data = null) {
             try {
-                console.log('📡 Fetching products and stats...');
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
 
-                // Test individual endpoints first
-                console.log('🧪 Testing inventory.php endpoint...');
-                const productsResponse = await fetch('inventory.php');
-                console.log('📊 Products response status:', productsResponse.status);
-                console.log('📊 Products response headers:', [...productsResponse.headers.entries()]);
-
-                const productsText = await productsResponse.text();
-                console.log('📊 Raw products response:', productsText.substring(0, 500));
-
-                let products = null;
-                try {
-                    products = JSON.parse(productsText);
-                    console.log('✅ Products parsed successfully:', products);
-                } catch (parseError) {
-                    console.error('❌ Failed to parse products JSON:', parseError);
-                    console.log('📄 Full response:', productsText);
-                    throw new Error('Invalid JSON response from products endpoint');
+                if (data) {
+                    options.body = JSON.stringify(data);
                 }
 
-                console.log('🧪 Testing stats endpoint...');
-                const statsResponse = await fetch('inventory.php?stats');
-                console.log('📈 Stats response status:', statsResponse.status);
-
-                const statsText = await statsResponse.text();
-                console.log('📈 Raw stats response:', statsText.substring(0, 500));
-
-                let stats = null;
-                try {
-                    stats = JSON.parse(statsText);
-                    console.log('✅ Stats parsed successfully:', stats);
-                } catch (parseError) {
-                    console.error('❌ Failed to parse stats JSON:', parseError);
-                    console.log('📄 Full stats response:', statsText);
-                    // Continue without stats rather than failing completely
+                const response = await fetch(endpoint, options);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
 
-                if (products) {
-                    console.log(`✅ Products loaded: ${products.length} items`);
-                    currentProducts = products;
-                    renderInventoryTable(products);
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return await response.json();
                 } else {
-                    console.error('❌ No products data received');
-                }
-
-                if (stats) {
-                    console.log('✅ Stats loaded:', stats);
-                    updateInventoryStats(stats);
-                } else {
-                    console.warn('⚠️ No stats data received');
+                    return await response.text();
                 }
 
             } catch (error) {
-                console.error('❌ Load inventory data error:', error);
-                showNotification(`Failed to load inventory data: ${error.message}`, 'error');
+                console.error('API Error:', error);
+                showNotification('Error: ' + error.message, 'error');
+                return null;
+            }
+        }
 
-                // Show detailed error in table
-                const tbody = document.querySelector('.inventory-table tbody');
-                if (tbody) {
-                    tbody.innerHTML = `
+        // Load inventory data
+        async function loadInventoryData() {
+            if (isLoading) return;
+            isLoading = true;
+            
+            showLoadingState();
+
+            try {
+                const [products, stats] = await Promise.all([
+                    fetchAPI('inventory.php'),
+                    fetchAPI('inventory.php?stats')
+                ]);
+
+                if (products) {
+                    currentProducts = products;
+                    renderInventoryTable(products);
+                }
+
+                if (stats) {
+                    updateInventoryStats(stats);
+                }
+
+            } catch (error) {
+                console.error('Load inventory error:', error);
+                showErrorState();
+            }
+
+            isLoading = false;
+        }
+
+        // Render inventory table
+        function renderInventoryTable(products) {
+            const tbody = document.getElementById('inventoryTableBody');
+            tbody.innerHTML = '';
+
+            if (!products || products.length === 0) {
+                tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 2rem; color: #ef4444;">
-                            ❌ Error loading data: ${error.message}
+                        <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
+                            No products found
                             <br><br>
-                            <button onclick="debugAPI()" style="padding: 0.5rem 1rem; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                Debug API
-                            </button>
-                            <button onclick="testDirectURL()" style="padding: 0.5rem 1rem; background: #f59e0b; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 0.5rem;">
-                                Test Direct URL
-                            </button>
-                            <button onclick="location.reload()" style="padding: 0.5rem 1rem; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 0.5rem;">
-                                Retry
+                            <button onclick="openAddProductModal()" class="btn-primary">
+                                Add First Product
                             </button>
                         </td>
                     </tr>
                 `;
-                }
-            }
-
-            hideLoadingState();
-            isLoading = false;
-        }
-
-        // Test direct URL access
-        function testDirectURL() {
-            console.log('🧪 Testing direct URL access...');
-            const urls = [
-                'inventory.php',
-                'inventory.php?stats',
-                'config.php'
-            ];
-
-            urls.forEach(url => {
-                const newWindow = window.open(url, '_blank');
-                console.log(`🔗 Opened: ${url}`);
-            });
-        }
-
-        // Enhanced debug function
-        async function debugAPI() {
-            console.log('🔍 Starting comprehensive API debug...');
-
-            const endpoints = [
-                'config.php',
-                'inventory.php',
-                'inventory.php?stats'
-            ];
-
-            for (const endpoint of endpoints) {
-                console.log(`\n🧪 Testing: ${endpoint}`);
-                try {
-                    const response = await fetch(endpoint);
-                    console.log(`📊 Status: ${response.status} ${response.statusText}`);
-                    console.log(`📊 Headers:`, [...response.headers.entries()]);
-
-                    const text = await response.text();
-                    console.log(`📊 Response length: ${text.length} characters`);
-                    console.log(`📊 First 300 characters:`, text.substring(0, 300));
-
-                    if (response.headers.get('content-type')?.includes('application/json')) {
-                        try {
-                            const json = JSON.parse(text);
-                            console.log(`✅ ${endpoint} - Valid JSON:`, json);
-                        } catch (e) {
-                            console.log(`❌ ${endpoint} - Invalid JSON:`, e.message);
-                        }
-                    } else {
-                        console.log(`⚠️ ${endpoint} - Not JSON content-type`);
-                    }
-
-                } catch (error) {
-                    console.log(`❌ ${endpoint} - Fetch error:`, error.message);
-                }
-
-                console.log('─'.repeat(50));
-            }
-
-            // Test database connection specifically
-            console.log('\n🗄️ Testing database connection...');
-            try {
-                const configResponse = await fetch('config.php');
-                const configText = await configResponse.text();
-                console.log('🗄️ Config response:', configText.substring(0, 200));
-            } catch (error) {
-                console.log('❌ Config test failed:', error.message);
-            }
-        }
-
-        // Render inventory table with detailed logging
-        function renderInventoryTable(products) {
-            console.log(`🎨 Rendering table with ${products ? products.length : 0} products`);
-
-            const tbody = document.querySelector('.inventory-table tbody');
-            if (!tbody) {
-                console.error('❌ Table tbody not found!');
                 return;
             }
 
-            tbody.innerHTML = '';
-
-            if (!products || products.length === 0) {
-                console.log('📋 No products to display');
-                tbody.innerHTML = `
-                <tr>
-                    <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
-                        No products found
-                        <br><br>
-                        <button onclick="addProduct()" style="padding: 0.5rem 1rem; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                            Add First Product
-                        </button>
-                    </td>
-                </tr>
-            `;
-                return;
-            }
-
-            console.log('🎨 Creating product rows...');
-            products.forEach((product, index) => {
-                console.log(`🎨 Rendering product ${index + 1}:`, product);
-
+            products.forEach(product => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${escapeHtml(product.product_name || 'N/A')}</td>
-                <td>${escapeHtml(product.sku || 'N/A')}</td>
-                <td>${escapeHtml(product.category || 'N/A')}</td>
-                <td>${product.stock_quantity || 0}</td>
-                <td>${getStatusBadge(product.stock_quantity || 0)}</td>
-                <td>₱${formatNumber(product.price || 0)}</td>
-                <td>
-                    <button class="btn-secondary" onclick="editProduct(${product.id})" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-                    <button class="btn-danger" onclick="deleteProduct(${product.id})" style="padding: 4px 8px; font-size: 12px; background: #ef4444; margin-left: 4px;">Delete</button>
-                </td>
-            `;
+                    <td>${escapeHtml(product.product_name || 'N/A')}</td>
+                    <td>${escapeHtml(product.sku || 'N/A')}</td>
+                    <td>${escapeHtml(product.category || 'N/A')}</td>
+                    <td>${product.stock_quantity || 0}</td>
+                    <td>${getStatusBadge(product.stock_quantity || 0)}</td>
+                    <td>₱${formatNumber(product.price || 0)}</td>
+                    <td>
+                        <button class="btn-secondary" onclick="editProduct(${product.id})" style="padding: 4px 8px; font-size: 12px; margin-right: 4px;">
+                            Edit
+                        </button>
+                        <button class="btn-danger" onclick="deleteProduct(${product.id}, '${escapeHtml(product.product_name)}')" style="padding: 4px 8px; font-size: 12px;">
+                            Delete
+                        </button>
+                    </td>
+                `;
                 tbody.appendChild(row);
             });
-
-            console.log('✅ Table rendered successfully');
         }
 
-        // Update inventory statistics with logging
+        // Update inventory statistics
         function updateInventoryStats(stats) {
-            console.log('📊 Updating stats:', stats);
+            document.getElementById('totalProducts').textContent = stats.total_products || 0;
+            document.getElementById('inventoryValue').textContent = `₱${formatLargeNumber(stats.inventory_value || 0)}`;
+            document.getElementById('lowStockItems').textContent = stats.low_stock_items || 0;
 
-            const statCards = document.querySelectorAll('.stats-card');
-            console.log(`📊 Found ${statCards.length} stat cards`);
-
-            if (statCards.length >= 3) {
-                // Total products
-                const totalElement = statCards[0].querySelector('.stat-value');
-                if (totalElement) {
-                    totalElement.textContent = stats.total_products || 0;
-                    console.log('📊 Updated total products:', stats.total_products);
-                }
-
-                const changeElement = statCards[0].querySelector('.stat-change');
-                if (changeElement) {
-                    changeElement.textContent = stats.recent_additions ? `+${stats.recent_additions} this month` : '+0 this month';
-                }
-
-                // Inventory value
-                const valueElement = statCards[1].querySelector('.stat-value');
-                if (valueElement) {
-                    valueElement.textContent = `₱${formatLargeNumber(stats.inventory_value)}`;
-                    console.log('📊 Updated inventory value:', stats.inventory_value);
-                }
-
-                // Low stock items
-                const lowStockElement = statCards[2].querySelector('.stat-value');
-                if (lowStockElement) {
-                    lowStockElement.textContent = stats.low_stock_items || 0;
-                    console.log('📊 Updated low stock:', stats.low_stock_items);
-                }
-
-                // Update the change text color for low stock
-                const lowStockChange = statCards[2].querySelector('.stat-change');
-                if (lowStockChange) {
-                    if (stats.low_stock_items > 0) {
-                        lowStockChange.style.color = '#dc2626';
-                        lowStockChange.textContent = 'Needs attention';
-                    } else {
-                        lowStockChange.style.color = '#10b981';
-                        lowStockChange.textContent = 'All good';
-                    }
-                }
+            // Update change indicators
+            document.getElementById('totalProductsChange').textContent = 
+                stats.recent_additions ? `+${stats.recent_additions} this month` : 'No recent additions';
+            
+            document.getElementById('inventoryValueChange').textContent = '+8.5% from last month';
+            
+            const lowStockChange = document.getElementById('lowStockChange');
+            if (stats.low_stock_items > 0) {
+                lowStockChange.textContent = 'Needs attention';
+                lowStockChange.style.color = '#dc2626';
+            } else {
+                lowStockChange.textContent = 'All good';
+                lowStockChange.style.color = '#10b981';
             }
         }
 
@@ -1014,109 +1000,36 @@
             }
         }
 
-        // Add new product with enhanced logging
-        async function addProduct() {
-            console.log('➕ Starting add product flow...');
-
-            const productData = await showProductDialog();
-            if (!productData) {
-                console.log('❌ Add product cancelled by user');
-                return;
-            }
-
-            console.log('📤 Submitting new product:', productData);
-
-            const result = await fetchAPI('inventory.php', 'POST', productData);
-            if (result) {
-                console.log('✅ Product added successfully:', result);
-                showNotification('Product added successfully!', 'success');
-                loadInventoryData();
-            } else {
-                console.error('❌ Failed to add product');
-            }
+        // Product Modal Functions
+        function openAddProductModal() {
+            isEditMode = false;
+            document.getElementById('modalTitle').textContent = 'Add New Product';
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('productModal').classList.add('active');
         }
 
-        // Show product dialog with enhanced logging
-        function showProductDialog(product = null) {
-            console.log('📝 Showing product dialog for:', product || 'new product');
+        function editProduct(productId) {
+            const product = currentProducts.find(p => p.id == productId);
+            if (!product) return;
 
-            return new Promise((resolve) => {
-                const isEdit = product !== null;
-                const title = isEdit ? 'Edit Product' : 'Add New Product';
-
-                const dialogHTML = `
-                <div class="modal-overlay" id="productModal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3>${title}</h3>
-                            <button class="modal-close" onclick="closeProductDialog()">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="productForm">
-                                <div class="form-group">
-                                    <label>Product Name *</label>
-                                    <input type="text" id="productName" value="${product?.product_name || ''}" required placeholder="Enter product name">
-                                </div>
-                                <div class="form-group">
-                                    <label>SKU *</label>
-                                    <input type="text" id="productSku" value="${product?.sku || ''}" required placeholder="Enter SKU">
-                                </div>
-                                <div class="form-group">
-                                    <label>Category *</label>
-                                    <select id="productCategory" required>
-                                        <option value="">Select Category</option>
-                                        <option value="Electronics" ${product?.category === 'Electronics' ? 'selected' : ''}>Electronics</option>
-                                        <option value="Food & Beverage" ${product?.category === 'Food & Beverage' ? 'selected' : ''}>Food & Beverage</option>
-                                        <option value="Furniture" ${product?.category === 'Furniture' ? 'selected' : ''}>Furniture</option>
-                                        <option value="Accessories" ${product?.category === 'Accessories' ? 'selected' : ''}>Accessories</option>
-                                        <option value="Lighting" ${product?.category === 'Lighting' ? 'selected' : ''}>Lighting</option>
-                                        <option value="Office Supplies" ${product?.category === 'Office Supplies' ? 'selected' : ''}>Office Supplies</option>
-                                        <option value="Stationery" ${product?.category === 'Stationery' ? 'selected' : ''}>Stationery</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Stock Quantity *</label>
-                                    <input type="number" id="productStock" value="${product?.stock_quantity || 0}" min="0" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Price (₱) *</label>
-                                    <input type="number" id="productPrice" value="${product?.price || 0}" min="0" step="0.01" required>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn-secondary" onclick="closeProductDialog()">Cancel</button>
-                            <button class="btn-primary" onclick="submitProductForm()">${isEdit ? 'Update' : 'Add'} Product</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-                document.body.insertAdjacentHTML('beforeend', dialogHTML);
-
-                // Store resolve function globally
-                window.productDialogResolve = resolve;
-
-                console.log('📝 Product dialog displayed');
-            });
+            isEditMode = true;
+            document.getElementById('modalTitle').textContent = 'Edit Product';
+            document.getElementById('productId').value = product.id;
+            document.getElementById('productName').value = product.product_name;
+            document.getElementById('productSku').value = product.sku;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productStock').value = product.stock_quantity;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productModal').classList.add('active');
         }
 
-        // Close product dialog
-        function closeProductDialog() {
-            console.log('❌ Closing product dialog');
-            const modal = document.getElementById('productModal');
-            if (modal) {
-                modal.remove();
-            }
-            if (window.productDialogResolve) {
-                window.productDialogResolve(null);
-            }
+        function closeProductModal() {
+            document.getElementById('productModal').classList.remove('active');
+            document.getElementById('productForm').reset();
         }
 
-        // Submit product form with validation logging
-        function submitProductForm() {
-            console.log('📤 Submitting product form...');
-
+        async function saveProduct() {
             const productData = {
                 product_name: document.getElementById('productName').value.trim(),
                 sku: document.getElementById('productSku').value.trim(),
@@ -1125,48 +1038,266 @@
                 price: parseFloat(document.getElementById('productPrice').value)
             };
 
-            console.log('📋 Form data collected:', productData);
-
-            // Enhanced validation with logging
+            // Validation
             if (!productData.product_name) {
-                console.error('❌ Validation failed: Product name is required');
                 showNotification('Product name is required', 'error');
                 return;
             }
-
             if (!productData.sku) {
-                console.error('❌ Validation failed: SKU is required');
                 showNotification('SKU is required', 'error');
                 return;
             }
-
             if (!productData.category) {
-                console.error('❌ Validation failed: Category is required');
                 showNotification('Please select a category', 'error');
                 return;
             }
-
             if (isNaN(productData.stock_quantity) || productData.stock_quantity < 0) {
-                console.error('❌ Validation failed: Invalid stock quantity');
                 showNotification('Stock quantity must be a valid non-negative number', 'error');
                 return;
             }
-
             if (isNaN(productData.price) || productData.price <= 0) {
-                console.error('❌ Validation failed: Invalid price');
                 showNotification('Price must be a valid positive number', 'error');
                 return;
             }
 
-            console.log('✅ Form validation passed, submitting...');
+            try {
+                let result;
+                if (isEditMode) {
+                    const productId = document.getElementById('productId').value;
+                    result = await fetchAPI(`inventory.php?id=${productId}`, 'PUT', productData);
+                } else {
+                    result = await fetchAPI('inventory.php', 'POST', productData);
+                }
 
-            closeProductDialog();
-            if (window.productDialogResolve) {
-                window.productDialogResolve(productData);
+                if (result) {
+                    showNotification(`Product ${isEditMode ? 'updated' : 'added'} successfully!`, 'success');
+                    closeProductModal();
+                    loadInventoryData();
+                }
+            } catch (error) {
+                showNotification(`Failed to ${isEditMode ? 'update' : 'add'} product`, 'error');
             }
         }
 
-        // Utility functions
+        // Delete Product Functions
+        function deleteProduct(productId, productName) {
+            deleteProductId = productId;
+            document.getElementById('deleteProductName').textContent = productName;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            deleteProductId = null;
+        }
+
+        async function confirmDelete() {
+            if (!deleteProductId) return;
+
+            try {
+                const result = await fetchAPI(`inventory.php?id=${deleteProductId}`, 'DELETE');
+                if (result) {
+                    showNotification('Product deleted successfully!', 'success');
+                    closeDeleteModal();
+                    loadInventoryData();
+                }
+            } catch (error) {
+                showNotification('Failed to delete product', 'error');
+            }
+        }
+
+        // Search Functionality
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            const filteredProducts = currentProducts.filter(product => 
+                product.product_name.toLowerCase().includes(searchTerm) ||
+                product.sku.toLowerCase().includes(searchTerm) ||
+                product.category.toLowerCase().includes(searchTerm)
+            );
+            renderInventoryTable(filteredProducts);
+        }
+
+        // CSV Import Functionality
+        function handleCSVImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+                showNotification('Please select a valid CSV file', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csv = e.target.result;
+                    const lines = csv.split('\n');
+                    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                    
+                    // Validate headers
+                    const requiredHeaders = ['product_name', 'sku', 'category', 'stock_quantity', 'price'];
+                    const hasRequiredHeaders = requiredHeaders.every(header => 
+                        headers.some(h => h.includes(header.replace('_', ' ')) || h.includes(header))
+                    );
+
+                    if (!hasRequiredHeaders) {
+                        showNotification('CSV must contain columns: Product Name, SKU, Category, Stock Quantity, Price', 'error');
+                        return;
+                    }
+
+                    // Parse products
+                    const products = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        const line = lines[i].trim();
+                        if (!line) continue;
+
+                        const values = line.split(',').map(v => v.trim().replace(/"/g, ''));
+                        if (values.length < 5) continue;
+
+                        const product = {
+                            product_name: values[0],
+                            sku: values[1],
+                            category: values[2],
+                            stock_quantity: parseInt(values[3]) || 0,
+                            price: parseFloat(values[4]) || 0
+                        };
+
+                        if (product.product_name && product.sku) {
+                            products.push(product);
+                        }
+                    }
+
+                    if (products.length === 0) {
+                        showNotification('No valid products found in CSV', 'error');
+                        return;
+                    }
+
+                    importProducts(products);
+                    
+                } catch (error) {
+                    showNotification('Error parsing CSV file: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        async function importProducts(products) {
+            showNotification(`Importing ${products.length} products...`, 'info');
+            
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (const product of products) {
+                try {
+                    const result = await fetchAPI('inventory.php', 'POST', product);
+                    if (result) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                    }
+                } catch (error) {
+                    errorCount++;
+                }
+            }
+
+            showNotification(
+                `Import complete: ${successCount} products added, ${errorCount} failed`, 
+                successCount > 0 ? 'success' : 'warning'
+            );
+
+            if (successCount > 0) {
+                loadInventoryData();
+            }
+        }
+
+        // Export Functionality
+        function exportInventory() {
+            window.open('inventory.php?export=csv', '_blank');
+        }
+
+        // Quick Actions
+        function filterLowStock() {
+            const lowStockProducts = currentProducts.filter(product => 
+                product.stock_quantity < 20 && product.stock_quantity > 0
+            );
+            renderInventoryTable(lowStockProducts);
+            showNotification(`Showing ${lowStockProducts.length} low stock items`, 'info');
+        }
+
+        function generateReport() {
+            const report = {
+                totalProducts: currentProducts.length,
+                totalValue: currentProducts.reduce((sum, p) => sum + (p.stock_quantity * p.price), 0),
+                lowStockItems: currentProducts.filter(p => p.stock_quantity < 20 && p.stock_quantity > 0).length,
+                outOfStockItems: currentProducts.filter(p => p.stock_quantity === 0).length,
+                categories: [...new Set(currentProducts.map(p => p.category))].length
+            };
+
+            const reportText = `
+INVENTORY REPORT
+Generated: ${new Date().toLocaleDateString()}
+
+Total Products: ${report.totalProducts}
+Total Inventory Value: ₱${formatLargeNumber(report.totalValue)}
+Low Stock Items: ${report.lowStockItems}
+Out of Stock Items: ${report.outOfStockItems}
+Categories: ${report.categories}
+
+Top Categories:
+${getTopCategories().map(cat => `- ${cat.category}: ${cat.count} items`).join('\n')}
+            `.trim();
+
+            // Create and download report
+            const blob = new Blob([reportText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `inventory_report_${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showNotification('Inventory report generated', 'success');
+        }
+
+        function getTopCategories() {
+            const categoryCount = {};
+            currentProducts.forEach(product => {
+                categoryCount[product.category] = (categoryCount[product.category] || 0) + 1;
+            });
+
+            return Object.entries(categoryCount)
+                .map(([category, count]) => ({ category, count }))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 5);
+        }
+
+        function bulkUpdatePrices() {
+            const percentage = prompt('Enter percentage change (e.g., 10 for +10%, -5 for -5%):');
+            if (!percentage || isNaN(percentage)) return;
+
+            const change = parseFloat(percentage) / 100;
+            const confirmed = confirm(`Apply ${percentage}% price change to all products?`);
+            
+            if (confirmed) {
+                showNotification('Bulk price update feature would be implemented here', 'info');
+            }
+        }
+
+        function stockAudit() {
+            const auditData = currentProducts.map(product => ({
+                sku: product.sku,
+                name: product.product_name,
+                currentStock: product.stock_quantity,
+                value: product.price * product.stock_quantity,
+                status: product.stock_quantity === 0 ? 'Out of Stock' : 
+                       product.stock_quantity < 20 ? 'Low Stock' : 'In Stock'
+            }));
+
+            console.table(auditData);
+            showNotification('Stock audit data logged to console. Full audit feature coming soon!', 'info');
+        }
+
+        // Utility Functions
         function formatNumber(num) {
             if (!num) return '0.00';
             return parseFloat(num).toLocaleString('en-US', {
@@ -1192,10 +1323,8 @@
         }
 
         function showLoadingState() {
-            console.log('⏳ Showing loading state');
-            const tbody = document.querySelector('.inventory-table tbody');
-            if (tbody) {
-                tbody.innerHTML = `
+            const tbody = document.getElementById('inventoryTableBody');
+            tbody.innerHTML = `
                 <tr>
                     <td colspan="7" style="text-align: center; padding: 2rem;">
                         <div class="loading-spinner"></div>
@@ -1203,40 +1332,26 @@
                     </td>
                 </tr>
             `;
-            }
         }
 
-        function hideLoadingState() {
-            console.log('✅ Hiding loading state');
+        function showErrorState() {
+            const tbody = document.getElementById('inventoryTableBody');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: #ef4444;">
+                        ❌ Error loading inventory data
+                        <br><br>
+                        <button onclick="loadInventoryData()" class="btn-primary">
+                            Retry
+                        </button>
+                    </td>
+                </tr>
+            `;
         }
 
-        // Show notification
         function showNotification(message, type = 'info') {
-            console.log(`📢 Notification (${type}): ${message}`);
-
             const notification = document.createElement('div');
             notification.className = `notification notification-${type}`;
-            notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            z-index: 1000;
-            animation: slideInRight 0.3s ease;
-            max-width: 300px;
-        `;
-
-            const colors = {
-                success: '#10b981',
-                error: '#ef4444',
-                warning: '#f59e0b',
-                info: '#3b82f6'
-            };
-
-            notification.style.backgroundColor = colors[type] || colors.info;
             notification.textContent = message;
 
             document.body.appendChild(notification);
@@ -1246,167 +1361,49 @@
             }, 5000);
         }
 
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('🚀 DOM Content Loaded - Initializing inventory page...');
-
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
             updateTime();
             setInterval(updateTime, 1000);
 
             // Load initial data
-            console.log('📊 Loading initial inventory data...');
             loadInventoryData();
 
             // Button event listeners
-            document.addEventListener('click', function (e) {
-                if (e.target.textContent === '+ Add Product') {
-                    console.log('🎯 Add Product button clicked');
-                    e.preventDefault();
-                    addProduct();
-                }
+            document.getElementById('addProductBtn').addEventListener('click', openAddProductModal);
+            document.getElementById('exportBtn').addEventListener('click', exportInventory);
+            document.getElementById('csvFileInput').addEventListener('change', handleCSVImport);
+            document.getElementById('searchBar').addEventListener('input', searchProducts);
+
+            // Modal event listeners
+            document.getElementById('productModal').addEventListener('click', function(e) {
+                if (e.target === this) closeProductModal();
             });
 
-            console.log('✅ Inventory page initialization complete');
+            document.getElementById('deleteModal').addEventListener('click', function(e) {
+                if (e.target === this) closeDeleteModal();
+            });
+
+            // Form submission
+            document.getElementById('productForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProduct();
+            });
         });
 
-        // Make functions available globally
-        window.debugAPI = debugAPI;
-        window.testDirectURL = testDirectURL;
-        window.addProduct = addProduct;
-        window.closeProductDialog = closeProductDialog;
-        window.submitProductForm = submitProductForm;
-
-        // Add styles
-        const inventoryStyles = document.createElement('style');
-        inventoryStyles.textContent = `
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-header h3 {
-            margin: 0;
-            color: #1e293b;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #64748b;
-        }
-        
-        .modal-body {
-            padding: 1.5rem;
-        }
-        
-        .modal-footer {
-            padding: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #374151;
-        }
-        
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-        
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-        
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #e2e8f0;
-            border-top: 2px solid #4f46e5;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 0.5rem;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    `;
-        document.head.appendChild(inventoryStyles);
-
-        console.log('🎨 Styles loaded');
+        // Make functions globally available
+        window.openAddProductModal = openAddProductModal;
+        window.editProduct = editProduct;
+        window.deleteProduct = deleteProduct;
+        window.closeProductModal = closeProductModal;
+        window.closeDeleteModal = closeDeleteModal;
+        window.saveProduct = saveProduct;
+        window.confirmDelete = confirmDelete;
+        window.filterLowStock = filterLowStock;
+        window.generateReport = generateReport;
+        window.bulkUpdatePrices = bulkUpdatePrices;
+        window.stockAudit = stockAudit;
     </script>
 </body>
-
-
 
 </html>

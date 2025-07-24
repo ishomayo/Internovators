@@ -34,7 +34,7 @@
 
         .logo {
             background: #4f46e5;
-            color: white;
+            color: rgb(175, 105, 105);
             width: 40px;
             height: 40px;
             border-radius: 8px;
@@ -55,12 +55,6 @@
             text-align: right;
             font-size: 12px;
             color: #64748b;
-        }
-
-        .user-section {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .notification-btn {
@@ -195,7 +189,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(248, 250, 252, 0.8);
+            background: rgba(248, 250, 252, 0.4);
             z-index: 1;
         }
 
@@ -204,23 +198,32 @@
             z-index: 2;
         }
 
-        .dashboard-welcome {
-            max-width: 600px;
-            margin-bottom: 3rem;
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            color: white;
         }
 
         .welcome-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1e293b;
+            font-size: 3.5rem;
+            font-weight: 800;
             margin-bottom: 1rem;
+            background-color: red;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
         }
 
         .welcome-subtitle {
-            font-size: 1.125rem;
-            color: #64748b;
+            font-size: 1.25rem;
+            opacity: 1;
             line-height: 1.6;
             margin-bottom: 2rem;
+            color: rgba(3, 0, 68, 0.8);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .action-buttons {
@@ -228,76 +231,207 @@
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
+            margin-bottom: 3rem;
         }
 
-        .btn-primary {
-            background: #4f46e5;
-            color: white;
-            padding: 12px 24px;
+        .btn-hero {
+            background: white;
+            color: #070090;
+            padding: 16px 32px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-hero-secondary {
+            background: rgb(251, 255, 0);
+            color: rgb(204, 0, 0);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-hero-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Business Tools Grid */
+        .tools-section {
+            margin-bottom: 3rem;
+        }
+
+        .tools-title {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--tool-color, #4f46e5);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: var(--tool-color, #4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .tool-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .tool-description {
+            color: #64748b;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .tool-features li {
+            color: #475569;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tool-features li::before {
+            content: '✓';
+            color: var(--tool-color, #4f46e5);
+            font-weight: bold;
+        }
+
+        .tool-button {
+            width: 100%;
+            background: var(--tool-color, #4f46e5);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .btn-primary:hover {
-            background: #4338ca;
+        .tool-button:hover {
+            background: var(--tool-color-hover, #4338ca);
             transform: translateY(-1px);
         }
 
-        .btn-secondary {
-            background: white;
-            color: #64748b;
-            padding: 12px 24px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        /* Tool-specific colors */
+        .tool-inventory {
+            --tool-color: #0ea5e9;
+            --tool-color-hover: #0284c7;
         }
 
-        .btn-secondary:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
+        .tool-payroll {
+            --tool-color: #10b981;
+            --tool-color-hover: #059669;
         }
 
-        .dashboard-stats {
+        .tool-expenses {
+            --tool-color: #f59e0b;
+            --tool-color-hover: #d97706;
+        }
+
+        .tool-support {
+            --tool-color: #8b5cf6;
+            --tool-color-hover: #7c3aed;
+        }
+
+        .tool-logistics {
+            --tool-color: #ef4444;
+            --tool-color-hover: #dc2626;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
-            width: 100%;
-            max-width: 800px;
-            margin: 2rem 0;
+            margin-bottom: 3rem;
         }
 
         .stat-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            text-align: left;
+            border-radius: 16px;
+            text-align: center;
+            color: white;
         }
 
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #1e293b;
             margin-bottom: 0.5rem;
         }
 
         .stat-label {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-change {
-            font-size: 12px;
-            color: #10b981;
-            font-weight: 500;
+            font-size: 0.875rem;
+            opacity: 0.8;
         }
 
         /* Chatbot Styles */
@@ -305,37 +439,37 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 56px;
-            height: 56px;
-            background: #ef4444;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 20px;
+            font-size: 24px;
             transition: all 0.3s ease;
             z-index: 1000;
         }
 
         .chatbot-toggle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(239, 68, 68, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.5);
         }
 
         .chatbot-container {
             position: fixed;
             bottom: 100px;
             right: 30px;
-            width: 360px;
-            height: 520px;
+            width: 380px;
+            height: 550px;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transform: translateY(20px) scale(0.95);
             opacity: 0;
             visibility: hidden;
@@ -352,11 +486,11 @@
         }
 
         .chatbot-header {
-            background: #f8fafc;
-            color: #1e293b;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
             padding: 20px;
-            border-radius: 16px 16px 0 0;
-            border-bottom: 1px solid #e2e8f0;
+            border-radius: 20px 20px 0 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -368,13 +502,13 @@
         }
 
         .chatbot-close {
-            background: none;
+            background: rgba(255, 255, 255, 0.2);
             border: none;
-            color: #64748b;
+            color: white;
             font-size: 18px;
             cursor: pointer;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -383,8 +517,7 @@
         }
 
         .chatbot-close:hover {
-            background: #e2e8f0;
-            color: #1e293b;
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .chatbot-messages {
@@ -413,7 +546,7 @@
         }
 
         .message.user {
-            background: #4f46e5;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             align-self: flex-end;
             border-bottom-right-radius: 4px;
@@ -441,11 +574,11 @@
         }
 
         .chatbot-input:focus {
-            border-color: #4f46e5;
+            border-color: #667eea;
         }
 
         .chatbot-send {
-            background: #4f46e5;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
             width: 40px;
@@ -461,7 +594,7 @@
         }
 
         .chatbot-send:hover:not(:disabled) {
-            background: #4338ca;
+            transform: scale(1.05);
         }
 
         .chatbot-send:disabled {
@@ -489,23 +622,14 @@
             animation: typingPulse 1.4s infinite ease-in-out;
         }
 
-        .typing-dot:nth-child(1) {
-            animation-delay: -0.32s;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: -0.16s;
-        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
 
         @keyframes typingPulse {
-
-            0%,
-            80%,
-            100% {
+            0%, 80%, 100% {
                 transform: scale(0);
                 opacity: 0.5;
             }
-
             40% {
                 transform: scale(1);
                 opacity: 1;
@@ -517,7 +641,6 @@
                 opacity: 0;
                 transform: translateY(8px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -528,9 +651,13 @@
             .sidebar {
                 width: 240px;
             }
-
+            
             .main-content {
                 padding: 2rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -538,29 +665,34 @@
             .header {
                 padding: 0 1rem;
             }
-
+            
             .main-layout {
                 flex-direction: column;
             }
-
+            
             .sidebar {
                 width: 100%;
                 padding: 1rem;
                 border-right: none;
                 border-bottom: 1px solid #e2e8f0;
             }
-
+            
             .welcome-title {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
             .chatbot-container {
                 width: calc(100vw - 40px);
                 right: 20px;
                 bottom: 90px;
-                height: 480px;
+                height: 500px;
             }
-
+            
             .chatbot-toggle {
                 right: 20px;
                 bottom: 20px;
@@ -576,7 +708,7 @@
         <div class="header-right">
             <div class="time-info">
                 <div>Philippine Standard Time</div>
-                <div>Friday, June 20, 2025, 9:29:45 AM</div>
+                <div id="current-time">Friday, June 20, 2025, 9:29:45 AM</div>
             </div>
             <button class="notification-btn">🔔</button>
             <button class="user-btn">
@@ -613,7 +745,7 @@
                 </a>
                 <a href="support.html" class="nav-item" data-page="support">
                     <div class="nav-icon">💬</div>
-                    Talk with SangkAI
+                    Communication & Support
                 </a>
                 <a href="logistics.html" class="nav-item">
                     <div class="nav-icon">🚚</div>
@@ -624,38 +756,113 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <div class="dashboard-welcome">
-                <h1 class="welcome-title">Welcome to Your Dashboard</h1>
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <h1 class="welcome-title">Welcome to Barato!</h1>
                 <p class="welcome-subtitle">
-                    Get a comprehensive overview of your business operations. Monitor key metrics,
-                    manage your inventory, track expenses, and streamline your workflow all in one place.
+                    Your all-in-one business management platform. Streamline operations, boost productivity, 
+                    and grow your business with our comprehensive suite of tools.
                 </p>
                 <div class="action-buttons">
-                    <button class="btn-primary" onclick="openChatbot()">Get Started</button>
-                    <button class="btn-secondary">View Reports</button>
+                    <button class="btn-hero" onclick="openChatbot()">Get Started ></button>
+                    <button class="btn-hero btn-hero-secondary" onclick="scrollToTools()">Explore Tools ></button>
                 </div>
             </div>
 
-            <div class="dashboard-stats">
-                <div class="stat-card">
-                    <div class="stat-value">₱125,400</div>
-                    <div class="stat-label">Total Revenue</div>
-                    <div class="stat-change">+12.5% from last month</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">342</div>
-                    <div class="stat-label">Active Orders</div>
-                    <div class="stat-change">+8.2% from last week</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">₱45,230</div>
-                    <div class="stat-label">Monthly Expenses</div>
-                    <div class="stat-change">-3.1% from last month</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">89%</div>
-                    <div class="stat-label">Inventory Health</div>
-                    <div class="stat-change">Optimal levels maintained</div>
+
+            <!-- Business Tools Section -->
+            <div class="tools-section" id="tools-section">
+                <h2 class="tools-title">⚡ Powerful Business Tools</h2>
+                <div class="tools-grid">
+                    <!-- Inventory Management -->
+                    <div class="tool-card tool-inventory">
+                        <div class="tool-icon">📦</div>
+                        <h3 class="tool-title">Inventory Management</h3>
+                        <p class="tool-description">
+                            Track stock levels, manage products, and optimize your inventory operations with real-time updates and insights.
+                        </p>
+                        <ul class="tool-features">
+                            <li>Real-time stock tracking</li>
+                            <li>Low stock alerts</li>
+                            <li>Product categorization</li>
+                            <li>Inventory reports</li>
+                        </ul>
+                        <button class="tool-button" onclick="navigateToTool('inventory.html')">
+                            Manage Inventory →
+                        </button>
+                    </div>
+
+                    <!-- Payroll -->
+                    <div class="tool-card tool-payroll">
+                        <div class="tool-icon">💰</div>
+                        <h3 class="tool-title">Payroll Management</h3>
+                        <p class="tool-description">
+                            Streamline employee payments, calculate deductions, and generate payroll reports with automated processing.
+                        </p>
+                        <ul class="tool-features">
+                            <li>Automated payroll processing</li>
+                            <li>Tax calculations</li>
+                            <li>Pay stub generation</li>
+                            <li>Employee records</li>
+                        </ul>
+                        <button class="tool-button" onclick="navigateToTool('payroll.html')">
+                            Process Payroll →
+                        </button>
+                    </div>
+
+                    <!-- Expense Tracker -->
+                    <div class="tool-card tool-expenses">
+                        <div class="tool-icon">📈</div>
+                        <h3 class="tool-title">Expense Tracker</h3>
+                        <p class="tool-description">
+                            Monitor business expenses, track spending patterns, categorize costs, and maintain budget control.
+                        </p>
+                        <ul class="tool-features">
+                            <li>Expense categorization</li>
+                            <li>Budget monitoring</li>
+                            <li>Receipt management</li>
+                            <li>Financial reports</li>
+                        </ul>
+                        <button class="tool-button" onclick="navigateToTool('expenses.php')">
+                            Track Expenses →
+                        </button>
+                    </div>
+
+                    <!-- Communication & Support -->
+                    <div class="tool-card tool-support">
+                        <div class="tool-icon">💬</div>
+                        <h3 class="tool-title">AI Support Assistant</h3>
+                        <p class="tool-description">
+                            Get instant help with SangkAI, your intelligent business assistant for troubleshooting and guidance.
+                        </p>
+                        <ul class="tool-features">
+                            <li>24/7 AI assistance</li>
+                            <li>Smart troubleshooting</li>
+                            <li>Business guidance</li>
+                            <li>Instant responses</li>
+                        </ul>
+                        <button class="tool-button" onclick="navigateToTool('support.html')">
+                            Chat with SangkAI →
+                        </button>
+                    </div>
+
+                    <!-- Logistics & Suppliers -->
+                    <div class="tool-card tool-logistics">
+                        <div class="tool-icon">🚚</div>
+                        <h3 class="tool-title">Logistics & Suppliers</h3>
+                        <p class="tool-description">
+                            Find suppliers across the Visayas region, manage logistics, and optimize your supply chain operations.
+                        </p>
+                        <ul class="tool-features">
+                            <li>Supplier mapping</li>
+                            <li>Quote requests</li>
+                            <li>Delivery tracking</li>
+                            <li>Regional suppliers</li>
+                        </ul>
+                        <button class="tool-button" onclick="navigateToTool('logistics.html')">
+                            Find Suppliers →
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -666,13 +873,13 @@
 
     <div class="chatbot-container" id="chatbotContainer">
         <div class="chatbot-header">
-            <div class="chatbot-title">Business Assistant</div>
+            <div class="chatbot-title">SangkAI Assistant</div>
             <button class="chatbot-close" id="chatbotClose">×</button>
         </div>
 
         <div class="chatbot-messages" id="chatbotMessages">
             <div class="message bot">
-                Hello! I'm here to help you navigate your business dashboard. What would you like to know about?
+                Hello ka-SangkAI! 🚀 I'm SangkAI, your intelligent business assistant. I'm here to help you navigate your business operations and answer any questions you might have!
             </div>
         </div>
 
@@ -683,37 +890,7 @@
         </div>
     </div>
 
-    // Add this JavaScript to your landing.html file (replace the existing script section)
-
     <script>
-        // API Helper Functions
-        async function fetchAPI(endpoint, method = 'GET', data = null) {
-            try {
-                const options = {
-                    method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                };
-
-                if (data) {
-                    options.body = JSON.stringify(data);
-                }
-
-                const response = await fetch(`api/${endpoint}`, options);
-                const result = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(result.error || 'API request failed');
-                }
-
-                return result;
-            } catch (error) {
-                console.error('API Error:', error);
-                return null;
-            }
-        }
-
         // Update time every second
         function updateTime() {
             const now = new Date();
@@ -737,155 +914,21 @@
             }
         }
 
-        // Load dashboard data from backend
-        async function loadDashboardData() {
-            const data = await fetchAPI('dashboard.php');
-            if (data) {
-                updateDashboardStats(data);
-            }
+        // Navigation functions
+        function navigateToTool(url) {
+            // Add a smooth transition effect
+            document.body.style.opacity = '0.8';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 200);
         }
 
-        // Update dashboard statistics
-        function updateDashboardStats(data) {
-            // Update main stats cards
-            const statsCards = document.querySelectorAll('.stat-card');
-            if (statsCards.length >= 4) {
-                // Revenue card
-                statsCards[0].querySelector('.stat-value').textContent = `₱${formatNumber(data.total_revenue)}`;
-                statsCards[0].querySelector('.stat-change').textContent = data.revenue_change || '+12.5% from last month';
-
-                // Orders card
-                statsCards[1].querySelector('.stat-value').textContent = formatNumber(data.active_orders);
-                statsCards[1].querySelector('.stat-change').textContent = data.orders_change || '+8.2% from last week';
-
-                // Expenses card
-                statsCards[2].querySelector('.stat-value').textContent = `₱${formatNumber(data.monthly_expenses)}`;
-                statsCards[2].querySelector('.stat-change').textContent = data.expenses_change || '-3.1% from last month';
-
-                // Inventory health card
-                statsCards[3].querySelector('.stat-value').textContent = `${data.inventory_health}%`;
-                statsCards[3].querySelector('.stat-change').textContent = data.inventory_status || 'Optimal levels maintained';
-            }
-
-            // Show alerts if any
-            if (data.alerts && data.alerts.length > 0) {
-                showDashboardAlerts(data.alerts);
-            }
-        }
-
-        // Format numbers with commas
-        function formatNumber(num) {
-            if (!num) return '0';
-            return parseFloat(num).toLocaleString('en-US', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
+        function scrollToTools() {
+            document.getElementById('tools-section').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
             });
         }
-
-        // Show dashboard alerts
-        function showDashboardAlerts(alerts) {
-            // Create alerts container if it doesn't exist
-            let alertsContainer = document.getElementById('dashboard-alerts');
-            if (!alertsContainer) {
-                alertsContainer = document.createElement('div');
-                alertsContainer.id = 'dashboard-alerts';
-                alertsContainer.style.cssText = `
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                max-width: 350px;
-                z-index: 1000;
-            `;
-                document.body.appendChild(alertsContainer);
-            }
-
-            // Clear existing alerts
-            alertsContainer.innerHTML = '';
-
-            // Show up to 3 most important alerts
-            alerts.slice(0, 3).forEach((alert, index) => {
-                setTimeout(() => {
-                    const alertDiv = document.createElement('div');
-                    alertDiv.className = `alert alert-${alert.type}`;
-                    alertDiv.style.cssText = `
-                    background: white;
-                    border: 1px solid ${getAlertBorderColor(alert.type)};
-                    border-left: 4px solid ${getAlertBorderColor(alert.type)};
-                    border-radius: 8px;
-                    padding: 1rem;
-                    margin-bottom: 0.5rem;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                    animation: slideIn 0.3s ease;
-                    cursor: pointer;
-                `;
-
-                    alertDiv.innerHTML = `
-                    <div style="display: flex; justify-content: between; align-items: flex-start;">
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem;">
-                                ${getAlertIcon(alert.type)} ${alert.title}
-                            </div>
-                            <div style="font-size: 14px; color: #64748b; margin-bottom: 0.5rem;">
-                                ${alert.message}
-                            </div>
-                            <div style="font-size: 12px; color: #4f46e5; font-weight: 500;">
-                                ${alert.action}
-                            </div>
-                        </div>
-                        <button onclick="this.parentElement.parentElement.remove()" style="
-                            background: none; border: none; color: #64748b; cursor: pointer;
-                            font-size: 18px; padding: 0; margin-left: 0.5rem;
-                        ">×</button>
-                    </div>
-                `;
-
-                    // Auto remove after 10 seconds
-                    setTimeout(() => {
-                        if (alertDiv.parentElement) {
-                            alertDiv.remove();
-                        }
-                    }, 10000);
-
-                    alertsContainer.appendChild(alertDiv);
-                }, index * 500); // Stagger alerts
-            });
-        }
-
-        function getAlertBorderColor(type) {
-            const colors = {
-                'info': '#3b82f6',
-                'warning': '#f59e0b',
-                'danger': '#ef4444',
-                'success': '#10b981'
-            };
-            return colors[type] || '#64748b';
-        }
-
-        function getAlertIcon(type) {
-            const icons = {
-                'info': 'ℹ️',
-                'warning': '⚠️',
-                'danger': '🚨',
-                'success': '✅'
-            };
-            return icons[type] || 'ℹ️';
-        }
-
-        // Add CSS for alert animations
-        const alertStyles = document.createElement('style');
-        alertStyles.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    `;
-        document.head.appendChild(alertStyles);
 
         // Chatbot functionality
         const chatbotToggle = document.getElementById('chatbotToggle');
@@ -901,23 +944,6 @@
         function openChatbot() {
             chatbotContainer.classList.add('active');
             chatbotInput.focus();
-            loadChatHistory();
-        }
-
-        // Load chat history from backend
-        async function loadChatHistory() {
-            const messages = await fetchAPI(`support.php?endpoint=chat&session_id=${sessionId}&limit=10`);
-            if (messages && messages.length > 0) {
-                chatbotMessages.innerHTML = '';
-                messages.forEach(msg => {
-                    if (msg.message) {
-                        addMessage(msg.message, 'user', false);
-                    }
-                    if (msg.response) {
-                        addMessage(msg.response, 'bot', false);
-                    }
-                });
-            }
         }
 
         // Toggle chatbot
@@ -939,17 +965,30 @@
                 showTypingIndicator();
 
                 // Send to backend
-                const response = await fetchAPI('support.php?endpoint=chat', 'POST', {
-                    message: message,
-                    session_id: sessionId
-                });
+                try {
+                    const response = await fetch('support.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            session_id: sessionId
+                        })
+                    });
 
-                hideTypingIndicator();
+                    const data = await response.json();
+                    
+                    hideTypingIndicator();
 
-                if (response && response.response) {
-                    addMessage(response.response, 'bot');
-                } else {
-                    addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                    if (data.success) {
+                        addMessage(data.response, 'bot');
+                    } else {
+                        addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                    }
+                } catch (error) {
+                    hideTypingIndicator();
+                    addMessage('Sorry, I could not connect to the support service. Please try again later.', 'bot');
                 }
 
                 chatbotSend.disabled = false;
@@ -960,7 +999,7 @@
         function addMessage(text, sender, animate = true) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}`;
-            messageDiv.innerHTML = text; // Allow HTML in bot responses
+            messageDiv.innerHTML = text;
 
             if (animate) {
                 messageDiv.style.animation = 'messageSlideIn 0.3s ease';
@@ -990,12 +1029,6 @@
             }
         }
 
-        // Enhanced bot responses with backend integration
-        async function getBotResponse(message) {
-            // This is now handled by the backend
-            return null;
-        }
-
         // Event listeners
         chatbotSend.addEventListener('click', sendMessage);
 
@@ -1005,16 +1038,14 @@
             }
         });
 
-        // Navigation interactions - Simplified to allow normal navigation
+        // Navigation interactions
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
-                // Only handle dashboard clicks (no navigation needed)
                 if (item.getAttribute('href') === '#') {
                     e.preventDefault();
                     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
                     item.classList.add('active');
                 }
-                // For all other links with actual hrefs, let the browser navigate normally
             });
         });
 
@@ -1025,25 +1056,105 @@
             }
         });
 
-        // Initialize everything when page loads
-        document.addEventListener('DOMContentLoaded', function () {
+        // Tool card hover effects
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Smooth scroll for action buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize everything
             updateTime();
             setInterval(updateTime, 1000);
 
-            // Load dashboard data
-            loadDashboardData();
+            // Add some entrance animations
+            const cards = document.querySelectorAll('.tool-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
 
-            // Refresh dashboard data every 5 minutes
-            setInterval(loadDashboardData, 5 * 60 * 1000);
+            // Add parallax effect to hero section
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const heroSection = document.querySelector('.hero-section');
+                if (heroSection) {
+                    heroSection.style.transform = `translateY(${scrolled * 0.5}px)`;
+                }
+            });
         });
 
-        // Add some utility functions for other pages to use
-        window.BusinessHub = {
-            fetchAPI,
-            formatNumber,
-            updateTime,
-            openChatbot
-        };
+        // Quick stats animation
+        function animateStats() {
+            const statValues = document.querySelectorAll('.stat-value');
+            const targets = ['125400', '342', '89', '5'];
+            
+            statValues.forEach((stat, index) => {
+                const target = parseInt(targets[index]);
+                const increment = target / 50;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    
+                    if (index === 0) {
+                        stat.textContent = '₱' + Math.floor(current).toLocaleString();
+                    } else if (index === 2) {
+                        stat.textContent = Math.floor(current) + '%';
+                    } else {
+                        stat.textContent = Math.floor(current);
+                    }
+                }, 50);
+            });
+        }
+
+        // Start stats animation when page loads
+        window.addEventListener('load', () => {
+            setTimeout(animateStats, 500);
+        });
+
+        // Add some interactive features
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.querySelector('.cursor');
+            if (!cursor) {
+                const newCursor = document.createElement('div');
+                newCursor.className = 'cursor';
+                newCursor.style.cssText = `
+                    position: fixed;
+                    width: 20px;
+                    height: 20px;
+                    background: rgba(255, 255, 255, 0.8);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 9999;
+                    transition: all 0.1s ease;
+                    backdrop-filter: blur(5px);
+                `;
+                document.body.appendChild(newCursor);
+            }
+            
+        });
+
+        // Make functions globally available
+        window.navigateToTool = navigateToTool;
+        window.scrollToTools = scrollToTools;
+        window.openChatbot = openChatbot;
     </script>
 </body>
 

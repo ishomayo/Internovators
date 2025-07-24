@@ -349,8 +349,7 @@
             background: white;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            max-height: 500px;
-            max-width: 600px;
+            height: 400px;
         }
 
         .chart-title {
@@ -363,9 +362,8 @@
         canvas#expenseChart {
             display: flex;
             flex-direction: column;
-            height: 500px !important;
+            height: 320px !important;
             width: 100% !important;
-            max-width: 100%;
         }
 
         .quick-actions {
@@ -529,3 +527,4 @@
         #newCategoryInput {
             display: none;
         }
+    

@@ -173,7 +173,25 @@
         .main-content {
             flex: 1;
             padding: 2rem;
-            background: #f8fafc;
+            background: #f8fafc url('assets/bg.png') center center/cover no-repeat;
+            position: relative;
+        }
+
+        /* Optional: Add overlay for better text readability */
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(248, 250, 252, 0.8);
+            z-index: 1;
+        }
+
+        .main-content>* {
+            position: relative;
+            z-index: 2;
         }
 
         .content-header {
@@ -642,7 +660,7 @@
                 </a>
                 <a href="support.html" class="nav-item" data-page="support">
                     <div class="nav-icon">💬</div>
-                    Talk with SangkAI
+                    Communication & Support
                 </a>
                 <a href="logistics.html" class="nav-item active">
                     <div class="nav-icon">🚚</div>
@@ -993,7 +1011,6 @@
                             <div class="popup-rating">⭐ ${supplier.rating}/5</div>
                             <div class="popup-info">⏱️ ${supplier.leadTime} days lead time</div>
                             <div class="popup-info">💰 Min order: ₱${supplier.minOrder.toLocaleString()}</div>
-                            <button class="popup-btn" onclick="showSupplierDetails(${supplier.id})">View Details</button>
                         </div>
                     `);
 
