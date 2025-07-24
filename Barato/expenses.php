@@ -890,7 +890,6 @@
                 demoMessage = `
                     <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; margin-bottom: 1rem; font-size: 13px; opacity: 0.9;">
                         💡 <strong>Demo Mode:</strong> These insights are generated from your actual expense data using built-in analysis. 
-                        Configure your Rev2 Labs API key for AI-powered insights.
                     </div>
                 `;
             }
