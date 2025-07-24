@@ -486,6 +486,56 @@
                 width: 100%;
             }
         }
+
+        /* Modal Styles */
+        #expenseModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        #expenseModal .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #expenseModal h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        #expenseModal label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        #expenseModal input,
+        #expenseModal select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        #expenseModal .btn-secondary {
+            margin-top: 0.5rem;
+        }
+
+        #newCategoryInput {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -574,8 +624,7 @@
                 <div class="expense-panel">
                     <div class="toolbar">
                         <div class="toolbar-left">
-                            <button class="btn-primary">+ Add Expense</button>
-                            <button class="btn-secondary">Upload Receipt</button>
+                            <button class="btn-primary" id="openExpenseModal">+ Add Expense</button>
                             <select class="filter-select">
                                 <option>All Categories</option>
                                 <option>Office Supplies</option>
@@ -680,47 +729,48 @@
                     <div class="chart-container">
                         <div class="chart-title">Expense Breakdown by Category</div>
                         <div class="chart-placeholder">
+                            <iframe src="https://lookerstudio.google.com/reporting/4c947710-c55f-44a7-9a6d-47cbc637183c" frameborder="0"></iframe>
                             📊 Interactive expense chart would be displayed here
                         </div>
                     </div>
 
-                    <div class="quick-actions">
-                        <h3>Quick Actions</h3>
-                        <ul class="action-list">
-                            <li class="action-item">
-                                <a href="#" class="action-link">
-                                    📸 Scan Receipt
-                                </a>
-                            </li>
-                            <li class="action-item">
-                                <a href="#" class="action-link">
-                                    📊 Monthly Report
-                                </a>
-                            </li>
-                            <li class="action-item">
-                                <a href="#" class="action-link">
-                                    💳 Setup Credit Card Import
-                                </a>
-                            </li>
-                            <li class="action-item">
-                                <a href="#" class="action-link">
-                                    📋 Expense Policy
-                                </a>
-                            </li>
-                            <li class="action-item">
-                                <a href="#" class="action-link">
-                                    🔄 Recurring Expenses
-                                </a>
-                            </li>
-                            <li class="action-item">
-                                <a href="#" class="action-link">
-                                    📈 Budget Planning
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Add Expense Modal -->
+    <div id="expenseModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 500px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <h2 style="margin-bottom: 1.5rem;">Add New Expense</h2>
+            <form id="expenseForm">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Amount (₱)</label>
+                    <input type="number" id="expenseAmount" required style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Category</label>
+                    <select id="expenseCategory" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <option value="Office">Office Supplies</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Meals">Meals</option>
+                    </select>
+                    <button type="button" id="newCategoryBtn" style="margin-top: 0.5rem;" class="btn-secondary">+ Add New Category</button>
+                </div>
+
+                <div style="display: none" id="newCategoryInput">
+                    <label style="display: block; margin-bottom: 0.5rem;">New Category Name</label>
+                    <input type="text" id="newCategory" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn-secondary" onclick="closeExpenseModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Expense</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -774,8 +824,8 @@
 
         // Add click handlers for buttons
         document.addEventListener('click', function(e) {
-            if (e.target.textContent === '+ Add Expense') {
-                alert('Add expense form would open here');
+            if (e.target.textContent === '+ Add Expense' || e.target.id === 'openExpenseModal') {
+                document.getElementById('expenseModal').style.display = 'block';
             } else if (e.target.textContent === 'Upload Receipt') {
                 alert('Receipt upload functionality would be implemented here');
             } else if (e.target.textContent === 'Edit') {
@@ -787,6 +837,84 @@
         document.addEventListener('click', function(e) {
             if (e.target.textContent === '📄') {
                 alert('Receipt viewer would open here');
+            }
+        });
+
+        // Open Expense Modal
+        function openExpenseModal() {
+            document.getElementById('expenseModal').style.display = 'block';
+        }
+
+        // Close modal function
+        function closeExpenseModal() {
+            document.getElementById('expenseModal').style.display = 'none';
+            document.getElementById('newCategoryInput').style.display = 'none';
+            document.getElementById('expenseForm').reset();
+        }
+
+        // New category button functionality
+        document.getElementById('newCategoryBtn').addEventListener('click', function() {
+            const newCategoryInput = document.getElementById('newCategoryInput');
+            newCategoryInput.style.display = newCategoryInput.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Expense form submission
+        document.getElementById('expenseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+            if (amount <= 0) {
+                alert('Please enter a positive amount');
+                return;
+            }
+            
+            let category = document.getElementById('expenseCategory').value;
+            const newCategory = document.getElementById('newCategory').value.trim();
+            
+            if (newCategory) {
+                // Check if category already exists (case-insensitive)
+                const existingCategories = Array.from(document.getElementById('expenseCategory').options)
+                    .map(option => option.value.toLowerCase());
+                
+                if (existingCategories.includes(newCategory.toLowerCase())) {
+                    // If category exists, just use the existing category
+                    category = document.getElementById('expenseCategory').value;
+                } else {
+                    // If it's a new category, add it
+                    category = newCategory;
+                    // Add new category to select options
+                    const option = new Option(newCategory, newCategory);
+                    document.getElementById('expenseCategory').add(option);
+                    // Also add to filter select
+                    const filterOption = new Option(newCategory, newCategory);
+                    document.querySelector('.filter-select').add(filterOption);
+                }
+            }
+
+            // Create new table row
+            const tbody = document.querySelector('.expense-table tbody');
+            const newRow = document.createElement('tr');
+            const today = new Date();
+            
+            newRow.innerHTML = `
+                <td>${today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                <td>New Expense Entry</td>
+                <td><span class="category-badge category-${category.toLowerCase()}">${category}</span></td>
+                <td>₱${amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td>📄</td>
+                <td>
+                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                </td>
+            `;
+            
+            tbody.insertBefore(newRow, tbody.firstChild);
+            closeExpenseModal();
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('expenseModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeExpenseModal();
             }
         });
     </script>
