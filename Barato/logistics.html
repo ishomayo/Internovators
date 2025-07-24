@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logistics Dashboard - Business Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     <style>
         * {
             margin: 0;
@@ -290,7 +291,7 @@
             padding: 1.5rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
         }
 
@@ -322,101 +323,8 @@
         }
 
         .map-viewport {
-            height: 100%;
-            min-height: 500px;
-            background: linear-gradient(45deg, #e6f3ff 0%, #f0f9ff 100%);
+            height: 500px;
             position: relative;
-            overflow: hidden;
-        }
-
-        /* Map Markers */
-        .map-marker {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 16px;
-            z-index: 10;
-        }
-
-        .map-marker:hover {
-            transform: scale(1.2);
-            z-index: 20;
-        }
-
-        .map-marker.supplier-food {
-            background: #10b981;
-        }
-
-        .map-marker.supplier-electronics {
-            background: #f59e0b;
-        }
-
-        .map-marker.supplier-textile {
-            background: #8b5cf6;
-        }
-
-        .map-marker.supplier-chemicals {
-            background: #ef4444;
-        }
-
-        .map-marker.supplier-metals {
-            background: #6b7280;
-        }
-
-        /* Tooltip */
-        .marker-tooltip {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            padding: 12px 16px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            border: 1px solid #e2e8f0;
-            white-space: nowrap;
-            font-size: 14px;
-            z-index: 30;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s ease;
-            pointer-events: none;
-        }
-
-        .marker-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: white;
-        }
-
-        .map-marker:hover .marker-tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .tooltip-name {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 4px;
-        }
-
-        .tooltip-info {
-            font-size: 12px;
-            color: #64748b;
         }
 
         /* Supplier Details Panel */
@@ -432,7 +340,7 @@
             padding: 1.5rem;
             transform: translateX(320px);
             transition: transform 0.3s ease;
-            z-index: 50;
+            z-index: 1000;
         }
 
         .supplier-details.active {
@@ -441,7 +349,7 @@
 
         .supplier-header {
             display: flex;
-
+            justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 1rem;
         }
@@ -562,6 +470,90 @@
             color: #64748b;
         }
 
+        /* Custom Leaflet Popup Styles */
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .supplier-popup {
+            min-width: 200px;
+        }
+
+        .popup-header {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .popup-info {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .popup-rating {
+            color: #f59e0b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .popup-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        /* Advanced Filtering */
+        .advanced-filters {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .filter-group {
+            margin-bottom: 1rem;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .filter-range {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .range-input {
+            flex: 1;
+            padding: 6px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Responsive Design */
         @media (max-width: 1024px) {
             .logistics-layout {
                 grid-template-columns: 1fr;
@@ -662,26 +654,25 @@
         <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
-                <h1 class="page-title">🚚 Logistics & Supplier Management</h1>
-                <p class="page-subtitle">Find and manage suppliers for raw materials and products across different
-                    regions</p>
+                <h1 class="page-title">🚚 Logistics & Supplier Management - Visayas</h1>
+                <p class="page-subtitle">Find and manage suppliers for raw materials and products across the Visayas region</p>
             </div>
 
             <div class="stats-bar">
                 <div class="stat-card">
-                    <div class="stat-value">142</div>
-                    <div class="stat-label">Active Suppliers</div>
+                    <div class="stat-value">89</div>
+                    <div class="stat-label">Visayas Suppliers</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">28</div>
                     <div class="stat-label">Product Categories</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">85%</div>
+                    <div class="stat-value">92%</div>
                     <div class="stat-label">On-Time Delivery</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">₱2.4M</div>
+                    <div class="stat-value">₱1.8M</div>
                     <div class="stat-label">Monthly Orders</div>
                 </div>
             </div>
@@ -694,6 +685,52 @@
                         <input type="text" class="search-input" id="productSearch"
                             placeholder="Search for raw materials...">
                     </div>
+                    
+                    <!-- Advanced Filters -->
+                    <div class="advanced-filters">
+                        <div class="filter-group">
+                            <label class="filter-label">Province</label>
+                            <select class="filter-select" id="provinceFilter">
+                                <option value="">All Provinces</option>
+                                <option value="Cebu">Cebu</option>
+                                <option value="Bohol">Bohol</option>
+                                <option value="Negros Oriental">Negros Oriental</option>
+                                <option value="Siquijor">Siquijor</option>
+                                <option value="Negros Occidental">Negros Occidental</option>
+                                <option value="Iloilo">Iloilo</option>
+                                <option value="Aklan">Aklan</option>
+                                <option value="Antique">Antique</option>
+                                <option value="Capiz">Capiz</option>
+                                <option value="Guimaras">Guimaras</option>
+                                <option value="Leyte">Leyte</option>
+                                <option value="Southern Leyte">Southern Leyte</option>
+                                <option value="Samar">Samar</option>
+                                <option value="Eastern Samar">Eastern Samar</option>
+                                <option value="Northern Samar">Northern Samar</option>
+                                <option value="Biliran">Biliran</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Minimum Rating</label>
+                            <select class="filter-select" id="ratingFilter">
+                                <option value="">Any Rating</option>
+                                <option value="4.5">4.5+ Stars</option>
+                                <option value="4.0">4.0+ Stars</option>
+                                <option value="3.5">3.5+ Stars</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Lead Time (days)</label>
+                            <div class="filter-range">
+                                <input type="number" class="range-input" id="minLeadTime" placeholder="Min" min="1" max="30">
+                                <span>-</span>
+                                <input type="number" class="range-input" id="maxLeadTime" placeholder="Max" min="1" max="30">
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="product-list" id="productList">
                         <!-- Products will be populated by JavaScript -->
                     </div>
@@ -702,17 +739,18 @@
                 <!-- Map Container -->
                 <div class="map-container">
                     <div class="map-header">
-                        <div class="map-title">Supplier Locations</div>
+                        <div class="map-title">Supplier Locations - Visayas Region</div>
                         <div class="map-filters">
                             <button class="filter-btn active" data-category="all">All</button>
                             <button class="filter-btn" data-category="food">Food</button>
                             <button class="filter-btn" data-category="electronics">Electronics</button>
                             <button class="filter-btn" data-category="textile">Textile</button>
                             <button class="filter-btn" data-category="chemicals">Chemicals</button>
+                            <button class="filter-btn" data-category="metals">Metals</button>
                         </div>
                     </div>
                     <div class="map-viewport" id="mapViewport">
-                        <!-- Map markers will be populated by JavaScript -->
+                        <!-- Interactive Leaflet map will be initialized here -->
                     </div>
 
                     <!-- Supplier Details Panel -->
@@ -738,6 +776,10 @@
                                 <span class="info-label">Min Order:</span>
                                 <span class="info-value" id="supplierMinOrder">-</span>
                             </div>
+                            <div class="info-row">
+                                <span class="info-label">Certifications:</span>
+                                <span class="info-value" id="supplierCertifications">-</span>
+                            </div>
                         </div>
                         <div class="products-supplied">
                             <div class="products-title">Products Supplied:</div>
@@ -746,42 +788,121 @@
                             </div>
                         </div>
                         <button class="contact-btn" onclick="contactSupplier()">Contact Supplier</button>
+                        <button class="contact-btn" style="background: #10b981; margin-top: 0.5rem;" onclick="requestQuote()">Request Quote</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <script>
-        // Dummy data for products and suppliers
+        // Enhanced product data with more Visayas-focused suppliers
         const products = [
-            { id: 1, name: "Cotton Fabric", category: "textile", suppliers: ["Manila Textile Co.", "Cebu Cotton Mills"] },
-            { id: 2, name: "Steel Sheets", category: "metals", suppliers: ["Philippine Steel Corp.", "Metro Steel Industries"] },
-            { id: 3, name: "Electronic Components", category: "electronics", suppliers: ["TechSource Manila", "Electronic Solutions Inc."] },
-            { id: 4, name: "Wheat Flour", category: "food", suppliers: ["Golden Wheat Mills", "Sunrise Food Processing"] },
-            { id: 5, name: "Plastic Pellets", category: "chemicals", suppliers: ["Polymer Industries", "ChemTech Philippines"] },
-            { id: 6, name: "Aluminum Sheets", category: "metals", suppliers: ["Aluminum Corp PH", "Metal Works Ltd."] },
-            { id: 7, name: "Silicon Chips", category: "electronics", suppliers: ["Semiconductor PH", "TechCore Industries"] },
-            { id: 8, name: "Organic Coconut Oil", category: "food", suppliers: ["Tropical Oils Inc.", "Pure Coconut Co."] },
-            { id: 9, name: "Polyester Yarn", category: "textile", suppliers: ["Fiber Tech Manila", "Yarn Masters PH"] },
-            { id: 10, name: "Chemical Solvents", category: "chemicals", suppliers: ["Industrial Chemicals Ltd.", "SafeChem Solutions"] }
+            { id: 1, name: "Coconut Oil", category: "food", suppliers: ["Cebu Coconut Mills", "Bohol Organic Oils", "Negros Coconut Corp"] },
+            { id: 2, name: "Sugarcane Products", category: "food", suppliers: ["Negros Sugar Mill", "Iloilo Sugar Co.", "Dumaguete Sugar Works"] },
+            { id: 3, name: "Cotton Fabric", category: "textile", suppliers: ["Cebu Textile Industries", "Iloilo Weaving Co.", "Antique Fabrics Ltd"] },
+            { id: 4, name: "Bamboo Materials", category: "construction", suppliers: ["Bohol Bamboo Crafts", "Leyte Bamboo Industries", "Samar Bamboo Co."] },
+            { id: 5, name: "Dried Fish Products", category: "food", suppliers: ["Cebu Dried Fish Co.", "Bohol Seafood Processing", "Leyte Marine Products"] },
+            { id: 6, name: "Electronic Components", category: "electronics", suppliers: ["Cebu Tech Solutions", "IT Park Electronics", "Mandaue Tech Hub"] },
+            { id: 7, name: "Seaweed Extracts", category: "food", suppliers: ["Bohol Seaweed Farm", "Siquijor Marine Products", "Cebu Algae Industries"] },
+            { id: 8, name: "Corn Products", category: "food", suppliers: ["Negros Corn Mill", "Leyte Grain Processing", "Samar Agriculture Co."] },
+            { id: 9, name: "Rattan Furniture", category: "furniture", suppliers: ["Cebu Rattan Works", "Bohol Furniture Crafts", "Antique Rattan Co."] },
+            { id: 10, name: "Copra Products", category: "food", suppliers: ["Leyte Copra Mill", "Samar Coconut Processing", "Biliran Copra Works"] },
+            { id: 11, name: "Abaca Fiber", category: "textile", suppliers: ["Leyte Abaca Farm", "Samar Fiber Co.", "Eastern Samar Abaca"] },
+            { id: 12, name: "Limestone", category: "construction", suppliers: ["Cebu Quarries Inc.", "Bohol Stone Works", "Negros Limestone Co."] }
         ];
 
+        // Comprehensive Visayas suppliers data with accurate coordinates
         const suppliers = [
-            { id: 1, name: "Manila Textile Co.", category: "textile", location: "Manila, Philippines", rating: 4.8, leadTime: "5-7 days", minOrder: "₱50,000", products: ["Cotton Fabric", "Polyester Yarn"], x: 45, y: 35, phone: "+63 2 123 4567" },
-            { id: 2, name: "Philippine Steel Corp.", category: "metals", location: "Batangas, Philippines", rating: 4.9, leadTime: "10-14 days", minOrder: "₱100,000", products: ["Steel Sheets", "Aluminum Sheets"], x: 50, y: 45, phone: "+63 43 456 7890" },
-            { id: 3, name: "TechSource Manila", category: "electronics", location: "Makati, Philippines", rating: 4.7, leadTime: "3-5 days", minOrder: "₱25,000", products: ["Electronic Components", "Silicon Chips"], x: 48, y: 32, phone: "+63 2 789 0123" },
-            { id: 4, name: "Golden Wheat Mills", category: "food", location: "Bulacan, Philippines", rating: 4.6, leadTime: "2-3 days", minOrder: "₱30,000", products: ["Wheat Flour"], x: 42, y: 25, phone: "+63 44 234 5678" },
-            { id: 5, name: "Polymer Industries", category: "chemicals", location: "Laguna, Philippines", rating: 4.5, leadTime: "7-10 days", minOrder: "₱75,000", products: ["Plastic Pellets", "Chemical Solvents"], x: 52, y: 38, phone: "+63 49 345 6789" },
-            { id: 6, name: "Cebu Cotton Mills", category: "textile", location: "Cebu, Philippines", rating: 4.9, leadTime: "6-8 days", minOrder: "₱40,000", products: ["Cotton Fabric"], x: 65, y: 55, phone: "+63 32 456 7890" },
-            { id: 7, name: "Semiconductor PH", category: "electronics", location: "Clark, Pampanga", rating: 4.8, leadTime: "4-6 days", minOrder: "₱80,000", products: ["Silicon Chips"], x: 40, y: 28, phone: "+63 45 567 8901" },
-            { id: 8, name: "Tropical Oils Inc.", category: "food", location: "Davao, Philippines", rating: 4.7, leadTime: "5-7 days", minOrder: "₱35,000", products: ["Organic Coconut Oil"], x: 70, y: 75, phone: "+63 82 678 9012" },
-            { id: 9, name: "Metro Steel Industries", category: "metals", location: "Quezon City, Philippines", rating: 4.6, leadTime: "8-12 days", minOrder: "₱90,000", products: ["Steel Sheets"], x: 46, y: 30, phone: "+63 2 789 0123" },
-            { id: 10, name: "ChemTech Philippines", category: "chemicals", location: "Cavite, Philippines", rating: 4.4, leadTime: "6-9 days", minOrder: "₱60,000", products: ["Chemical Solvents"], x: 49, y: 40, phone: "+63 46 890 1234" }
+            // CEBU PROVINCE
+            { id: 1, name: "Cebu Coconut Mills", category: "food", location: "Cebu City, Cebu", province: "Cebu", rating: 4.8, leadTime: 3, minOrder: 25000, products: ["Coconut Oil", "Copra Products"], lat: 10.3157, lng: 123.8854, phone: "+63 32 123 4567", certifications: "HACCP, ISO 22000" },
+            { id: 2, name: "Cebu Textile Industries", category: "textile", location: "Mandaue City, Cebu", province: "Cebu", rating: 4.7, leadTime: 7, minOrder: 50000, products: ["Cotton Fabric"], lat: 10.3237, lng: 123.9227, phone: "+63 32 234 5678", certifications: "OEKO-TEX, ISO 9001" },
+            { id: 3, name: "Cebu Tech Solutions", category: "electronics", location: "Lahug, Cebu City", province: "Cebu", rating: 4.9, leadTime: 5, minOrder: 75000, products: ["Electronic Components"], lat: 10.3321, lng: 123.9061, phone: "+63 32 345 6789", certifications: "RoHS, CE" },
+            { id: 4, name: "Cebu Dried Fish Co.", category: "food", location: "Talisay City, Cebu", province: "Cebu", rating: 4.6, leadTime: 2, minOrder: 15000, products: ["Dried Fish Products"], lat: 10.2449, lng: 123.8495, phone: "+63 32 456 7890", certifications: "FDA, BFAD" },
+            { id: 5, name: "Cebu Rattan Works", category: "furniture", location: "Consolacion, Cebu", province: "Cebu", rating: 4.5, leadTime: 14, minOrder: 100000, products: ["Rattan Furniture"], lat: 10.3757, lng: 123.9571, phone: "+63 32 567 8901", certifications: "FSC, ISO 14001" },
+            { id: 6, name: "Cebu Quarries Inc.", category: "construction", location: "Carcar City, Cebu", province: "Cebu", rating: 4.4, leadTime: 10, minOrder: 200000, products: ["Limestone"], lat: 10.1077, lng: 123.6386, phone: "+63 32 678 9012", certifications: "DENR, Safety Cert" },
+
+            // BOHOL PROVINCE  
+            { id: 7, name: "Bohol Organic Oils", category: "food", location: "Tagbilaran City, Bohol", province: "Bohol", rating: 4.9, leadTime: 4, minOrder: 30000, products: ["Coconut Oil"], lat: 9.6497, lng: 123.8537, phone: "+63 38 123 4567", certifications: "Organic, USDA" },
+            { id: 8, name: "Bohol Bamboo Crafts", category: "construction", location: "Carmen, Bohol", province: "Bohol", rating: 4.6, leadTime: 12, minOrder: 80000, products: ["Bamboo Materials"], lat: 9.7024, lng: 124.0154, phone: "+63 38 234 5678", certifications: "Sustainable, ISO 14001" },
+            { id: 9, name: "Bohol Seafood Processing", category: "food", location: "Ubay, Bohol", province: "Bohol", rating: 4.7, leadTime: 3, minOrder: 20000, products: ["Dried Fish Products"], lat: 10.0594, lng: 124.4756, phone: "+63 38 345 6789", certifications: "HACCP, FDA" },
+            { id: 10, name: "Bohol Seaweed Farm", category: "food", location: "Getafe, Bohol", province: "Bohol", rating: 4.8, leadTime: 5, minOrder: 35000, products: ["Seaweed Extracts"], lat: 9.9547, lng: 124.1458, phone: "+63 38 456 7890", certifications: "Organic, Marine Cert" },
+            { id: 11, name: "Bohol Furniture Crafts", category: "furniture", location: "Dauis, Bohol", province: "Bohol", rating: 4.5, leadTime: 16, minOrder: 120000, products: ["Rattan Furniture"], lat: 9.6091, lng: 123.8547, phone: "+63 38 567 8901", certifications: "Handcraft, Export Quality" },
+            { id: 12, name: "Bohol Stone Works", category: "construction", location: "Jagna, Bohol", province: "Bohol", rating: 4.3, leadTime: 8, minOrder: 150000, products: ["Limestone"], lat: 9.6504, lng: 124.3637, phone: "+63 38 678 9012", certifications: "Quality Assurance" },
+
+            // NEGROS ORIENTAL
+            { id: 13, name: "Dumaguete Sugar Works", category: "food", location: "Dumaguete City, Negros Oriental", province: "Negros Oriental", rating: 4.9, leadTime: 6, minOrder: 100000, products: ["Sugarcane Products"], lat: 9.3063, lng: 123.3019, phone: "+63 35 123 4567", certifications: "Sugar Quality, ISO 9001" },
+            { id: 14, name: "Negros Oriental Mills", category: "food", location: "Bais City, Negros Oriental", province: "Negros Oriental", rating: 4.6, leadTime: 5, minOrder: 40000, products: ["Corn Products"], lat: 9.5904, lng: 123.1217, phone: "+63 35 234 5678", certifications: "Grain Quality" },
+
+            // SIQUIJOR
+            { id: 15, name: "Siquijor Marine Products", category: "food", location: "Siquijor, Siquijor", province: "Siquijor", rating: 4.7, leadTime: 4, minOrder: 25000, products: ["Seaweed Extracts"], lat: 9.2164, lng: 123.5081, phone: "+63 35 345 6789", certifications: "Marine Sustainable" },
+
+            // NEGROS OCCIDENTAL
+            { id: 16, name: "Negros Sugar Mill", category: "food", location: "Bacolod City, Negros Occidental", province: "Negros Occidental", rating: 4.8, leadTime: 7, minOrder: 150000, products: ["Sugarcane Products"], lat: 10.6764, lng: 122.9539, phone: "+63 34 123 4567", certifications: "Premium Sugar, Export Grade" },
+            { id: 17, name: "Negros Coconut Corp", category: "food", location: "Silay City, Negros Occidental", province: "Negros Occidental", rating: 4.7, leadTime: 4, minOrder: 45000, products: ["Coconut Oil"], lat: 10.7951, lng: 122.9703, phone: "+63 34 234 5678", certifications: "Virgin Oil, Organic" },
+            { id: 18, name: "Negros Corn Mill", category: "food", location: "Talisay City, Negros Occidental", province: "Negros Occidental", rating: 4.5, leadTime: 6, minOrder: 35000, products: ["Corn Products"], lat: 10.7325, lng: 122.9825, phone: "+63 34 345 6789", certifications: "Feed Grade" },
+            { id: 19, name: "Negros Limestone Co.", category: "construction", location: "La Carlota City, Negros Occidental", province: "Negros Occidental", rating: 4.4, leadTime: 9, minOrder: 180000, products: ["Limestone"], lat: 10.4219, lng: 122.9242, phone: "+63 34 456 7890", certifications: "Construction Grade" },
+
+            // ILOILO
+            { id: 20, name: "Iloilo Sugar Co.", category: "food", location: "Iloilo City, Iloilo", province: "Iloilo", rating: 4.6, leadTime: 8, minOrder: 80000, products: ["Sugarcane Products"], lat: 10.7202, lng: 122.5621, phone: "+63 33 123 4567", certifications: "Raw Sugar, Refined" },
+            { id: 21, name: "Iloilo Weaving Co.", category: "textile", location: "Miagao, Iloilo", province: "Iloilo", rating: 4.8, leadTime: 10, minOrder: 60000, products: ["Cotton Fabric"], lat: 10.6438, lng: 121.9234, phone: "+63 33 234 5678", certifications: "Traditional Weave, Export Quality" },
+
+            // AKLAN
+            { id: 22, name: "Aklan Textile Mills", category: "textile", location: "Kalibo, Aklan", province: "Aklan", rating: 4.5, leadTime: 9, minOrder: 55000, products: ["Cotton Fabric"], lat: 11.7049, lng: 122.3679, phone: "+63 36 123 4567", certifications: "Piña Fiber, Traditional" },
+
+            // ANTIQUE
+            { id: 23, name: "Antique Fabrics Ltd", category: "textile", location: "San Jose, Antique", province: "Antique", rating: 4.4, leadTime: 11, minOrder: 45000, products: ["Cotton Fabric"], lat: 10.7647, lng: 121.9318, phone: "+63 36 234 5678", certifications: "Handwoven, Local Craft" },
+            { id: 24, name: "Antique Rattan Co.", category: "furniture", location: "Patnongon, Antique", province: "Antique", rating: 4.6, leadTime: 15, minOrder: 90000, products: ["Rattan Furniture"], lat: 10.9136, lng: 122.1142, phone: "+63 36 345 6789", certifications: "Eco-friendly, Sustainable" },
+
+            // CAPIZ
+            { id: 25, name: "Capiz Seafood Processing", category: "food", location: "Roxas City, Capiz", province: "Capiz", rating: 4.7, leadTime: 3, minOrder: 28000, products: ["Dried Fish Products"], lat: 11.5877, lng: 122.7514, phone: "+63 36 456 7890", certifications: "Fresh Quality, HACCP" },
+
+            // GUIMARAS
+            { id: 26, name: "Guimaras Fruit Processing", category: "food", location: "Jordan, Guimaras", province: "Guimaras", rating: 4.8, leadTime: 2, minOrder: 20000, products: ["Mango Products"], lat: 10.5803, lng: 122.5711, phone: "+63 33 567 8901", certifications: "Sweet Mangoes, Premium" },
+
+            // LEYTE
+            { id: 27, name: "Leyte Marine Products", category: "food", location: "Tacloban City, Leyte", province: "Leyte", rating: 4.6, leadTime: 4, minOrder: 30000, products: ["Dried Fish Products"], lat: 11.2436, lng: 125.0072, phone: "+63 53 123 4567", certifications: "Marine Fresh, Quality" },
+            { id: 28, name: "Leyte Bamboo Industries", category: "construction", location: "Ormoc City, Leyte", province: "Leyte", rating: 4.5, leadTime: 13, minOrder: 70000, products: ["Bamboo Materials"], lat: 11.0059, lng: 124.6074, phone: "+63 53 234 5678", certifications: "Sustainable Bamboo" },
+            { id: 29, name: "Leyte Copra Mill", category: "food", location: "Baybay City, Leyte", province: "Leyte", rating: 4.4, leadTime: 5, minOrder: 40000, products: ["Copra Products"], lat: 10.6785, lng: 124.8003, phone: "+63 53 345 6789", certifications: "Dried Coconut" },
+            { id: 30, name: "Leyte Grain Processing", category: "food", location: "Abuyog, Leyte", province: "Leyte", rating: 4.3, leadTime: 7, minOrder: 50000, products: ["Corn Products"], lat: 10.7482, lng: 125.0121, phone: "+63 53 456 7890", certifications: "Feed Grade Corn" },
+            { id: 31, name: "Leyte Abaca Farm", category: "textile", location: "Mahaplag, Leyte", province: "Leyte", rating: 4.7, leadTime: 12, minOrder: 65000, products: ["Abaca Fiber"], lat: 10.5803, lng: 124.9756, phone: "+63 53 567 8901", certifications: "Natural Fiber, Premium" },
+
+            // SOUTHERN LEYTE
+            { id: 32, name: "Southern Leyte Copra", category: "food", location: "Maasin City, Southern Leyte", province: "Southern Leyte", rating: 4.5, leadTime: 6, minOrder: 35000, products: ["Copra Products"], lat: 10.1303, lng: 124.8584, phone: "+63 53 678 9012", certifications: "Quality Copra" },
+
+            // SAMAR
+            { id: 33, name: "Samar Bamboo Co.", category: "construction", location: "Catbalogan City, Samar", province: "Samar", rating: 4.3, leadTime: 14, minOrder: 60000, products: ["Bamboo Materials"], lat: 11.7756, lng: 124.8817, phone: "+63 55 123 4567", certifications: "Native Bamboo" },
+            { id: 34, name: "Samar Agriculture Co.", category: "food", location: "Calbayog City, Samar", province: "Samar", rating: 4.4, leadTime: 8, minOrder: 45000, products: ["Corn Products"], lat: 12.0664, lng: 124.6045, phone: "+63 55 234 5678", certifications: "Agricultural Grade" },
+            { id: 35, name: "Samar Coconut Processing", category: "food", location: "Basey, Samar", province: "Samar", rating: 4.5, leadTime: 5, minOrder: 38000, products: ["Copra Products"], lat: 11.2758, lng: 125.0636, phone: "+63 55 345 6789", certifications: "Traditional Processing" },
+            { id: 36, name: "Samar Fiber Co.", category: "textile", location: "Gandara, Samar", province: "Samar", rating: 4.6, leadTime: 11, minOrder: 55000, products: ["Abaca Fiber"], lat: 12.0156, lng: 124.8369, phone: "+63 55 456 7890", certifications: "Strong Fiber, Export" },
+
+            // EASTERN SAMAR
+            { id: 37, name: "Eastern Samar Abaca", category: "textile", location: "Borongan City, Eastern Samar", province: "Eastern Samar", rating: 4.7, leadTime: 10, minOrder: 60000, products: ["Abaca Fiber"], lat: 11.6050, lng: 125.4336, phone: "+63 55 567 8901", certifications: "Premium Abaca, Strong" },
+
+            // NORTHERN SAMAR
+            { id: 38, name: "Northern Samar Marine", category: "food", location: "Catarman, Northern Samar", province: "Northern Samar", rating: 4.4, leadTime: 4, minOrder: 32000, products: ["Dried Fish Products"], lat: 12.4994, lng: 124.6378, phone: "+63 55 678 9012", certifications: "Fresh Marine" },
+
+            // BILIRAN
+            { id: 39, name: "Biliran Copra Works", category: "food", location: "Naval, Biliran", province: "Biliran", rating: 4.6, leadTime: 4, minOrder: 30000, products: ["Copra Products"], lat: 11.5554, lng: 124.3928, phone: "+63 53 789 0123", certifications: "Island Fresh Copra" }
         ];
 
         let selectedProduct = null;
         let filteredSuppliers = suppliers;
+        let map = null;
+        let markersGroup = null;
+        let currentSupplier = null;
+
+        // Category colors for map markers
+        const categoryColors = {
+            food: '#10b981',
+            electronics: '#f59e0b', 
+            textile: '#8b5cf6',
+            chemicals: '#ef4444',
+            metals: '#6b7280',
+            construction: '#0ea5e9',
+            furniture: '#ec4899'
+        };
 
         // Update time every second
         function updateTime() {
@@ -800,14 +921,85 @@
             document.getElementById('current-time').textContent = timeString;
         }
 
-        updateTime();
-        setInterval(updateTime, 1000);
-
         // Initialize the application
         function initApp() {
+            initMap();
             populateProductList();
-            renderMapMarkers();
             setupEventListeners();
+            renderMapMarkers();
+        }
+
+        // Initialize Leaflet map focused on Visayas
+        function initMap() {
+            map = L.map('mapViewport').setView([10.5, 123.5], 8);
+            
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Initialize markers group
+            markersGroup = L.layerGroup().addTo(map);
+
+            // Add Visayas region boundary highlight (approximate)
+            const visayasBounds = [
+                [8.5, 121.0],  // Southwest
+                [13.5, 126.5]  // Northeast
+            ];
+            
+            // Optional: Add a subtle region highlight
+            const visayasHighlight = L.rectangle(visayasBounds, {
+                color: '#4f46e5',
+                weight: 2,
+                opacity: 0.3,
+                fillOpacity: 0.1
+            }).addTo(map);
+        }
+
+        // Render suppliers as map markers
+        function renderMapMarkers() {
+            markersGroup.clearLayers();
+
+            filteredSuppliers.forEach(supplier => {
+                const color = categoryColors[supplier.category] || '#6b7280';
+                
+                // Create custom icon
+                const customIcon = L.divIcon({
+                    className: 'custom-marker',
+                    html: `<div style="
+                        background: ${color};
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        border: 3px solid white;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-size: 12px;
+                        font-weight: bold;
+                    ">${supplier.name.charAt(0)}</div>`,
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12]
+                });
+
+                const marker = L.marker([supplier.lat, supplier.lng], { icon: customIcon })
+                    .bindPopup(`
+                        <div class="supplier-popup">
+                            <div class="popup-header">${supplier.name}</div>
+                            <div class="popup-info">📍 ${supplier.location}</div>
+                            <div class="popup-info">📱 ${supplier.phone}</div>
+                            <div class="popup-rating">⭐ ${supplier.rating}/5</div>
+                            <div class="popup-info">⏱️ ${supplier.leadTime} days lead time</div>
+                            <div class="popup-info">💰 Min order: ₱${supplier.minOrder.toLocaleString()}</div>
+                            <button class="popup-btn" onclick="showSupplierDetails(${supplier.id})">View Details</button>
+                        </div>
+                    `);
+
+                marker.on('click', () => showSupplierDetails(supplier.id));
+                markersGroup.addLayer(marker);
+            });
         }
 
         // Populate product list
@@ -815,45 +1007,36 @@
             const productList = document.getElementById('productList');
             productList.innerHTML = '';
 
-            products.forEach(product => {
+            // Apply current filters
+            let displayProducts = products;
+            const searchTerm = document.getElementById('productSearch').value.toLowerCase();
+            
+            if (searchTerm) {
+                displayProducts = products.filter(product =>
+                    product.name.toLowerCase().includes(searchTerm) ||
+                    product.category.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            displayProducts.forEach(product => {
+                const availableSuppliers = suppliers.filter(supplier =>
+                    supplier.products.some(p => product.suppliers.includes(supplier.name))
+                );
+
                 const productItem = document.createElement('div');
                 productItem.className = 'product-item';
                 productItem.dataset.productId = product.id;
                 productItem.innerHTML = `
                     <div class="product-name">${product.name}</div>
                     <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
-                    <div class="product-suppliers">${product.suppliers.length} suppliers available</div>
+                    <div class="product-suppliers">${availableSuppliers.length} suppliers available</div>
                 `;
                 productItem.addEventListener('click', () => selectProduct(product.id));
                 productList.appendChild(productItem);
             });
         }
 
-        // Render map markers
-        function renderMapMarkers() {
-            const mapViewport = document.getElementById('mapViewport');
-            const existingMarkers = mapViewport.querySelectorAll('.map-marker');
-            existingMarkers.forEach(marker => marker.remove());
-
-            filteredSuppliers.forEach(supplier => {
-                const marker = document.createElement('div');
-                marker.className = `map-marker supplier-${supplier.category}`;
-                marker.style.left = `${supplier.x}%`;
-                marker.style.top = `${supplier.y}%`;
-                marker.innerHTML = `
-                    📍
-                    <div class="marker-tooltip">
-                        <div class="tooltip-name">${supplier.name}</div>
-                        <div class="tooltip-info">${supplier.location}</div>
-                        <div class="tooltip-info">Rating: ${supplier.rating}/5 ⭐</div>
-                    </div>
-                `;
-                marker.addEventListener('click', () => showSupplierDetails(supplier));
-                mapViewport.appendChild(marker);
-            });
-        }
-
-        // Select product
+        // Select product and filter suppliers
         function selectProduct(productId) {
             selectedProduct = productId;
             const product = products.find(p => p.id === productId);
@@ -867,26 +1050,93 @@
             });
 
             // Filter suppliers based on selected product
-            filteredSuppliers = suppliers.filter(supplier =>
-                supplier.products.some(p => product.suppliers.includes(supplier.name))
-            );
+            applyFilters();
+        }
 
+        // Apply all filters
+        function applyFilters() {
+            let filtered = suppliers;
+
+            // Product filter
+            if (selectedProduct) {
+                const product = products.find(p => p.id === selectedProduct);
+                filtered = filtered.filter(supplier =>
+                    supplier.products.some(p => product.suppliers.includes(supplier.name))
+                );
+            }
+
+            // Category filter
+            const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
+            if (activeCategory !== 'all') {
+                filtered = filtered.filter(supplier => supplier.category === activeCategory);
+            }
+
+            // Province filter
+            const provinceFilter = document.getElementById('provinceFilter').value;
+            if (provinceFilter) {
+                filtered = filtered.filter(supplier => supplier.province === provinceFilter);
+            }
+
+            // Rating filter
+            const ratingFilter = document.getElementById('ratingFilter').value;
+            if (ratingFilter) {
+                filtered = filtered.filter(supplier => supplier.rating >= parseFloat(ratingFilter));
+            }
+
+            // Lead time filter
+            const minLeadTime = document.getElementById('minLeadTime').value;
+            const maxLeadTime = document.getElementById('maxLeadTime').value;
+            if (minLeadTime) {
+                filtered = filtered.filter(supplier => supplier.leadTime >= parseInt(minLeadTime));
+            }
+            if (maxLeadTime) {
+                filtered = filtered.filter(supplier => supplier.leadTime <= parseInt(maxLeadTime));
+            }
+
+            filteredSuppliers = filtered;
             renderMapMarkers();
+            updateStats();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const statCards = document.querySelectorAll('.stat-card .stat-value');
+            if (statCards.length >= 4) {
+                statCards[0].textContent = filteredSuppliers.length;
+                
+                const categories = [...new Set(filteredSuppliers.map(s => s.category))];
+                statCards[1].textContent = categories.length;
+                
+                const avgRating = filteredSuppliers.length > 0 
+                    ? (filteredSuppliers.reduce((sum, s) => sum + s.rating, 0) / filteredSuppliers.length * 100 / 5).toFixed(0)
+                    : 0;
+                statCards[2].textContent = `${avgRating}%`;
+                
+                const totalMinOrders = filteredSuppliers.reduce((sum, s) => sum + s.minOrder, 0);
+                statCards[3].textContent = `₱${(totalMinOrders / 1000000).toFixed(1)}M`;
+            }
         }
 
         // Show supplier details
-        function showSupplierDetails(supplier) {
+        function showSupplierDetails(supplierId) {
+            const supplier = suppliers.find(s => s.id === supplierId);
+            if (!supplier) return;
+
+            currentSupplier = supplier;
+
             document.getElementById('supplierName').textContent = supplier.name;
             document.getElementById('supplierLocation').textContent = supplier.location;
-            document.getElementById('supplierLeadTime').textContent = supplier.leadTime;
-            document.getElementById('supplierMinOrder').textContent = supplier.minOrder;
+            document.getElementById('supplierLeadTime').textContent = `${supplier.leadTime} days`;
+            document.getElementById('supplierMinOrder').textContent = `₱${supplier.minOrder.toLocaleString()}`;
+            document.getElementById('supplierCertifications').textContent = supplier.certifications;
 
             // Create rating stars
             const ratingElement = document.getElementById('supplierRating');
-            const stars = '⭐'.repeat(Math.floor(supplier.rating)) +
-                (supplier.rating % 1 !== 0 ? '⭐' : '') +
-                '☆'.repeat(5 - Math.ceil(supplier.rating));
-            ratingElement.innerHTML = `${supplier.rating}/5 ${stars.substring(0, 5)}`;
+            const fullStars = Math.floor(supplier.rating);
+            const hasHalfStar = supplier.rating % 1 !== 0;
+            const emptyStars = 5 - Math.ceil(supplier.rating);
+            
+            ratingElement.innerHTML = `${supplier.rating}/5 ${'⭐'.repeat(fullStars)}${hasHalfStar ? '⭐' : ''}${'☆'.repeat(emptyStars)}`;
 
             // Populate products
             const productsContainer = document.getElementById('supplierProducts');
@@ -898,26 +1148,58 @@
                 productsContainer.appendChild(tag);
             });
 
-            // Store current supplier for contact function
-            window.currentSupplier = supplier;
-
             // Show the details panel
             document.getElementById('supplierDetails').classList.add('active');
+
+            // Center map on supplier
+            map.setView([supplier.lat, supplier.lng], 12);
         }
 
         // Close supplier details
         function closeSupplierDetails() {
             document.getElementById('supplierDetails').classList.remove('active');
+            currentSupplier = null;
         }
 
         // Contact supplier
         function contactSupplier() {
-            if (window.currentSupplier) {
-                alert(`Contacting ${window.currentSupplier.name}\nPhone: ${window.currentSupplier.phone}\n\nThis would normally open your email client or contact form.`);
+            if (currentSupplier) {
+                const message = `Hello ${currentSupplier.name},\n\nI'm interested in your products and would like to discuss potential business opportunities.\n\nBest regards,\nBusiness Hub User`;
+                
+                // Create mailto link
+                const mailtoLink = `mailto:${currentSupplier.phone.replace('+63', 'info@')}@${currentSupplier.name.toLowerCase().replace(/\s+/g, '')}.com?subject=Business Inquiry&body=${encodeURIComponent(message)}`;
+                
+                // Show contact options
+                const contactModal = confirm(`Contact ${currentSupplier.name}?\n\nPhone: ${currentSupplier.phone}\nEmail: Auto-generated\n\nClick OK to open email client or Cancel to copy phone number.`);
+                
+                if (contactModal) {
+                    window.location.href = mailtoLink;
+                } else {
+                    navigator.clipboard.writeText(currentSupplier.phone).then(() => {
+                        alert('Phone number copied to clipboard!');
+                    });
+                }
             }
         }
 
-        // Filter suppliers by category
+        // Request quote
+        function requestQuote() {
+            if (currentSupplier) {
+                const productName = selectedProduct ? products.find(p => p.id === selectedProduct)?.name : 'Various Products';
+                const quantity = prompt(`Request quote from ${currentSupplier.name}\n\nProduct: ${productName}\nMin Order: ₱${currentSupplier.minOrder.toLocaleString()}\n\nEnter desired quantity (in PHP value):`);
+                
+                if (quantity && !isNaN(quantity)) {
+                    const quoteAmount = parseInt(quantity);
+                    if (quoteAmount >= currentSupplier.minOrder) {
+                        alert(`Quote request sent to ${currentSupplier.name}!\n\nProduct: ${productName}\nQuantity: ₱${quoteAmount.toLocaleString()}\nEstimated delivery: ${currentSupplier.leadTime} days\n\nYou will receive a response within 24 hours.`);
+                    } else {
+                        alert(`Minimum order amount is ₱${currentSupplier.minOrder.toLocaleString()}. Please enter a higher amount.`);
+                    }
+                }
+            }
+        }
+
+        // Filter by category
         function filterByCategory(category) {
             // Update active filter button
             document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -927,59 +1209,18 @@
                 }
             });
 
-            // Filter suppliers
-            if (category === 'all') {
-                if (selectedProduct) {
-                    const product = products.find(p => p.id === selectedProduct);
-                    filteredSuppliers = suppliers.filter(supplier =>
-                        supplier.products.some(p => product.suppliers.includes(supplier.name))
-                    );
-                } else {
-                    filteredSuppliers = suppliers;
-                }
-            } else {
-                let baseSuppliers = selectedProduct ?
-                    suppliers.filter(supplier => {
-                        const product = products.find(p => p.id === selectedProduct);
-                        return supplier.products.some(p => product.suppliers.includes(supplier.name));
-                    }) : suppliers;
-
-                filteredSuppliers = baseSuppliers.filter(supplier => supplier.category === category);
-            }
-
-            renderMapMarkers();
+            applyFilters();
         }
 
         // Search products
-        function searchProducts(query) {
-            const productList = document.getElementById('productList');
-            productList.innerHTML = '';
-
-            const filteredProducts = products.filter(product =>
-                product.name.toLowerCase().includes(query.toLowerCase()) ||
-                product.category.toLowerCase().includes(query.toLowerCase())
-            );
-
-            filteredProducts.forEach(product => {
-                const productItem = document.createElement('div');
-                productItem.className = 'product-item';
-                productItem.dataset.productId = product.id;
-                productItem.innerHTML = `
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
-                    <div class="product-suppliers">${product.suppliers.length} suppliers available</div>
-                `;
-                productItem.addEventListener('click', () => selectProduct(product.id));
-                productList.appendChild(productItem);
-            });
+        function searchProducts() {
+            populateProductList();
         }
 
         // Setup event listeners
         function setupEventListeners() {
             // Search input
-            document.getElementById('productSearch').addEventListener('input', (e) => {
-                searchProducts(e.target.value);
-            });
+            document.getElementById('productSearch').addEventListener('input', searchProducts);
 
             // Filter buttons
             document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -988,21 +1229,31 @@
                 });
             });
 
-            // Close details panel when clicking outside
-            document.addEventListener('click', (e) => {
-                const detailsPanel = document.getElementById('supplierDetails');
-                const mapViewport = document.getElementById('mapViewport');
+            // Advanced filter controls
+            document.getElementById('provinceFilter').addEventListener('change', applyFilters);
+            document.getElementById('ratingFilter').addEventListener('change', applyFilters);
+            document.getElementById('minLeadTime').addEventListener('input', applyFilters);
+            document.getElementById('maxLeadTime').addEventListener('input', applyFilters);
 
-                if (!detailsPanel.contains(e.target) &&
-                    !e.target.classList.contains('map-marker') &&
-                    mapViewport.contains(e.target)) {
-                    closeSupplierDetails();
-                }
+            // Close details panel when clicking on map
+            map.on('click', (e) => {
+                // Only close if clicking on map, not on markers
+                closeSupplierDetails();
             });
         }
 
         // Initialize app when page loads
-        window.addEventListener('load', initApp);
+        window.addEventListener('load', () => {
+            updateTime();
+            setInterval(updateTime, 1000);
+            initApp();
+        });
+
+        // Global functions for onclick handlers
+        window.showSupplierDetails = (supplierId) => showSupplierDetails(supplierId);
+        window.closeSupplierDetails = closeSupplierDetails;
+        window.contactSupplier = contactSupplier;
+        window.requestQuote = requestQuote;
     </script>
 </body>
 

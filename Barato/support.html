@@ -510,26 +510,26 @@
         <div class="sidebar">
             <div class="nav-section">
                 <div class="nav-title">Home</div>
-                <a href="#" class="nav-item" data-page="dashboard">
+                <a href="landing.html" class="nav-item">
                     <div class="nav-icon">📊</div>
                     Dashboard
                 </a>
             </div>
 
             <div class="nav-section">
-                <a href="inventory.html" class="nav-item" data-page="inventory">
+                <a href="inventory.html" class="nav-item">
                     <div class="nav-icon">📦</div>
                     Inventory Management
                 </a>
-                <a href="payroll.html" class="nav-item" data-page="payroll">
+                <a href="payroll.html" class="nav-item">
                     <div class="nav-icon">💰</div>
                     Payroll
                 </a>
-                <a href="expenses.php" class="nav-item" data-page="expenses">
+                <a href="expenses.html" class="nav-item">
                     <div class="nav-icon">📈</div>
                     Expense Tracker
                 </a>
-                <a href="support.html" class="nav-item active" data-page="support">
+                <a href="support.html" class="nav-item active">
                     <div class="nav-icon">💬</div>
                     Communication & Support
                 </a>
@@ -544,7 +544,7 @@
         <div class="chat-main">
             <div class="chat-container">
                 <div class="chat-header">
-                    <h1 class="chat-title">💬 Business Support Assistant</h1>
+                    <h1 class="chat-title">💬 Meet SangkAI, your sangkay na AI! 😎🚀</h1>
                     <p class="chat-subtitle">Get instant help with your business operations, ask questions, and find
                         solutions</p>
 
@@ -568,8 +568,8 @@
                     <div class="chat-messages" id="chatMessages">
                         <div class="message bot">
                             <div>
-                                Hello! I'm your Business Support Assistant. I'm here to help you with any questions
-                                about your business operations, troubleshooting, or general inquiries.
+                                Hello ka-SangkAI 😀🚀! I'm SangkAI 😎, your Business Support Assistant. I'm here to help you with any questions
+                                about your business operations, troubleshooting, or general inquiries❤️.
                             </div>
                             <div class="message-time">Just now</div>
                         </div>
@@ -577,12 +577,12 @@
                         <div class="message bot">
                             <div>
                                 I can help you with:
-                                <br>• Inventory management questions
-                                <br>• Payroll processing issues
-                                <br>• Expense tracking guidance
-                                <br>• Technical troubleshooting
-                                <br>• Account settings and billing
-                                <br>• General business advice
+                                <br>🚀 Inventory management questions
+                                <br>🚀 Payroll processing issues
+                                <br>🚀 Expense tracking guidance
+                                <br>🚀 Technical troubleshooting
+                                <br>🚀 Account settings and billing
+                                <br>🚀 General business advice
                             </div>
                             <div class="message-time">Just now</div>
                         </div>
@@ -604,7 +604,7 @@
                                 What\'s New</button>
                         </div>
                     </div>
-
+                    
                     <div class="chat-input-container">
                         <textarea class="chat-input" id="chatInput"
                             placeholder="Type your message here... Press Enter to send" rows="1"></textarea>
@@ -614,198 +614,175 @@
             </div>
         </div>
 
-        <script>
-            // Update time every second
-            function updateTime() {
-                const now = new Date();
-                const options = {
-                    timeZone: 'Asia/Manila',
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                };
-                const timeString = now.toLocaleString('en-US', options);
-                document.getElementById('current-time').textContent = timeString;
-            }
+       <script>
+// Update time every second
+function updateTime() {
+    const now = new Date();
+    const options = {
+        timeZone: 'Asia/Manila',
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    };
+    const timeString = now.toLocaleString('en-US', options);
+    document.getElementById('current-time').textContent = timeString;
+}
 
-            updateTime();
-            setInterval(updateTime, 1000);
+updateTime();
+setInterval(updateTime, 1000);
 
-            // Chat functionality
-            const chatMessages = document.getElementById('chatMessages');
-            const chatInput = document.getElementById('chatInput');
-            const chatSend = document.getElementById('chatSend');
-            const quickActions = document.getElementById('quickActions');
+// Chat functionality
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+const quickActions = document.getElementById('quickActions');
 
-            let isTyping = false;
+let isTyping = false;
 
-            // Auto-resize textarea
-            chatInput.addEventListener('input', function () {
-                this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-            });
+// Auto-resize textarea
+chatInput.addEventListener('input', function () {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
 
-            // Send message function
-            function sendMessage() {
-                const message = chatInput.value.trim();
-                if (message && !isTyping) {
-                    addMessage(message, 'user');
-                    chatInput.value = '';
-                    chatInput.style.height = 'auto';
-                    chatSend.disabled = true;
+// Send message function
+function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message && !isTyping) {
+        addMessage(message, 'user');
+        chatInput.value = '';
+        chatInput.style.height = 'auto';
+        chatSend.disabled = true;
 
-                    // Hide quick actions after first message
-                    if (quickActions) {
-                        quickActions.style.display = 'none';
-                    }
+        // Hide quick actions after first message
+        if (quickActions) {
+            quickActions.style.display = 'none';
+        }
 
-                    // Show typing indicator
-                    showTypingIndicator();
+        // Show typing indicator
+        showTypingIndicator();
 
-                    // Simulate bot response
-                    setTimeout(() => {
-                        hideTypingIndicator();
-                        const response = getBotResponse(message);
-                        addMessage(response, 'bot');
-                        chatSend.disabled = false;
-                    }, 1000 + Math.random() * 2000);
-                }
-            }
+        // Get bot response using proper Promise handling
+        getBotResponse(message).then(function(response) {
+            hideTypingIndicator();
+            addMessage(response, 'bot');
+            chatSend.disabled = false;
+        });
+    }
+}
 
-            // Quick message function
-            function sendQuickMessage(message) {
-                addMessage(message, 'user');
-                chatSend.disabled = true;
+// Quick message function
+function sendQuickMessage(message) {
+    addMessage(message, 'user');
+    chatSend.disabled = true;
 
-                // Hide quick actions
-                quickActions.style.display = 'none';
+    // Hide quick actions
+    quickActions.style.display = 'none';
 
-                // Show typing indicator
-                showTypingIndicator();
+    // Show typing indicator
+    showTypingIndicator();
 
-                // Simulate bot response
-                setTimeout(() => {
-                    hideTypingIndicator();
-                    const response = getBotResponse(message);
-                    addMessage(response, 'bot');
-                    chatSend.disabled = false;
-                }, 1200 + Math.random() * 1500);
-            }
+    // Get bot response using proper Promise handling
+    getBotResponse(message).then(function(response) {
+        hideTypingIndicator();
+        addMessage(response, 'bot');
+        chatSend.disabled = false;
+    });
+}
 
-            // Add message to chat
-            function addMessage(text, sender) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${sender}`;
+// Add message to chat
+function addMessage(text, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}`;
 
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    timeZone: 'Asia/Manila'
-                });
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Asia/Manila'
+    });
 
-                messageDiv.innerHTML = `
-                <div>${text}</div>
-                <div class="message-time">${timeString}</div>
-            `;
+    messageDiv.innerHTML = `
+        <div>${text}</div>
+        <div class="message-time">${timeString}</div>
+    `;
 
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
-            // Show typing indicator
-            function showTypingIndicator() {
-                isTyping = true;
-                const typingDiv = document.createElement('div');
-                typingDiv.className = 'typing-indicator';
-                typingDiv.id = 'typingIndicator';
-                typingDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-                chatMessages.appendChild(typingDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
+// Show typing indicator
+function showTypingIndicator() {
+    isTyping = true;
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'typing-indicator';
+    typingDiv.id = 'typingIndicator';
+    typingDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
-            // Hide typing indicator
-            function hideTypingIndicator() {
-                isTyping = false;
-                const typingIndicator = document.getElementById('typingIndicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
-                }
-            }
+// Hide typing indicator
+function hideTypingIndicator() {
+    isTyping = false;
+    const typingIndicator = document.getElementById('typingIndicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+}
 
-            // Enhanced bot responses
-            function getBotResponse(message) {
-                const responses = {
-                    'payroll': 'I can help you with payroll processing! Here are the main steps:<br><br>1. Go to the Payroll section from your dashboard<br>2. Click "Run Payroll" to start processing<br>3. Review employee hours and deductions<br>4. Approve and process payments<br><br>If you\'re experiencing specific issues, let me know what error messages you\'re seeing.',
+// Enhanced bot responses
+function getBotResponse(message) {
+    return fetch('support.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message })
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        if (data.success) {
+            return data.response;
+        } else {
+            console.error('API Error:', data.error);
+            return 'Sorry, I encountered an error. Please try again.';
+        }
+    })
+    .catch(function(error) {
+        console.error('Network Error:', error);
+        return 'Sorry, I could not connect to the chatbot service.';
+    });
+}
 
-                    'inventory': 'For inventory management issues, let\'s troubleshoot step by step:<br><br>1. First, try refreshing your browser<br>2. Check if you\'ve recently imported data<br>3. Verify your stock levels in the Inventory section<br><br>If numbers still look incorrect, I can help you run a stock audit. What specific discrepancies are you seeing?',
+// Event listeners
+chatSend.addEventListener('click', sendMessage);
 
-                    'export': 'To export your expense reports:<br><br>1. Navigate to the Expense Tracker<br>2. Use the filter options to select your date range<br>3. Click the "Export" button in the toolbar<br>4. Choose your preferred format (PDF, CSV, or Excel)<br><br>The report will download automatically. Need help with a specific format?',
+chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
 
-                    'technical': 'I\'m here to help with technical issues! To provide the best support:<br><br>1. What specific problem are you experiencing?<br>2. What browser are you using?<br>3. Are you seeing any error messages?<br><br>Common solutions:<br>• Clear your browser cache<br>• Try an incognito/private window<br>• Check your internet connection<br><br>Let me know the details and I\'ll guide you through the solution!',
+chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.shiftKey) {
+        // Allow shift+enter for new lines
+        return;
+    }
+});
 
-                    'account': 'For account settings, you can:<br><br>1. Click your profile icon in the top right<br>2. Select "Account Settings"<br>3. Update your information as needed<br><br>You can modify:<br>• Personal information<br>• Password and security<br>• Notification preferences<br>• Billing details<br><br>What specific setting would you like to change?',
-
-                    'features': 'Here are our latest features:<br><br>✨ <strong>New This Month:</strong><br>• Enhanced expense categorization<br>• Real-time inventory alerts<br>• Improved payroll dashboard<br>• Mobile app updates<br><br>🔄 <strong>Coming Soon:</strong><br>• Advanced reporting tools<br>• Automated tax calculations<br>• Integration with QuickBooks<br><br>Would you like details about any of these features?',
-
-                    'hello': 'Hello! I\'m excited to help you with your business needs today. Whether you need assistance with payroll, inventory, expenses, or technical support, I\'m here for you 24/7. What can I help you with?',
-
-                    'help': 'I\'m here to provide comprehensive support for all aspects of your business platform:<br><br>📊 <strong>Dashboard & Analytics</strong><br>💰 <strong>Payroll Processing</strong><br>📦 <strong>Inventory Management</strong><br>📈 <strong>Expense Tracking</strong><br>🔧 <strong>Technical Support</strong><br>⚙️ <strong>Account Management</strong><br><br>Just describe what you need help with, and I\'ll provide detailed guidance!',
-
-                    'billing': 'For billing and subscription questions:<br><br>💳 <strong>Current Plan:</strong> Business Pro<br>📅 <strong>Next Billing:</strong> July 20, 2025<br>💰 <strong>Amount:</strong> ₱2,999/month<br><br>You can:<br>• View detailed invoices<br>• Update payment methods<br>• Change subscription plans<br>• Download receipts<br><br>Need help with a specific billing issue?'
-                };
-
-                const lowerMessage = message.toLowerCase();
-
-                // Check for keyword matches
-                for (const [keyword, response] of Object.entries(responses)) {
-                    if (lowerMessage.includes(keyword)) {
-                        return response;
-                    }
-                }
-
-                // Default responses based on message sentiment
-                const helpfulResponses = [
-                    'I understand you need assistance with that. Could you provide more specific details about what you\'re trying to accomplish? This will help me give you the most accurate guidance.',
-
-                    'That\'s a great question! Based on your business setup, I can provide targeted advice. What specific area would you like me to focus on - payroll, inventory, expenses, or something else?',
-
-                    'I\'m here to help you resolve this quickly. To give you the best solution, could you tell me:<br>• What you were trying to do<br>• What happened instead<br>• Any error messages you saw',
-
-                    'Absolutely! I can walk you through that step-by-step. Your business data shows everything is running smoothly, so we should be able to get this sorted out quickly. What\'s the first thing you\'d like to tackle?',
-
-                    'I\'ve helped many businesses with similar questions. Let me provide you with a comprehensive solution. Could you clarify which aspect is most important to you right now?'
-                ];
-
-                return helpfulResponses[Math.floor(Math.random() * helpfulResponses.length)];
-            }
-
-            // Event listeners
-            chatSend.addEventListener('click', sendMessage);
-
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-
-            chatInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && e.shiftKey) {
-                    // Allow shift+enter for new lines
-                    return;
-                }
-            });
-
-            // Focus input on page load
-            window.addEventListener('load', () => {
-                chatInput.focus();
-            });
-        </script>
+// Focus input on page load
+window.addEventListener('load', () => {
+    chatInput.focus();
+});
+</script>
 </body>
 
 </html>
