@@ -192,7 +192,8 @@
         }
 
         .chat-header {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            /*background: linear-gradient(45deg, #667eea, #764ba2);*/
+            background: linear-gradient(45deg,  #1800ad,#667eea);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -232,9 +233,16 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            background: #fafbfc;
             min-height: 400px;
             max-height: 600px;
+        }
+        
+
+        .chat-icons{
+            flex:1;
+            height: 20px;
+            width: 20px;
+            gap: 1rem;
         }
 
         .message {
@@ -247,10 +255,25 @@
             position: relative;
         }
 
+        .message.icon{
+            min-height: 50px;
+            width: 50px;
+            height: 50px;
+            background-image: url('assets/SangkAI_icon.png'); /* path to your image */
+            background-size: cover;    /* cover or contain */
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
         .message.bot {
-            background: white;
+            background: #ffce11;
             color: #334155;
-            align-self: flex-start;
+            /*align-self: flex-start;*/
             border-bottom-left-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border: 1px solid #e2e8f0;
@@ -299,7 +322,7 @@
         }
 
         .chat-send {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #667eea, #1800ad);
             color: white;
             border: none;
             width: 56px;
@@ -464,14 +487,16 @@
             }
 
             .chat-header {
-                padding: 1.5rem;
+                padding: 1rem;
             }
 
             .chat-title {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
 
             .chat-messages {
+                display: flex;
+                flex-direction: column;
                 padding: 1rem;
             }
 
@@ -525,7 +550,7 @@
                     <div class="nav-icon">💰</div>
                     Payroll
                 </a>
-                <a href="expenses.php" class="nav-item">
+                <a href="expenses.html" class="nav-item">
                     <div class="nav-icon">📈</div>
                     Expense Tracker
                 </a>
@@ -548,33 +573,20 @@
                     <p class="chat-subtitle">Get instant help with your business operations, ask questions, and find
                         solutions</p>
 
-                    <div class="support-stats">
-                        <div class="support-stat">
-                            <div class="support-stat-value">24/7</div>
-                            <div class="support-stat-label">Support Available</div>
-                        </div>
-                        <div class="support-stat">
-                            <div class="support-stat-value">
-                                < 30s</div>
-                                    <div class="support-stat-label">Response Time</div>
-                            </div>
-                            <div class="support-stat">
-                                <div class="support-stat-value">98%</div>
-                                <div class="support-stat-label">Satisfaction Rate</div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="chat-messages" id="chatMessages">
-                        <div class="message bot">
-                            <div>
-                                Hello ka-SangkAI 😀🚀! I'm SangkAI 😎, your Business Support Assistant. I'm here to help you with any questions
-                                about your business operations, troubleshooting, or general inquiries❤️.
-                            </div>
+                        <div class="message icon"> </div>
+                            <div class="message bot">
+                                <div>
+                                    Hello ka-SangkAI 😀🚀! I'm SangkAI 😎, your Business Support Assistant. I'm here to help you with any questions
+                                    about your business operations, troubleshooting, or general inquiries❤️.
+                                </div>
                             <div class="message-time">Just now</div>
                         </div>
-
-                        <div class="message bot">
+                        
+                        <div class="message icon"> </div>
+                            <div class="message bot">
                             <div>
                                 I can help you with:
                                 <br>🚀 Inventory management questions
@@ -586,6 +598,8 @@
                             </div>
                             <div class="message-time">Just now</div>
                         </div>
+                        
+                        
 
                         <div class="quick-actions" id="quickActions">
                             <button class="quick-action-btn" onclick="sendQuickMessage('How do I process payroll?')">💰
@@ -669,6 +683,9 @@ function sendMessage() {
         // Get bot response using proper Promise handling
         getBotResponse(message).then(function(response) {
             hideTypingIndicator();
+            const messIconDiv = document.createElement('div');
+            messIconDiv.className = 'message icon';
+            chatMessages.appendChild(messIconDiv);
             addMessage(response, 'bot');
             chatSend.disabled = false;
         });
