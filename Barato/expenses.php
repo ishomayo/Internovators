@@ -8,6 +8,7 @@
   $month_expenses_sql = $db->query("SELECT SUM(amount) AS total_this_month FROM expenses WHERE created_at >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND created_at < DATE_FORMAT(CURRENT_DATE + INTERVAL 1 MONTH, '%Y-%m-01')");
   $total_expenses_sql = $db->query("SELECT SUM(amount) AS total FROM expenses");
   $categories_sql = $db->query("SELECT DISTINCT category FROM expenses");
+  $budget_sql = $db->query("SELECT budget FROM monthly_budget");
 ?>
 
 <!DOCTYPE html>
@@ -104,6 +105,12 @@
                     <div class="stat-label">Budget Remaining</div>
                     <div class="stat-change">64% of monthly budget</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value">₱<?php foreach($budget_sql as $row){
+                        ?> <?= $row["budget"] ?>
+                    <?php } ?></div>
+                    <div class="stat-label">Initial Budget of the Month</div>
+                </div>
             </div>
 
             <div class="expense-grid">
@@ -145,6 +152,7 @@
                                             <button class="btn-secondary edit-btn" style="padding: 4px 8px; font-size: 12px;" 
                                                     data-expense-id="<?= $row["id"] ?>"
                                                     data-amount="<?= $row["amount"] ?>"
+                                                    data-description="<?= $row["description"] ?>"
                                                     data-category="<?= $row["category"] ?>">
                                                 Edit
                                             </button>
@@ -216,37 +224,33 @@
         <div style="background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 500px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             <h2 style="margin-bottom: 1.5rem;">Edit Expense</h2>
             <form id="editExpenseForm" action="edit-expense.php" method="POST">
-                <input type="hidden" id="editExpenseId">
+                <input type="hidden" name="id" id="editExpenseId">
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem;">Amount (₱)</label>
                     <input name="amount" type="number" id="editExpenseAmount" min=0 required style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
                 </div>
                 <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem;">Decription</label>
-                    <input name="description" id="editExpenseDescription" required style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;" required>
+                    <label style="display: block; margin-bottom: 0.5rem;">Description</label>
+                    <input name="description" id="editExpenseDescription" required style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
                 </div>
                 
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem;">Category</label>
                     <select name="category" id="editExpenseCategory" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
-                        <?php 
-                        
-                        $db = new PDO("mysql:dbname=barato_db;host=192.168.1.61", "internnovators", "Internnovator123!");
-                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        <?php
+                            $categories_sql = $db->query("SELECT DISTINCT category FROM expenses");
 
-                        $categories_sql = $db->query("SELECT DISTINCT category FROM expenses");
-
-                        foreach($categories_sql as $row) { ?>
+                            foreach($categories_sql as $row) { ?>
                             <option value="<?= $row["category"] ?>"><?= $row["category"] ?></option>
                         <?php } ?>
                     </select>
                 </div>
 
                 <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
-                    <button type="submit" class="btn-danger" onclick="deleteExpense()">Delete Expense</button>
+                    <button type="submit" name="act" class="btn-danger" value="Delete Expense">Delete Expense</button>
                     <div>
-                        <button type="submit" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
-                        <button type="submit" class="btn-primary">Save Changes</button>
+                        <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" name="act" class="btn-primary" value="Save Changes">Save Changes</button>
                     </div>
                 </div>
             </form>
@@ -332,7 +336,7 @@
         }
 
         // Edit expense functionality
-        function openEditModal(expenseId, amount, category) {
+        function openEditModal(expenseId, amount, description, category) {
             document.getElementById('editExpenseModal').style.display = 'block';
             document.getElementById('editExpenseId').value = expenseId;
             document.getElementById('editExpenseAmount').value = amount;
@@ -407,8 +411,9 @@
             if (e.target.classList.contains('edit-btn')) {
                 const expenseId = e.target.dataset.expenseId;
                 const amount = e.target.dataset.amount;
+                const description = e.target.dataset.description;
                 const category = e.target.dataset.category;
-                openEditModal(expenseId, amount, category);
+                openEditModal(expenseId, amount, description, category);
             }
         });
 
