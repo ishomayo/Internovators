@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Dashboard - Business Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            background: #4f46e5;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .time-info {
+            text-align: right;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .notification-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #e2e8f0;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 6px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 2rem 1.5rem;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-title {
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+            padding-left: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            margin: 2px 0;
+            border-radius: 8px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .nav-item.active {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #f59e0b;
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #64748b;
+            flex-shrink: 0;
+        }
+
+        .nav-item.active .nav-icon {
+            background: #f59e0b;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .logistics-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            height: calc(100vh - 200px);
+        }
+
+        /* Search Panel */
+        .search-panel {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .search-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: #4f46e5;
+        }
+
+        .product-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .product-item {
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .product-item:hover {
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+        }
+
+        .product-item.active {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .product-name {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .product-suppliers {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        /* Map Container */
+        .map-container {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .map-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .map-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .map-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            background: white;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+
+        .map-viewport {
+            height: 100%;
+            min-height: 500px;
+            background: linear-gradient(45deg, #e6f3ff 0%, #f0f9ff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Map Markers */
+        .map-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            z-index: 10;
+        }
+
+        .map-marker:hover {
+            transform: scale(1.2);
+            z-index: 20;
+        }
+
+        .map-marker.supplier-food {
+            background: #10b981;
+        }
+
+        .map-marker.supplier-electronics {
+            background: #f59e0b;
+        }
+
+        .map-marker.supplier-textile {
+            background: #8b5cf6;
+        }
+
+        .map-marker.supplier-chemicals {
+            background: #ef4444;
+        }
+
+        .map-marker.supplier-metals {
+            background: #6b7280;
+        }
+
+        /* Tooltip */
+        .marker-tooltip {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e2e8f0;
+            white-space: nowrap;
+            font-size: 14px;
+            z-index: 30;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+
+        .marker-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: white;
+        }
+
+        .map-marker:hover .marker-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tooltip-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .tooltip-info {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Supplier Details Panel */
+        .supplier-details {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transform: translateX(320px);
+            transition: transform 0.3s ease;
+            z-index: 50;
+        }
+
+        .supplier-details.active {
+            transform: translateX(0);
+        }
+
+        .supplier-header {
+            display: flex;
+
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .supplier-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .close-details {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .supplier-info {
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-label {
+            color: #64748b;
+        }
+
+        .info-value {
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .rating {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            color: #fbbf24;
+        }
+
+        .products-supplied {
+            margin-top: 1rem;
+        }
+
+        .products-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .product-tag {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin: 2px 4px 2px 0;
+        }
+
+        .contact-btn {
+            width: 100%;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .contact-btn:hover {
+            background: #4338ca;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        @media (max-width: 1024px) {
+            .logistics-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+                height: auto;
+            }
+
+            .search-panel {
+                height: 300px;
+            }
+
+            .supplier-details {
+                position: relative;
+                top: 0;
+                right: 0;
+                width: 100%;
+                transform: none;
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">B</div>
+        <div class="header-right">
+            <div class="time-info">
+                <div>Philippine Standard Time</div>
+                <div id="current-time">Friday, June 20, 2025, 9:29:45 AM</div>
+            </div>
+            <button class="notification-btn">🔔</button>
+            <button class="user-btn">
+                <div class="user-avatar">👤</div>
+                <span>User</span>
+                <span>▼</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-section">
+                <div class="nav-title">Home</div>
+                <a href="landing.html" class="nav-item">
+                    <div class="nav-icon">📊</div>
+                    Dashboard
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <a href="inventory.html" class="nav-item">
+                    <div class="nav-icon">📦</div>
+                    Inventory Management
+                </a>
+                <a href="payroll.html" class="nav-item">
+                    <div class="nav-icon">💰</div>
+                    Payroll
+                </a>
+                <a href="expenses.html" class="nav-item">
+                    <div class="nav-icon">📈</div>
+                    Expense Tracker
+                </a>
+                <a href="support.html" class="nav-item">
+                    <div class="nav-icon">💬</div>
+                    Communication & Support
+                </a>
+                <a href="logistics.html" class="nav-item active">
+                    <div class="nav-icon">🚚</div>
+                    Logistics & Suppliers
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <h1 class="page-title">🚚 Logistics & Supplier Management</h1>
+                <p class="page-subtitle">Find and manage suppliers for raw materials and products across different
+                    regions</p>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <div class="stat-value">142</div>
+                    <div class="stat-label">Active Suppliers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">28</div>
+                    <div class="stat-label">Product Categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">On-Time Delivery</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">₱2.4M</div>
+                    <div class="stat-label">Monthly Orders</div>
+                </div>
+            </div>
+
+            <div class="logistics-layout">
+                <!-- Search Panel -->
+                <div class="search-panel">
+                    <div class="search-header">
+                        <div class="search-title">Search Raw Materials</div>
+                        <input type="text" class="search-input" id="productSearch"
+                            placeholder="Search for raw materials...">
+                    </div>
+                    <div class="product-list" id="productList">
+                        <!-- Products will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div class="map-container">
+                    <div class="map-header">
+                        <div class="map-title">Supplier Locations</div>
+                        <div class="map-filters">
+                            <button class="filter-btn active" data-category="all">All</button>
+                            <button class="filter-btn" data-category="food">Food</button>
+                            <button class="filter-btn" data-category="electronics">Electronics</button>
+                            <button class="filter-btn" data-category="textile">Textile</button>
+                            <button class="filter-btn" data-category="chemicals">Chemicals</button>
+                        </div>
+                    </div>
+                    <div class="map-viewport" id="mapViewport">
+                        <!-- Map markers will be populated by JavaScript -->
+                    </div>
+
+                    <!-- Supplier Details Panel -->
+                    <div class="supplier-details" id="supplierDetails">
+                        <div class="supplier-header">
+                            <div class="supplier-name" id="supplierName">Select a supplier</div>
+                            <button class="close-details" onclick="closeSupplierDetails()">×</button>
+                        </div>
+                        <div class="supplier-info" id="supplierInfo">
+                            <div class="info-row">
+                                <span class="info-label">Location:</span>
+                                <span class="info-value" id="supplierLocation">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Rating:</span>
+                                <span class="info-value" id="supplierRating">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Lead Time:</span>
+                                <span class="info-value" id="supplierLeadTime">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Min Order:</span>
+                                <span class="info-value" id="supplierMinOrder">-</span>
+                            </div>
+                        </div>
+                        <div class="products-supplied">
+                            <div class="products-title">Products Supplied:</div>
+                            <div id="supplierProducts">
+                                <!-- Product tags will be populated -->
+                            </div>
+                        </div>
+                        <button class="contact-btn" onclick="contactSupplier()">Contact Supplier</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dummy data for products and suppliers
+        const products = [
+            { id: 1, name: "Cotton Fabric", category: "textile", suppliers: ["Manila Textile Co.", "Cebu Cotton Mills"] },
+            { id: 2, name: "Steel Sheets", category: "metals", suppliers: ["Philippine Steel Corp.", "Metro Steel Industries"] },
+            { id: 3, name: "Electronic Components", category: "electronics", suppliers: ["TechSource Manila", "Electronic Solutions Inc."] },
+            { id: 4, name: "Wheat Flour", category: "food", suppliers: ["Golden Wheat Mills", "Sunrise Food Processing"] },
+            { id: 5, name: "Plastic Pellets", category: "chemicals", suppliers: ["Polymer Industries", "ChemTech Philippines"] },
+            { id: 6, name: "Aluminum Sheets", category: "metals", suppliers: ["Aluminum Corp PH", "Metal Works Ltd."] },
+            { id: 7, name: "Silicon Chips", category: "electronics", suppliers: ["Semiconductor PH", "TechCore Industries"] },
+            { id: 8, name: "Organic Coconut Oil", category: "food", suppliers: ["Tropical Oils Inc.", "Pure Coconut Co."] },
+            { id: 9, name: "Polyester Yarn", category: "textile", suppliers: ["Fiber Tech Manila", "Yarn Masters PH"] },
+            { id: 10, name: "Chemical Solvents", category: "chemicals", suppliers: ["Industrial Chemicals Ltd.", "SafeChem Solutions"] }
+        ];
+
+        const suppliers = [
+            { id: 1, name: "Manila Textile Co.", category: "textile", location: "Manila, Philippines", rating: 4.8, leadTime: "5-7 days", minOrder: "₱50,000", products: ["Cotton Fabric", "Polyester Yarn"], x: 45, y: 35, phone: "+63 2 123 4567" },
+            { id: 2, name: "Philippine Steel Corp.", category: "metals", location: "Batangas, Philippines", rating: 4.9, leadTime: "10-14 days", minOrder: "₱100,000", products: ["Steel Sheets", "Aluminum Sheets"], x: 50, y: 45, phone: "+63 43 456 7890" },
+            { id: 3, name: "TechSource Manila", category: "electronics", location: "Makati, Philippines", rating: 4.7, leadTime: "3-5 days", minOrder: "₱25,000", products: ["Electronic Components", "Silicon Chips"], x: 48, y: 32, phone: "+63 2 789 0123" },
+            { id: 4, name: "Golden Wheat Mills", category: "food", location: "Bulacan, Philippines", rating: 4.6, leadTime: "2-3 days", minOrder: "₱30,000", products: ["Wheat Flour"], x: 42, y: 25, phone: "+63 44 234 5678" },
+            { id: 5, name: "Polymer Industries", category: "chemicals", location: "Laguna, Philippines", rating: 4.5, leadTime: "7-10 days", minOrder: "₱75,000", products: ["Plastic Pellets", "Chemical Solvents"], x: 52, y: 38, phone: "+63 49 345 6789" },
+            { id: 6, name: "Cebu Cotton Mills", category: "textile", location: "Cebu, Philippines", rating: 4.9, leadTime: "6-8 days", minOrder: "₱40,000", products: ["Cotton Fabric"], x: 65, y: 55, phone: "+63 32 456 7890" },
+            { id: 7, name: "Semiconductor PH", category: "electronics", location: "Clark, Pampanga", rating: 4.8, leadTime: "4-6 days", minOrder: "₱80,000", products: ["Silicon Chips"], x: 40, y: 28, phone: "+63 45 567 8901" },
+            { id: 8, name: "Tropical Oils Inc.", category: "food", location: "Davao, Philippines", rating: 4.7, leadTime: "5-7 days", minOrder: "₱35,000", products: ["Organic Coconut Oil"], x: 70, y: 75, phone: "+63 82 678 9012" },
+            { id: 9, name: "Metro Steel Industries", category: "metals", location: "Quezon City, Philippines", rating: 4.6, leadTime: "8-12 days", minOrder: "₱90,000", products: ["Steel Sheets"], x: 46, y: 30, phone: "+63 2 789 0123" },
+            { id: 10, name: "ChemTech Philippines", category: "chemicals", location: "Cavite, Philippines", rating: 4.4, leadTime: "6-9 days", minOrder: "₱60,000", products: ["Chemical Solvents"], x: 49, y: 40, phone: "+63 46 890 1234" }
+        ];
+
+        let selectedProduct = null;
+        let filteredSuppliers = suppliers;
+
+        // Update time every second
+        function updateTime() {
+            const now = new Date();
+            const options = {
+                timeZone: 'Asia/Manila',
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const timeString = now.toLocaleString('en-US', options);
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Initialize the application
+        function initApp() {
+            populateProductList();
+            renderMapMarkers();
+            setupEventListeners();
+        }
+
+        // Populate product list
+        function populateProductList() {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+
+            products.forEach(product => {
+                const productItem = document.createElement('div');
+                productItem.className = 'product-item';
+                productItem.dataset.productId = product.id;
+                productItem.innerHTML = `
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
+                    <div class="product-suppliers">${product.suppliers.length} suppliers available</div>
+                `;
+                productItem.addEventListener('click', () => selectProduct(product.id));
+                productList.appendChild(productItem);
+            });
+        }
+
+        // Render map markers
+        function renderMapMarkers() {
+            const mapViewport = document.getElementById('mapViewport');
+            const existingMarkers = mapViewport.querySelectorAll('.map-marker');
+            existingMarkers.forEach(marker => marker.remove());
+
+            filteredSuppliers.forEach(supplier => {
+                const marker = document.createElement('div');
+                marker.className = `map-marker supplier-${supplier.category}`;
+                marker.style.left = `${supplier.x}%`;
+                marker.style.top = `${supplier.y}%`;
+                marker.innerHTML = `
+                    📍
+                    <div class="marker-tooltip">
+                        <div class="tooltip-name">${supplier.name}</div>
+                        <div class="tooltip-info">${supplier.location}</div>
+                        <div class="tooltip-info">Rating: ${supplier.rating}/5 ⭐</div>
+                    </div>
+                `;
+                marker.addEventListener('click', () => showSupplierDetails(supplier));
+                mapViewport.appendChild(marker);
+            });
+        }
+
+        // Select product
+        function selectProduct(productId) {
+            selectedProduct = productId;
+            const product = products.find(p => p.id === productId);
+
+            // Update active state
+            document.querySelectorAll('.product-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.productId == productId) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Filter suppliers based on selected product
+            filteredSuppliers = suppliers.filter(supplier =>
+                supplier.products.some(p => product.suppliers.includes(supplier.name))
+            );
+
+            renderMapMarkers();
+        }
+
+        // Show supplier details
+        function showSupplierDetails(supplier) {
+            document.getElementById('supplierName').textContent = supplier.name;
+            document.getElementById('supplierLocation').textContent = supplier.location;
+            document.getElementById('supplierLeadTime').textContent = supplier.leadTime;
+            document.getElementById('supplierMinOrder').textContent = supplier.minOrder;
+
+            // Create rating stars
+            const ratingElement = document.getElementById('supplierRating');
+            const stars = '⭐'.repeat(Math.floor(supplier.rating)) +
+                (supplier.rating % 1 !== 0 ? '⭐' : '') +
+                '☆'.repeat(5 - Math.ceil(supplier.rating));
+            ratingElement.innerHTML = `${supplier.rating}/5 ${stars.substring(0, 5)}`;
+
+            // Populate products
+            const productsContainer = document.getElementById('supplierProducts');
+            productsContainer.innerHTML = '';
+            supplier.products.forEach(product => {
+                const tag = document.createElement('span');
+                tag.className = 'product-tag';
+                tag.textContent = product;
+                productsContainer.appendChild(tag);
+            });
+
+            // Store current supplier for contact function
+            window.currentSupplier = supplier;
+
+            // Show the details panel
+            document.getElementById('supplierDetails').classList.add('active');
+        }
+
+        // Close supplier details
+        function closeSupplierDetails() {
+            document.getElementById('supplierDetails').classList.remove('active');
+        }
+
+        // Contact supplier
+        function contactSupplier() {
+            if (window.currentSupplier) {
+                alert(`Contacting ${window.currentSupplier.name}\nPhone: ${window.currentSupplier.phone}\n\nThis would normally open your email client or contact form.`);
+            }
+        }
+
+        // Filter suppliers by category
+        function filterByCategory(category) {
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Filter suppliers
+            if (category === 'all') {
+                if (selectedProduct) {
+                    const product = products.find(p => p.id === selectedProduct);
+                    filteredSuppliers = suppliers.filter(supplier =>
+                        supplier.products.some(p => product.suppliers.includes(supplier.name))
+                    );
+                } else {
+                    filteredSuppliers = suppliers;
+                }
+            } else {
+                let baseSuppliers = selectedProduct ?
+                    suppliers.filter(supplier => {
+                        const product = products.find(p => p.id === selectedProduct);
+                        return supplier.products.some(p => product.suppliers.includes(supplier.name));
+                    }) : suppliers;
+
+                filteredSuppliers = baseSuppliers.filter(supplier => supplier.category === category);
+            }
+
+            renderMapMarkers();
+        }
+
+        // Search products
+        function searchProducts(query) {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+
+            const filteredProducts = products.filter(product =>
+                product.name.toLowerCase().includes(query.toLowerCase()) ||
+                product.category.toLowerCase().includes(query.toLowerCase())
+            );
+
+            filteredProducts.forEach(product => {
+                const productItem = document.createElement('div');
+                productItem.className = 'product-item';
+                productItem.dataset.productId = product.id;
+                productItem.innerHTML = `
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
+                    <div class="product-suppliers">${product.suppliers.length} suppliers available</div>
+                `;
+                productItem.addEventListener('click', () => selectProduct(product.id));
+                productList.appendChild(productItem);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search input
+            document.getElementById('productSearch').addEventListener('input', (e) => {
+                searchProducts(e.target.value);
+            });
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterByCategory(btn.dataset.category);
+                });
+            });
+
+            // Close details panel when clicking outside
+            document.addEventListener('click', (e) => {
+                const detailsPanel = document.getElementById('supplierDetails');
+                const mapViewport = document.getElementById('mapViewport');
+
+                if (!detailsPanel.contains(e.target) &&
+                    !e.target.classList.contains('map-marker') &&
+                    mapViewport.contains(e.target)) {
+                    closeSupplierDetails();
+                }
+            });
+        }
+
+        // Initialize app when page loads
+        window.addEventListener('load', initApp);
+    </script>
+</body>
+
+</html>

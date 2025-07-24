@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -409,12 +410,12 @@
             .content-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .side-panel {
                 flex-direction: row;
                 overflow-x: auto;
             }
-            
+
             .stats-card,
             .quick-actions {
                 min-width: 250px;
@@ -425,30 +426,31 @@
             .main-layout {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 padding: 1rem;
                 border-right: none;
                 border-bottom: 1px solid #e2e8f0;
             }
-            
+
             .main-content {
                 padding: 1rem;
             }
-            
+
             .toolbar {
                 flex-direction: column;
                 gap: 1rem;
                 align-items: stretch;
             }
-            
+
             .search-bar {
                 width: 100%;
             }
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <div class="header">
@@ -477,7 +479,7 @@
                     Dashboard
                 </a>
             </div>
-            
+
             <div class="nav-section">
                 <a href="inventory.html" class="nav-item active">
                     <div class="nav-icon">📦</div>
@@ -494,6 +496,10 @@
                 <a href="support.html" class="nav-item">
                     <div class="nav-icon">💬</div>
                     Communication & Support
+                </a>
+                <a href="logistics.html" class="nav-item">
+                    <div class="nav-icon">🚚</div>
+                    Logistics & Suppliers
                 </a>
             </div>
         </div>
@@ -515,7 +521,7 @@
                         </div>
                         <input type="text" class="search-bar" placeholder="Search products...">
                     </div>
-                    
+
                     <div class="panel-content">
                         <table class="inventory-table">
                             <thead>
@@ -538,7 +544,8 @@
                                     <td><span class="status-badge status-in-stock">In Stock</span></td>
                                     <td>₱2,500</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -549,7 +556,8 @@
                                     <td><span class="status-badge status-low-stock">Low Stock</span></td>
                                     <td>₱850</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -560,7 +568,8 @@
                                     <td><span class="status-badge status-out-of-stock">Out of Stock</span></td>
                                     <td>₱8,500</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -571,7 +580,8 @@
                                     <td><span class="status-badge status-in-stock">In Stock</span></td>
                                     <td>₱450</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -582,7 +592,8 @@
                                     <td><span class="status-badge status-in-stock">In Stock</span></td>
                                     <td>₱1,200</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -661,10 +672,10 @@
         setInterval(updateTime, 1000);
 
         // Search functionality
-        document.querySelector('.search-bar').addEventListener('input', function(e) {
+        document.querySelector('.search-bar').addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
             const rows = document.querySelectorAll('.inventory-table tbody tr');
-            
+
             rows.forEach(row => {
                 const text = row.textContent.toLowerCase();
                 row.style.display = text.includes(searchTerm) ? '' : 'none';
@@ -672,7 +683,7 @@
         });
 
         // Add click handlers for buttons
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (e.target.textContent === '+ Add Product') {
                 alert('Add Product dialog would open here');
             } else if (e.target.textContent === 'Import CSV') {
@@ -683,6 +694,19 @@
                 alert('Edit product dialog would open here');
             }
         });
+
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`api/${endpoint}`);
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                return null;
+            }
+        }
     </script>
 </body>
+
+
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -454,7 +455,7 @@
             .expense-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .stats-overview {
                 grid-template-columns: 1fr;
             }
@@ -464,30 +465,31 @@
             .main-layout {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 padding: 1rem;
                 border-right: none;
                 border-bottom: 1px solid #e2e8f0;
             }
-            
+
             .main-content {
                 padding: 1rem;
             }
-            
+
             .toolbar {
                 flex-direction: column;
                 gap: 1rem;
                 align-items: stretch;
             }
-            
+
             .search-bar {
                 width: 100%;
             }
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <div class="header">
@@ -516,7 +518,7 @@
                     Dashboard
                 </a>
             </div>
-            
+
             <div class="nav-section">
                 <a href="inventory.html" class="nav-item">
                     <div class="nav-icon">📦</div>
@@ -533,6 +535,10 @@
                 <a href="support.html" class="nav-item">
                     <div class="nav-icon">💬</div>
                     Communication & Support
+                </a>
+                <a href="logistics.html" class="nav-item">
+                    <div class="nav-icon">🚚</div>
+                    Logistics & Suppliers
                 </a>
             </div>
         </div>
@@ -587,7 +593,7 @@
                         </div>
                         <input type="text" class="search-bar" placeholder="Search expenses...">
                     </div>
-                    
+
                     <div class="panel-content">
                         <table class="expense-table">
                             <thead>
@@ -608,7 +614,8 @@
                                     <td>₱1,250</td>
                                     <td>📄</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -618,7 +625,8 @@
                                     <td>₱8,500</td>
                                     <td>📄</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -628,7 +636,8 @@
                                     <td>₱5,000</td>
                                     <td>📄</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -638,7 +647,8 @@
                                     <td>₱3,200</td>
                                     <td>📄</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -648,7 +658,8 @@
                                     <td>₱2,800</td>
                                     <td>📄</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -658,7 +669,8 @@
                                     <td>₱1,500</td>
                                     <td>📄</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -668,7 +680,8 @@
                                     <td>₱450</td>
                                     <td>📄</td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -746,10 +759,10 @@
         setInterval(updateTime, 1000);
 
         // Search functionality
-        document.querySelector('.search-bar').addEventListener('input', function(e) {
+        document.querySelector('.search-bar').addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
             const rows = document.querySelectorAll('.expense-table tbody tr');
-            
+
             rows.forEach(row => {
                 const text = row.textContent.toLowerCase();
                 row.style.display = text.includes(searchTerm) ? '' : 'none';
@@ -757,10 +770,10 @@
         });
 
         // Filter functionality
-        document.querySelector('.filter-select').addEventListener('change', function(e) {
+        document.querySelector('.filter-select').addEventListener('change', function (e) {
             const filterValue = e.target.value;
             const rows = document.querySelectorAll('.expense-table tbody tr');
-            
+
             rows.forEach(row => {
                 if (filterValue === 'All Categories') {
                     row.style.display = '';
@@ -773,7 +786,7 @@
         });
 
         // Add click handlers for buttons
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (e.target.textContent === '+ Add Expense') {
                 alert('Add expense form would open here');
             } else if (e.target.textContent === 'Upload Receipt') {
@@ -784,11 +797,12 @@
         });
 
         // Receipt click handler
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (e.target.textContent === '📄') {
                 alert('Receipt viewer would open here');
             }
         });
     </script>
 </body>
+
 </html>

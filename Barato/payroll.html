@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -430,7 +431,7 @@
             .payroll-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
@@ -440,18 +441,18 @@
             .main-layout {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 padding: 1rem;
                 border-right: none;
                 border-bottom: 1px solid #e2e8f0;
             }
-            
+
             .main-content {
                 padding: 1rem;
             }
-            
+
             .toolbar {
                 flex-direction: column;
                 gap: 1rem;
@@ -460,6 +461,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <div class="header">
@@ -488,7 +490,7 @@
                     Dashboard
                 </a>
             </div>
-            
+
             <div class="nav-section">
                 <a href="inventory.html" class="nav-item">
                     <div class="nav-icon">📦</div>
@@ -505,6 +507,10 @@
                 <a href="support.html" class="nav-item">
                     <div class="nav-icon">💬</div>
                     Communication & Support
+                </a>
+                <a href="logistics.html" class="nav-item">
+                    <div class="nav-icon">🚚</div>
+                    Logistics & Suppliers
                 </a>
             </div>
         </div>
@@ -529,7 +535,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="panel-content">
                         <table class="payroll-table">
                             <thead>
@@ -560,7 +566,8 @@
                                     <td>₱56,550</td>
                                     <td><span class="status-badge status-paid">Paid</span></td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">View</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">View</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -579,7 +586,8 @@
                                     <td>₱47,850</td>
                                     <td><span class="status-badge status-processing">Processing</span></td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">View</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">View</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -598,7 +606,8 @@
                                     <td>₱36,540</td>
                                     <td><span class="status-badge status-pending">Pending</span></td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">View</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">View</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -617,7 +626,8 @@
                                     <td>₱41,760</td>
                                     <td><span class="status-badge status-paid">Paid</span></td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">View</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">View</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -636,7 +646,8 @@
                                     <td>₱45,240</td>
                                     <td><span class="status-badge status-paid">Paid</span></td>
                                     <td>
-                                        <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;">View</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">View</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -706,7 +717,38 @@
         </div>
     </div>
 
+    // Add this JavaScript to your payroll.html file (replace the existing script section)
+
     <script>
+        // API Helper Functions
+        async function fetchAPI(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const response = await fetch(`api/${endpoint}`, options);
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'API request failed');
+                }
+
+                return result;
+            } catch (error) {
+                console.error('API Error:', error);
+                showNotification('Error: ' + error.message, 'error');
+                return null;
+            }
+        }
+
         // Update time every second
         function updateTime() {
             const now = new Date();
@@ -724,25 +766,535 @@
             document.getElementById('current-time').textContent = timeString;
         }
 
-        updateTime();
-        setInterval(updateTime, 1000);
+        // Global variables
+        let currentPayrolls = [];
+        let currentEmployees = [];
+        let selectedMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
 
-        // Add click handlers for buttons
-        document.addEventListener('click', function(e) {
-            if (e.target.textContent === 'Run Payroll') {
-                alert('Payroll processing would be initiated here');
-            } else if (e.target.textContent === 'Export Report') {
-                alert('Payroll report export functionality would be implemented here');
-            } else if (e.target.textContent === 'View') {
-                alert('Employee payroll details would be displayed here');
+        // Load payroll data from backend
+        async function loadPayrollData() {
+            showLoadingState();
+
+            const [payrolls, stats, employees] = await Promise.all([
+                fetchAPI(`payroll.php?month=${selectedMonth}`),
+                fetchAPI('payroll.php?stats'),
+                fetchAPI('payroll.php?employees')
+            ]);
+
+            if (payrolls) {
+                currentPayrolls = payrolls;
+                renderPayrollTable(payrolls);
             }
+
+            if (stats) {
+                updatePayrollStats(stats);
+            }
+
+            if (employees) {
+                currentEmployees = employees;
+            }
+
+            hideLoadingState();
+        }
+
+        // Render payroll table
+        function renderPayrollTable(payrolls) {
+            const tbody = document.querySelector('.payroll-table tbody');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            if (payrolls.length === 0) {
+                tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
+                        No payroll records found for ${selectedMonth}
+                    </td>
+                </tr>
+            `;
+                return;
+            }
+
+            payrolls.forEach(payroll => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>
+                    <div class="employee-info">
+                        <div class="employee-avatar">${getEmployeeAvatar(payroll.full_name)}</div>
+                        <div class="employee-details">
+                            <div class="employee-name">${escapeHtml(payroll.full_name)}</div>
+                            <div class="employee-position">${escapeHtml(payroll.position || 'N/A')}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>${escapeHtml(payroll.department)}</td>
+                <td>₱${formatNumber(payroll.gross_pay)}</td>
+                <td>₱${formatNumber(payroll.deductions)}</td>
+                <td>₱${formatNumber(payroll.net_pay)}</td>
+                <td>${getStatusBadge(payroll.status)}</td>
+                <td>
+                    <button class="btn-secondary" onclick="viewPayroll(${payroll.id})" style="padding: 4px 8px; font-size: 12px;">View</button>
+                    ${payroll.status !== 'paid' ? `<button class="btn-primary" onclick="updatePayrollStatus(${payroll.id}, 'paid')" style="padding: 4px 8px; font-size: 12px; margin-left: 4px;">Pay</button>` : ''}
+                </td>
+            `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Update payroll statistics
+        function updatePayrollStats(stats) {
+            const statCards = document.querySelectorAll('.stat-card');
+            if (statCards.length >= 4) {
+                // Total payroll
+                statCards[0].querySelector('.stat-value').textContent = `₱${formatNumber(stats.total_payroll)}`;
+
+                // Active employees
+                statCards[1].querySelector('.stat-value').textContent = stats.active_employees || 0;
+
+                // Total deductions
+                statCards[2].querySelector('.stat-value').textContent = `₱${formatNumber(stats.total_deductions)}`;
+
+                // Net payroll
+                statCards[3].querySelector('.stat-value').textContent = `₱${formatNumber(stats.net_payroll)}`;
+            }
+        }
+
+        // Get employee avatar
+        function getEmployeeAvatar(fullName) {
+            const names = fullName.split(' ');
+            const firstName = names[0] || '';
+            const lastName = names[names.length - 1] || '';
+            return (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+        }
+
+        // Get status badge HTML
+        function getStatusBadge(status) {
+            const statusConfig = {
+                'paid': { class: 'status-paid', text: 'Paid' },
+                'processing': { class: 'status-processing', text: 'Processing' },
+                'pending': { class: 'status-pending', text: 'Pending' }
+            };
+
+            const config = statusConfig[status] || { class: 'status-pending', text: 'Unknown' };
+            return `<span class="status-badge ${config.class}">${config.text}</span>`;
+        }
+
+        // Run payroll for all employees
+        async function runPayroll() {
+            if (!confirm('Are you sure you want to run payroll for all active employees? This will create payroll records for the current month.')) {
+                return;
+            }
+
+            showNotification('Processing payroll...', 'info');
+
+            const result = await fetchAPI('payroll.php', 'POST', {
+                action: 'run_payroll'
+            });
+
+            if (result) {
+                showNotification(`Payroll processed successfully! ${result.processed} employees processed, ${result.skipped} skipped.`, 'success');
+                loadPayrollData();
+            }
+        }
+
+        // Update payroll status
+        async function updatePayrollStatus(payrollId, newStatus) {
+            const result = await fetchAPI(`payroll.php?id=${payrollId}`, 'PUT', {
+                status: newStatus
+            });
+
+            if (result) {
+                showNotification(`Payroll status updated to ${newStatus}!`, 'success');
+                loadPayrollData();
+            }
+        }
+
+        // View payroll details
+        async function viewPayroll(payrollId) {
+            const payroll = currentPayrolls.find(p => p.id == payrollId);
+            if (!payroll) return;
+
+            showPayrollDetailsDialog(payroll);
+        }
+
+        // Show payroll details dialog
+        function showPayrollDetailsDialog(payroll) {
+            const dialogHTML = `
+            <div class="modal-overlay" id="payrollModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Payroll Details - ${escapeHtml(payroll.full_name)}</h3>
+                        <button class="modal-close" onclick="closePayrollDialog()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="payroll-details">
+                            <div class="detail-section">
+                                <h4>Employee Information</h4>
+                                <div class="detail-row">
+                                    <span class="detail-label">Employee ID:</span>
+                                    <span class="detail-value">${escapeHtml(payroll.employee_id)}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Full Name:</span>
+                                    <span class="detail-value">${escapeHtml(payroll.full_name)}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Department:</span>
+                                    <span class="detail-value">${escapeHtml(payroll.department)}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Position:</span>
+                                    <span class="detail-value">${escapeHtml(payroll.position || 'N/A')}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <h4>Pay Period</h4>
+                                <div class="detail-row">
+                                    <span class="detail-label">Start Date:</span>
+                                    <span class="detail-value">${formatDate(payroll.pay_period_start)}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">End Date:</span>
+                                    <span class="detail-value">${formatDate(payroll.pay_period_end)}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <h4>Payment Details</h4>
+                                <div class="detail-row">
+                                    <span class="detail-label">Gross Pay:</span>
+                                    <span class="detail-value">₱${formatNumber(payroll.gross_pay)}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Deductions:</span>
+                                    <span class="detail-value">₱${formatNumber(payroll.deductions)}</span>
+                                </div>
+                                <div class="detail-row total-row">
+                                    <span class="detail-label">Net Pay:</span>
+                                    <span class="detail-value">₱${formatNumber(payroll.net_pay)}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <h4>Status Information</h4>
+                                <div class="detail-row">
+                                    <span class="detail-label">Status:</span>
+                                    <span class="detail-value">${getStatusBadge(payroll.status)}</span>
+                                </div>
+                                ${payroll.processed_at ? `
+                                <div class="detail-row">
+                                    <span class="detail-label">Processed At:</span>
+                                    <span class="detail-value">${formatDate(payroll.processed_at)}</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-secondary" onclick="closePayrollDialog()">Close</button>
+                        ${payroll.status !== 'paid' ? `
+                        <button class="btn-primary" onclick="updatePayrollFromDialog(${payroll.id})">Process Payment</button>
+                        ` : ''}
+                        <button class="btn-secondary" onclick="generatePayStub(${payroll.id})">Generate Pay Stub</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            document.body.insertAdjacentHTML('beforeend', dialogHTML);
+        }
+
+        // Close payroll dialog
+        function closePayrollDialog() {
+            const modal = document.getElementById('payrollModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Update payroll from dialog
+        async function updatePayrollFromDialog(payrollId) {
+            await updatePayrollStatus(payrollId, 'paid');
+            closePayrollDialog();
+        }
+
+        // Generate pay stub
+        async function generatePayStub(payrollId) {
+            showNotification('Pay stub generation would be implemented here', 'info');
+            // In a real implementation, this would generate a PDF pay stub
+        }
+
+        // Export payroll report
+        async function exportReport() {
+            try {
+                showNotification('Generating payroll report...', 'info');
+
+                // In a real implementation, this would call the backend to generate a report
+                const response = await fetch(`api/payroll.php?export=pdf&month=${selectedMonth}`);
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `payroll_report_${selectedMonth}.pdf`;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    showNotification('Payroll report exported successfully!', 'success');
+                } else {
+                    throw new Error('Export failed');
+                }
+            } catch (error) {
+                showNotification('Export functionality would be implemented here', 'info');
+            }
+        }
+
+        // Handle month filter change
+        function handleMonthFilter(event) {
+            selectedMonth = event.target.value;
+            loadPayrollData();
+        }
+
+        // Utility functions
+        function formatNumber(num) {
+            if (!num) return '0.00';
+            return parseFloat(num).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showLoadingState() {
+            const tbody = document.querySelector('.payroll-table tbody');
+            if (tbody) {
+                tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem;">
+                        <div class="loading-spinner"></div>
+                        Loading payroll data...
+                    </td>
+                </tr>
+            `;
+            }
+        }
+
+        function hideLoadingState() {
+            // Loading state will be replaced by actual data
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+        `;
+
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                warning: '#f59e0b',
+                info: '#3b82f6'
+            };
+
+            notification.style.backgroundColor = colors[type] || colors.info;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            // Load initial data
+            loadPayrollData();
+
+            // Filter select event listener
+            const filterSelect = document.querySelector('.filter-select');
+            if (filterSelect) {
+                filterSelect.addEventListener('change', handleMonthFilter);
+            }
+
+            // Button event listeners
+            document.addEventListener('click', function (e) {
+                if (e.target.textContent === 'Run Payroll') {
+                    e.preventDefault();
+                    runPayroll();
+                } else if (e.target.textContent === 'Export Report') {
+                    e.preventDefault();
+                    exportReport();
+                }
+            });
         });
 
-        // Filter functionality
-        document.querySelector('.filter-select').addEventListener('change', function(e) {
-            console.log('Filter changed to:', e.target.value);
-            // Filter logic would be implemented here
-        });
+        // Add modal and payroll details styles
+        const payrollStyles = document.createElement('style');
+        payrollStyles.textContent = `
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: #1e293b;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        .payroll-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .detail-section {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .detail-section h4 {
+            margin: 0 0 1rem 0;
+            color: #1e293b;
+            font-size: 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-row.total-row {
+            border-top: 2px solid #e2e8f0;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+        
+        .detail-label {
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .detail-value {
+            color: #1e293b;
+            font-weight: 500;
+        }
+        
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e2e8f0;
+            border-top: 2px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    `;
+        document.head.appendChild(payrollStyles);
     </script>
 </body>
+
 </html>
