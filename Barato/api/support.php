@@ -319,7 +319,27 @@ function generateChatResponse($pdo, $message) {
         
         'hello' => 'Hello! Welcome to your business dashboard. I can see your business is performing well. How can I help you today?\n\nI can assist with:\n• Dashboard navigation\n• Business metrics analysis\n• Technical support\n• Feature explanations',
         
-        'help' => 'I\'m here to provide comprehensive support for all aspects of your business platform:\n\n📊 Dashboard & Analytics\n💰 Payroll Processing\n📦 Inventory Management\n📈 Expense Tracking\n🚚 Logistics & Suppliers\n🔧 Technical Support\n\nJust describe what you need help with, and I\'ll provide detailed guidance!'
+        'help' => 'I\'m here to provide comprehensive support for all aspects of your business platform:\n\n📊 Dashboard & Analytics\n💰 Payroll Processing\n📦 Inventory Management\n📈 Expense Tracking\n🚚 Logistics & Suppliers\n🔧 Technical Support\n\nJust describe what you need help with, and I\'ll provide detailed guidance!',
+        'sourcing_materials' => 'Hello ka-SangkAI! 🚀 Maari ko bang malaman kung saan ang iyong negosyo? [Chatbot should prompt for user\’s location] 😀\n\nKapag nasabi mo na ang iyong lokasyon, narito ang ilang mga suppliers o tindahan kung saan ka makakabili ng [name of raw materials]:\n📍 [Nearby Supplier 1 with link]\n📍 [Nearby Supplier 2 with link]\n📍 [Online Marketplaces like Lazada, Shopee, or Facebook Marketplace]\n\n💡 Tip: Pwede ka ring sumali sa mga FB Groups ng local entrepreneurs para magtanong ng direct suppliers sa inyong lugar.',
+
+'sales_optimization' => 'Hello ka-SangkAI! 🚀 Ito ang mga maaari mong gawin para maimprove ang iyong sales:\n\n✅ Mag-offer ng promos o bundles\n✅ Gumamit ng social media marketing\n✅ Gumamit ng customer feedback para i-refine ang produkto o serbisyo\n✅ I-post ang customer reviews to build trust\n\nGusto mo bang gumawa tayo ng sales calendar together? 😃',
+
+'inventory_management' => 'Hello ka-SangkAI! 🚀 Para mapamahalaan nang mas maayos ang iyong inventory:\n\n📦 Gumamit ng inventory system tulad ng spreadsheet, Loyverse, o SalesBinder\n📊 I-categorize ang stocks: fast-moving, slow-moving, at seasonal\n🔁 Gamitin ang First-In First-Out (FIFO) method\n📉 Iwasan ang overstock at i-audit monthly\n\nPwede kitang bigyan ng free inventory tracker template! 😃',
+
+'payslip_online' => 'Hello Ka-SangkAI! 🚀 Depende ito sa system na gamit mo:\n\n💼 Kung manual pa, kailangang ikaw ang magbigay ng payslip\n💻 Kung automated (Sprout, Salarium, GCash Payroll), may portal ang staff para makita ang payslip nila\n\nGusto mo bang i-check kung may self-service feature ang payroll system mo?',
+
+'business_consultation' => 'Hello ka-SangkAI! 🚀 Maraming libreng consultation services para sa mga MSMEs! Narito ang mga pwede mong lapitan:\n\n🧠 DTI Negosyo Center – business counselors for strategy & compliance\n🌐 Go Negosyo – mentorship programs for entrepreneurs\n💼 PhilDev, StartUp PH – para sa tech or innovative businesses\n📱 FB groups like "Online Negosyo PH" for peer advice\n\nGusto mo bang hanapan kita ng pinakamalapit na DTI Negosyo Center?',
+
+'online_presence' => 'Hello ka-SangkAI! 🚀 Pwede mong gawin ito para lumakas ang online presence ng business mo:\n\n🌐 Gumawa ng FB Page at Google Business Profile\n📸 Mag-post ng high-quality photos ng produkto mo\n📅 Maging consistent sa posting schedule (kahit 3x/week)\n📈 Gumamit ng trending hashtags at sumali sa seller groups\n🎁 Mag-offer ng promos or giveaways for engagement\n\nPwede kitang bigyan ng content calendar template kung gusto mo!',
+
+'customer_complaint' => 'Hello ka-SangkAI! 🚀 Ito ang tamang gawin kapag may reklamo ang customer:\n\n👂 Pakinggan ang concern nang buo at may respeto\n🙏 Magpakita ng empathy, kahit hindi ikaw ang may pagkukulang\n🔧 Magbigay ng mabilis at malinaw na solusyon\n📝 I-record ang complaint para ma-review sa future\n\nGusto mo bang gumawa tayo ng simple complaint tracker?',
+
+'pricing_strategy' => 'Hello ka-SangkAI! 🚀 Narito ang steps para siguraduhing tama ang presyo mo:\n\n🧮 I-compute ang total cost (materials, labor, overhead)\n📈 Magdagdag ng profit margin (20–40%)\n📊 I-compare sa competitors para sa competitive edge\n📦 Magdagdag ng value—hal. free delivery o eco-packaging\n\nGusto mo ba ng pricing calculator worksheet?',
+
+'product_ideas' => 'Hello ka-SangkAI! 🚀 Heto ang paraan para makaisip ng bagong produkto:\n\n📋 Mangolekta ng feedback mula sa customers\n📱 Gamitin ang social media polls para malaman ang demand\n🧠 Obserbahan ang trending products sa ibang stores\n🌱 Mag-test ng small batches bago mag-scale up\n\nPwede kitang tulungan gumawa ng survey form or poll!',
+
+
+
     ];
     
     // Check for keyword matches
