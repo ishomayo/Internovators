@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management - Business Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            background: #4f46e5;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .time-info {
+            text-align: right;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .notification-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #e2e8f0;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 6px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 2rem 1.5rem;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-title {
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+            padding-left: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            margin: 2px 0;
+            border-radius: 8px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .nav-item.active {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #f59e0b;
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #64748b;
+            flex-shrink: 0;
+        }
+
+        .nav-item.active .nav-icon {
+            background: #f59e0b;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .main-panel {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #64748b;
+            padding: 8px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .inventory-table th {
+            background: #f8fafc;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .inventory-table td {
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        .inventory-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-in-stock {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-low-stock {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-out-of-stock {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .stats-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        .quick-actions {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .quick-actions h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .action-list {
+            list-style: none;
+        }
+
+        .action-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .action-item:last-child {
+            border-bottom: none;
+        }
+
+        .action-link {
+            color: #4f46e5;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-link:hover {
+            color: #4338ca;
+        }
+
+        .search-bar {
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 300px;
+            margin-left: auto;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .side-panel {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .stats-card,
+            .quick-actions {
+                min-width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">B</div>
+        <div class="header-right">
+            <div class="time-info">
+                <div>Philippine Standard Time</div>
+                <div id="current-time">Friday, June 20, 2025, 9:29:45 AM</div>
+            </div>
+            <button class="notification-btn">🔔</button>
+            <button class="user-btn">
+                <div class="user-avatar">👤</div>
+                <span>User</span>
+                <span>▼</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-section">
+                <div class="nav-title">Home</div>
+                <a href="landing.html" class="nav-item">
+                    <div class="nav-icon">📊</div>
+                    Dashboard
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <a href="inventory.html" class="nav-item active">
+                    <div class="nav-icon">📦</div>
+                    Inventory Management
+                </a>
+                <a href="payroll.html" class="nav-item">
+                    <div class="nav-icon">💰</div>
+                    Payroll
+                </a>
+                <a href="expenses.php" class="nav-item">
+                    <div class="nav-icon">📈</div>
+                    Expense Tracker
+                </a>
+                <a href="support.html" class="nav-item">
+                    <div class="nav-icon">💬</div>
+                    Communication & Support
+                </a>
+                <a href="logistics.html" class="nav-item">
+                    <div class="nav-icon">🚚</div>
+                    Logistics & Suppliers
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <h1 class="page-title">📦 Inventory Management</h1>
+                <p class="page-subtitle">Manage your stock levels, track products, and optimize inventory operations</p>
+            </div>
+
+            <div class="content-grid">
+                <div class="main-panel">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <button class="btn-primary">+ Add Product</button>
+                            <button class="btn-secondary">Import CSV</button>
+                            <button class="btn-secondary">Export</button>
+                        </div>
+                        <input type="text" class="search-bar" placeholder="Search products...">
+                    </div>
+
+                    <div class="panel-content">
+                        <table class="inventory-table">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>SKU</th>
+                                    <th>Category</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Wireless Headphones</td>
+                                    <td>WH-001</td>
+                                    <td>Electronics</td>
+                                    <td>45</td>
+                                    <td><span class="status-badge status-in-stock">In Stock</span></td>
+                                    <td>₱2,500</td>
+                                    <td>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Coffee Beans Premium</td>
+                                    <td>CB-002</td>
+                                    <td>Food & Beverage</td>
+                                    <td>12</td>
+                                    <td><span class="status-badge status-low-stock">Low Stock</span></td>
+                                    <td>₱850</td>
+                                    <td>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Office Chair Ergonomic</td>
+                                    <td>OC-003</td>
+                                    <td>Furniture</td>
+                                    <td>0</td>
+                                    <td><span class="status-badge status-out-of-stock">Out of Stock</span></td>
+                                    <td>₱8,500</td>
+                                    <td>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Smartphone Case</td>
+                                    <td>SC-004</td>
+                                    <td>Accessories</td>
+                                    <td>156</td>
+                                    <td><span class="status-badge status-in-stock">In Stock</span></td>
+                                    <td>₱450</td>
+                                    <td>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Desk Lamp LED</td>
+                                    <td>DL-005</td>
+                                    <td>Lighting</td>
+                                    <td>23</td>
+                                    <td><span class="status-badge status-in-stock">In Stock</span></td>
+                                    <td>₱1,200</td>
+                                    <td>
+                                        <button class="btn-secondary"
+                                            style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="side-panel">
+                    <div class="stats-card">
+                        <div class="stat-value">236</div>
+                        <div class="stat-label">Total Products</div>
+                        <div class="stat-change">+12 this month</div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="stat-value">₱2.4M</div>
+                        <div class="stat-label">Inventory Value</div>
+                        <div class="stat-change">+8.5% from last month</div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="stat-value">15</div>
+                        <div class="stat-label">Low Stock Items</div>
+                        <div class="stat-change" style="color: #dc2626;">Needs attention</div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <ul class="action-list">
+                            <li class="action-item">
+                                <a href="#" class="action-link">
+                                    📦 Reorder Low Stock Items
+                                </a>
+                            </li>
+                            <li class="action-item">
+                                <a href="#" class="action-link">
+                                    📊 Generate Inventory Report
+                                </a>
+                            </li>
+                            <li class="action-item">
+                                <a href="#" class="action-link">
+                                    🏷️ Update Product Prices
+                                </a>
+                            </li>
+                            <li class="action-item">
+                                <a href="#" class="action-link">
+                                    📋 Stock Audit
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // API Helper Functions with detailed logging
+        async function fetchAPI(endpoint, method = 'GET', data = null) {
+            console.log(`🔄 API Call: ${method} ${endpoint}`);
+            if (data) console.log('📤 Sending data:', data);
+
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const response = await fetch(endpoint, options);
+                console.log(`📡 Response status: ${response.status}`);
+                console.log(`📡 Response headers:`, [...response.headers.entries()]);
+
+                // Check if response is actually JSON
+                const contentType = response.headers.get('content-type');
+                console.log(`📡 Content-Type: ${contentType}`);
+
+                if (!contentType || !contentType.includes('application/json')) {
+                    const errorText = await response.text();
+                    console.error('❌ Non-JSON response:', errorText);
+
+                    if (errorText.includes('<?php')) {
+                        throw new Error('PHP file is not being processed by the server');
+                    } else if (errorText.includes('Fatal error') || errorText.includes('Parse error')) {
+                        throw new Error('PHP syntax error: ' + errorText.substring(0, 200));
+                    } else if (errorText.includes('404') || errorText.includes('Not Found')) {
+                        throw new Error(`API endpoint not found: ${endpoint}`);
+                    } else {
+                        throw new Error('Server returned HTML instead of JSON: ' + errorText.substring(0, 200));
+                    }
+                }
+
+                const result = await response.json();
+                console.log(`✅ API Response:`, result);
+
+                if (!response.ok) {
+                    throw new Error(result.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                return result;
+
+            } catch (error) {
+                console.error('❌ API Error:', error);
+                showNotification('Error: ' + error.message, 'error');
+                return null;
+            }
+        }
+
+        // Update time every second
+        function updateTime() {
+            const now = new Date();
+            const options = {
+                timeZone: 'Asia/Manila',
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const timeString = now.toLocaleString('en-US', options);
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
+        }
+
+        // Global variables
+        let currentProducts = [];
+        let isLoading = false;
+
+        // Load inventory data from backend with extensive logging
+        async function loadInventoryData() {
+            if (isLoading) {
+                console.log('⏳ Already loading, skipping...');
+                return;
+            }
+            isLoading = true;
+
+            console.log('🔄 Starting to load inventory data...');
+            showLoadingState();
+
+            try {
+                console.log('📡 Fetching products and stats...');
+
+                // Test individual endpoints first
+                console.log('🧪 Testing inventory.php endpoint...');
+                const productsResponse = await fetch('inventory.php');
+                console.log('📊 Products response status:', productsResponse.status);
+                console.log('📊 Products response headers:', [...productsResponse.headers.entries()]);
+
+                const productsText = await productsResponse.text();
+                console.log('📊 Raw products response:', productsText.substring(0, 500));
+
+                let products = null;
+                try {
+                    products = JSON.parse(productsText);
+                    console.log('✅ Products parsed successfully:', products);
+                } catch (parseError) {
+                    console.error('❌ Failed to parse products JSON:', parseError);
+                    console.log('📄 Full response:', productsText);
+                    throw new Error('Invalid JSON response from products endpoint');
+                }
+
+                console.log('🧪 Testing stats endpoint...');
+                const statsResponse = await fetch('inventory.php?stats');
+                console.log('📈 Stats response status:', statsResponse.status);
+
+                const statsText = await statsResponse.text();
+                console.log('📈 Raw stats response:', statsText.substring(0, 500));
+
+                let stats = null;
+                try {
+                    stats = JSON.parse(statsText);
+                    console.log('✅ Stats parsed successfully:', stats);
+                } catch (parseError) {
+                    console.error('❌ Failed to parse stats JSON:', parseError);
+                    console.log('📄 Full stats response:', statsText);
+                    // Continue without stats rather than failing completely
+                }
+
+                if (products) {
+                    console.log(`✅ Products loaded: ${products.length} items`);
+                    currentProducts = products;
+                    renderInventoryTable(products);
+                } else {
+                    console.error('❌ No products data received');
+                }
+
+                if (stats) {
+                    console.log('✅ Stats loaded:', stats);
+                    updateInventoryStats(stats);
+                } else {
+                    console.warn('⚠️ No stats data received');
+                }
+
+            } catch (error) {
+                console.error('❌ Load inventory data error:', error);
+                showNotification(`Failed to load inventory data: ${error.message}`, 'error');
+
+                // Show detailed error in table
+                const tbody = document.querySelector('.inventory-table tbody');
+                if (tbody) {
+                    tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem; color: #ef4444;">
+                            ❌ Error loading data: ${error.message}
+                            <br><br>
+                            <button onclick="debugAPI()" style="padding: 0.5rem 1rem; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Debug API
+                            </button>
+                            <button onclick="testDirectURL()" style="padding: 0.5rem 1rem; background: #f59e0b; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 0.5rem;">
+                                Test Direct URL
+                            </button>
+                            <button onclick="location.reload()" style="padding: 0.5rem 1rem; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 0.5rem;">
+                                Retry
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                }
+            }
+
+            hideLoadingState();
+            isLoading = false;
+        }
+
+        // Test direct URL access
+        function testDirectURL() {
+            console.log('🧪 Testing direct URL access...');
+            const urls = [
+                'inventory.php',
+                'inventory.php?stats',
+                'config.php'
+            ];
+
+            urls.forEach(url => {
+                const newWindow = window.open(url, '_blank');
+                console.log(`🔗 Opened: ${url}`);
+            });
+        }
+
+        // Enhanced debug function
+        async function debugAPI() {
+            console.log('🔍 Starting comprehensive API debug...');
+
+            const endpoints = [
+                'config.php',
+                'inventory.php',
+                'inventory.php?stats'
+            ];
+
+            for (const endpoint of endpoints) {
+                console.log(`\n🧪 Testing: ${endpoint}`);
+                try {
+                    const response = await fetch(endpoint);
+                    console.log(`📊 Status: ${response.status} ${response.statusText}`);
+                    console.log(`📊 Headers:`, [...response.headers.entries()]);
+
+                    const text = await response.text();
+                    console.log(`📊 Response length: ${text.length} characters`);
+                    console.log(`📊 First 300 characters:`, text.substring(0, 300));
+
+                    if (response.headers.get('content-type')?.includes('application/json')) {
+                        try {
+                            const json = JSON.parse(text);
+                            console.log(`✅ ${endpoint} - Valid JSON:`, json);
+                        } catch (e) {
+                            console.log(`❌ ${endpoint} - Invalid JSON:`, e.message);
+                        }
+                    } else {
+                        console.log(`⚠️ ${endpoint} - Not JSON content-type`);
+                    }
+
+                } catch (error) {
+                    console.log(`❌ ${endpoint} - Fetch error:`, error.message);
+                }
+
+                console.log('─'.repeat(50));
+            }
+
+            // Test database connection specifically
+            console.log('\n🗄️ Testing database connection...');
+            try {
+                const configResponse = await fetch('config.php');
+                const configText = await configResponse.text();
+                console.log('🗄️ Config response:', configText.substring(0, 200));
+            } catch (error) {
+                console.log('❌ Config test failed:', error.message);
+            }
+        }
+
+        // Render inventory table with detailed logging
+        function renderInventoryTable(products) {
+            console.log(`🎨 Rendering table with ${products ? products.length : 0} products`);
+
+            const tbody = document.querySelector('.inventory-table tbody');
+            if (!tbody) {
+                console.error('❌ Table tbody not found!');
+                return;
+            }
+
+            tbody.innerHTML = '';
+
+            if (!products || products.length === 0) {
+                console.log('📋 No products to display');
+                tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
+                        No products found
+                        <br><br>
+                        <button onclick="addProduct()" style="padding: 0.5rem 1rem; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            Add First Product
+                        </button>
+                    </td>
+                </tr>
+            `;
+                return;
+            }
+
+            console.log('🎨 Creating product rows...');
+            products.forEach((product, index) => {
+                console.log(`🎨 Rendering product ${index + 1}:`, product);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${escapeHtml(product.product_name || 'N/A')}</td>
+                <td>${escapeHtml(product.sku || 'N/A')}</td>
+                <td>${escapeHtml(product.category || 'N/A')}</td>
+                <td>${product.stock_quantity || 0}</td>
+                <td>${getStatusBadge(product.stock_quantity || 0)}</td>
+                <td>₱${formatNumber(product.price || 0)}</td>
+                <td>
+                    <button class="btn-secondary" onclick="editProduct(${product.id})" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+                    <button class="btn-danger" onclick="deleteProduct(${product.id})" style="padding: 4px 8px; font-size: 12px; background: #ef4444; margin-left: 4px;">Delete</button>
+                </td>
+            `;
+                tbody.appendChild(row);
+            });
+
+            console.log('✅ Table rendered successfully');
+        }
+
+        // Update inventory statistics with logging
+        function updateInventoryStats(stats) {
+            console.log('📊 Updating stats:', stats);
+
+            const statCards = document.querySelectorAll('.stats-card');
+            console.log(`📊 Found ${statCards.length} stat cards`);
+
+            if (statCards.length >= 3) {
+                // Total products
+                const totalElement = statCards[0].querySelector('.stat-value');
+                if (totalElement) {
+                    totalElement.textContent = stats.total_products || 0;
+                    console.log('📊 Updated total products:', stats.total_products);
+                }
+
+                const changeElement = statCards[0].querySelector('.stat-change');
+                if (changeElement) {
+                    changeElement.textContent = stats.recent_additions ? `+${stats.recent_additions} this month` : '+0 this month';
+                }
+
+                // Inventory value
+                const valueElement = statCards[1].querySelector('.stat-value');
+                if (valueElement) {
+                    valueElement.textContent = `₱${formatLargeNumber(stats.inventory_value)}`;
+                    console.log('📊 Updated inventory value:', stats.inventory_value);
+                }
+
+                // Low stock items
+                const lowStockElement = statCards[2].querySelector('.stat-value');
+                if (lowStockElement) {
+                    lowStockElement.textContent = stats.low_stock_items || 0;
+                    console.log('📊 Updated low stock:', stats.low_stock_items);
+                }
+
+                // Update the change text color for low stock
+                const lowStockChange = statCards[2].querySelector('.stat-change');
+                if (lowStockChange) {
+                    if (stats.low_stock_items > 0) {
+                        lowStockChange.style.color = '#dc2626';
+                        lowStockChange.textContent = 'Needs attention';
+                    } else {
+                        lowStockChange.style.color = '#10b981';
+                        lowStockChange.textContent = 'All good';
+                    }
+                }
+            }
+        }
+
+        // Get status badge HTML
+        function getStatusBadge(quantity) {
+            if (quantity == 0) {
+                return '<span class="status-badge status-out-of-stock">Out of Stock</span>';
+            } else if (quantity < 20) {
+                return '<span class="status-badge status-low-stock">Low Stock</span>';
+            } else {
+                return '<span class="status-badge status-in-stock">In Stock</span>';
+            }
+        }
+
+        // Add new product with enhanced logging
+        async function addProduct() {
+            console.log('➕ Starting add product flow...');
+
+            const productData = await showProductDialog();
+            if (!productData) {
+                console.log('❌ Add product cancelled by user');
+                return;
+            }
+
+            console.log('📤 Submitting new product:', productData);
+
+            const result = await fetchAPI('inventory.php', 'POST', productData);
+            if (result) {
+                console.log('✅ Product added successfully:', result);
+                showNotification('Product added successfully!', 'success');
+                loadInventoryData();
+            } else {
+                console.error('❌ Failed to add product');
+            }
+        }
+
+        // Show product dialog with enhanced logging
+        function showProductDialog(product = null) {
+            console.log('📝 Showing product dialog for:', product || 'new product');
+
+            return new Promise((resolve) => {
+                const isEdit = product !== null;
+                const title = isEdit ? 'Edit Product' : 'Add New Product';
+
+                const dialogHTML = `
+                <div class="modal-overlay" id="productModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>${title}</h3>
+                            <button class="modal-close" onclick="closeProductDialog()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="productForm">
+                                <div class="form-group">
+                                    <label>Product Name *</label>
+                                    <input type="text" id="productName" value="${product?.product_name || ''}" required placeholder="Enter product name">
+                                </div>
+                                <div class="form-group">
+                                    <label>SKU *</label>
+                                    <input type="text" id="productSku" value="${product?.sku || ''}" required placeholder="Enter SKU">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category *</label>
+                                    <select id="productCategory" required>
+                                        <option value="">Select Category</option>
+                                        <option value="Electronics" ${product?.category === 'Electronics' ? 'selected' : ''}>Electronics</option>
+                                        <option value="Food & Beverage" ${product?.category === 'Food & Beverage' ? 'selected' : ''}>Food & Beverage</option>
+                                        <option value="Furniture" ${product?.category === 'Furniture' ? 'selected' : ''}>Furniture</option>
+                                        <option value="Accessories" ${product?.category === 'Accessories' ? 'selected' : ''}>Accessories</option>
+                                        <option value="Lighting" ${product?.category === 'Lighting' ? 'selected' : ''}>Lighting</option>
+                                        <option value="Office Supplies" ${product?.category === 'Office Supplies' ? 'selected' : ''}>Office Supplies</option>
+                                        <option value="Stationery" ${product?.category === 'Stationery' ? 'selected' : ''}>Stationery</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Stock Quantity *</label>
+                                    <input type="number" id="productStock" value="${product?.stock_quantity || 0}" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Price (₱) *</label>
+                                    <input type="number" id="productPrice" value="${product?.price || 0}" min="0" step="0.01" required>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-secondary" onclick="closeProductDialog()">Cancel</button>
+                            <button class="btn-primary" onclick="submitProductForm()">${isEdit ? 'Update' : 'Add'} Product</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                document.body.insertAdjacentHTML('beforeend', dialogHTML);
+
+                // Store resolve function globally
+                window.productDialogResolve = resolve;
+
+                console.log('📝 Product dialog displayed');
+            });
+        }
+
+        // Close product dialog
+        function closeProductDialog() {
+            console.log('❌ Closing product dialog');
+            const modal = document.getElementById('productModal');
+            if (modal) {
+                modal.remove();
+            }
+            if (window.productDialogResolve) {
+                window.productDialogResolve(null);
+            }
+        }
+
+        // Submit product form with validation logging
+        function submitProductForm() {
+            console.log('📤 Submitting product form...');
+
+            const productData = {
+                product_name: document.getElementById('productName').value.trim(),
+                sku: document.getElementById('productSku').value.trim(),
+                category: document.getElementById('productCategory').value,
+                stock_quantity: parseInt(document.getElementById('productStock').value),
+                price: parseFloat(document.getElementById('productPrice').value)
+            };
+
+            console.log('📋 Form data collected:', productData);
+
+            // Enhanced validation with logging
+            if (!productData.product_name) {
+                console.error('❌ Validation failed: Product name is required');
+                showNotification('Product name is required', 'error');
+                return;
+            }
+
+            if (!productData.sku) {
+                console.error('❌ Validation failed: SKU is required');
+                showNotification('SKU is required', 'error');
+                return;
+            }
+
+            if (!productData.category) {
+                console.error('❌ Validation failed: Category is required');
+                showNotification('Please select a category', 'error');
+                return;
+            }
+
+            if (isNaN(productData.stock_quantity) || productData.stock_quantity < 0) {
+                console.error('❌ Validation failed: Invalid stock quantity');
+                showNotification('Stock quantity must be a valid non-negative number', 'error');
+                return;
+            }
+
+            if (isNaN(productData.price) || productData.price <= 0) {
+                console.error('❌ Validation failed: Invalid price');
+                showNotification('Price must be a valid positive number', 'error');
+                return;
+            }
+
+            console.log('✅ Form validation passed, submitting...');
+
+            closeProductDialog();
+            if (window.productDialogResolve) {
+                window.productDialogResolve(productData);
+            }
+        }
+
+        // Utility functions
+        function formatNumber(num) {
+            if (!num) return '0.00';
+            return parseFloat(num).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function formatLargeNumber(num) {
+            if (!num) return '0';
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return formatNumber(num);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showLoadingState() {
+            console.log('⏳ Showing loading state');
+            const tbody = document.querySelector('.inventory-table tbody');
+            if (tbody) {
+                tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem;">
+                        <div class="loading-spinner"></div>
+                        Loading inventory data...
+                    </td>
+                </tr>
+            `;
+            }
+        }
+
+        function hideLoadingState() {
+            console.log('✅ Hiding loading state');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            console.log(`📢 Notification (${type}): ${message}`);
+
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+            max-width: 300px;
+        `;
+
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                warning: '#f59e0b',
+                info: '#3b82f6'
+            };
+
+            notification.style.backgroundColor = colors[type] || colors.info;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🚀 DOM Content Loaded - Initializing inventory page...');
+
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            // Load initial data
+            console.log('📊 Loading initial inventory data...');
+            loadInventoryData();
+
+            // Button event listeners
+            document.addEventListener('click', function (e) {
+                if (e.target.textContent === '+ Add Product') {
+                    console.log('🎯 Add Product button clicked');
+                    e.preventDefault();
+                    addProduct();
+                }
+            });
+
+            console.log('✅ Inventory page initialization complete');
+        });
+
+        // Make functions available globally
+        window.debugAPI = debugAPI;
+        window.testDirectURL = testDirectURL;
+        window.addProduct = addProduct;
+        window.closeProductDialog = closeProductDialog;
+        window.submitProductForm = submitProductForm;
+
+        // Add styles
+        const inventoryStyles = document.createElement('style');
+        inventoryStyles.textContent = `
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: #1e293b;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e2e8f0;
+            border-top: 2px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    `;
+        document.head.appendChild(inventoryStyles);
+
+        console.log('🎨 Styles loaded');
+    </script>
+</body>
+
+
+
+</html>
