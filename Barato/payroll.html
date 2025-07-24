@@ -485,26 +485,26 @@
         <div class="sidebar">
             <div class="nav-section">
                 <div class="nav-title">Home</div>
-                <a href="landing.html" class="nav-item">
+                <a href="#" class="nav-item" data-page="dashboard">
                     <div class="nav-icon">📊</div>
                     Dashboard
                 </a>
             </div>
 
             <div class="nav-section">
-                <a href="inventory.html" class="nav-item">
+                <a href="inventory.html" class="nav-item" data-page="inventory">
                     <div class="nav-icon">📦</div>
                     Inventory Management
                 </a>
-                <a href="payroll.html" class="nav-item active">
+                <a href="payroll.html" class="nav-item active" data-page="payroll">
                     <div class="nav-icon">💰</div>
                     Payroll
                 </a>
-                <a href="expenses.html" class="nav-item">
+                <a href="expenses.php" class="nav-item" data-page="expenses">
                     <div class="nav-icon">📈</div>
                     Expense Tracker
                 </a>
-                <a href="support.html" class="nav-item">
+                <a href="support.html" class="nav-item" data-page="support">
                     <div class="nav-icon">💬</div>
                     Communication & Support
                 </a>
@@ -717,10 +717,11 @@
         </div>
     </div>
 
-    // Add this JavaScript to your payroll.html file (replace the existing script section)
+    // Replace the JavaScript in your payroll.html with this version
+    // This version calls APIs in the root directory instead of api/ folder
 
     <script>
-        // API Helper Functions
+        // API Helper Functions - Updated for root directory APIs
         async function fetchAPI(endpoint, method = 'GET', data = null) {
             try {
                 const options = {
@@ -734,14 +735,34 @@
                     options.body = JSON.stringify(data);
                 }
 
-                const response = await fetch(`api/${endpoint}`, options);
+                // Call APIs in root directory (no api/ prefix)
+                const response = await fetch(endpoint, options);
+
+                // Check if response is actually JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const errorText = await response.text();
+                    console.error('Non-JSON response:', errorText);
+
+                    if (errorText.includes('<?php')) {
+                        throw new Error('PHP file is not being processed by the server');
+                    } else if (errorText.includes('Fatal error') || errorText.includes('Parse error')) {
+                        throw new Error('PHP syntax error in the API');
+                    } else if (errorText.includes('404') || errorText.includes('Not Found')) {
+                        throw new Error(`API endpoint not found: ${endpoint}`);
+                    } else {
+                        throw new Error('Server returned an error instead of JSON data');
+                    }
+                }
+
                 const result = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(result.error || 'API request failed');
+                    throw new Error(result.error || `HTTP ${response.status}: ${response.statusText}`);
                 }
 
                 return result;
+
             } catch (error) {
                 console.error('API Error:', error);
                 showNotification('Error: ' + error.message, 'error');
@@ -771,30 +792,92 @@
         let currentEmployees = [];
         let selectedMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
 
-        // Load payroll data from backend
+        // Load payroll data from backend - Updated endpoints
         async function loadPayrollData() {
+            console.log('🔄 Loading payroll data...');
             showLoadingState();
 
-            const [payrolls, stats, employees] = await Promise.all([
-                fetchAPI(`payroll.php?month=${selectedMonth}`),
-                fetchAPI('payroll.php?stats'),
-                fetchAPI('payroll.php?employees')
-            ]);
+            try {
+                const [payrolls, stats, employees] = await Promise.all([
+                    fetchAPI(`payroll.php?month=${selectedMonth}`),
+                    fetchAPI('payroll.php?stats'),
+                    fetchAPI('payroll.php?employees')
+                ]);
 
-            if (payrolls) {
-                currentPayrolls = payrolls;
-                renderPayrollTable(payrolls);
-            }
+                if (payrolls) {
+                    console.log('✅ Payrolls loaded:', payrolls);
+                    currentPayrolls = payrolls;
+                    renderPayrollTable(payrolls);
+                }
 
-            if (stats) {
-                updatePayrollStats(stats);
-            }
+                if (stats) {
+                    console.log('✅ Stats loaded:', stats);
+                    updatePayrollStats(stats);
+                }
 
-            if (employees) {
-                currentEmployees = employees;
+                if (employees) {
+                    console.log('✅ Employees loaded:', employees);
+                    currentEmployees = employees;
+                }
+
+            } catch (error) {
+                console.error('❌ Load payroll data error:', error);
+                showNotification(`Failed to load payroll data: ${error.message}`, 'error');
+
+                // Show error in table
+                const tbody = document.querySelector('.payroll-table tbody');
+                if (tbody) {
+                    tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem; color: #ef4444;">
+                            ❌ Error loading data: ${error.message}
+                            <br><br>
+                            <button onclick="testAPI()" style="padding: 0.5rem 1rem; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Test API
+                            </button>
+                            <button onclick="location.reload()" style="padding: 0.5rem 1rem; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 0.5rem;">
+                                Retry
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                }
             }
 
             hideLoadingState();
+        }
+
+        // Test API function
+        async function testAPI() {
+            console.log('🔍 Testing API endpoints...');
+
+            const endpoints = ['payroll.php?stats', 'payroll.php?employees'];
+
+            for (const endpoint of endpoints) {
+                try {
+                    console.log(`Testing: ${endpoint}`);
+                    const response = await fetch(endpoint);
+                    const contentType = response.headers.get('content-type');
+
+                    console.log(`Status: ${response.status}`);
+                    console.log(`Content-Type: ${contentType}`);
+
+                    if (contentType && contentType.includes('application/json')) {
+                        const data = await response.json();
+                        console.log(`✅ ${endpoint} - JSON response received`);
+                        console.log('Data:', data);
+                    } else {
+                        const text = await response.text();
+                        console.log(`❌ ${endpoint} - Non-JSON response:`);
+                        console.log(text.substring(0, 200) + '...');
+                    }
+
+                } catch (error) {
+                    console.log(`❌ ${endpoint} - Error:`, error.message);
+                }
+
+                console.log('---');
+            }
         }
 
         // Render payroll table
@@ -809,6 +892,10 @@
                 <tr>
                     <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
                         No payroll records found for ${selectedMonth}
+                        <br><br>
+                        <button onclick="runPayroll()" style="padding: 0.5rem 1rem; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            Generate Payroll for This Month
+                        </button>
                     </td>
                 </tr>
             `;
@@ -879,7 +966,7 @@
             return `<span class="status-badge ${config.class}">${config.text}</span>`;
         }
 
-        // Run payroll for all employees
+        // Run payroll for all employees - Updated endpoint
         async function runPayroll() {
             if (!confirm('Are you sure you want to run payroll for all active employees? This will create payroll records for the current month.')) {
                 return;
@@ -897,7 +984,7 @@
             }
         }
 
-        // Update payroll status
+        // Update payroll status - Updated endpoint
         async function updatePayrollStatus(payrollId, newStatus) {
             const result = await fetchAPI(`payroll.php?id=${payrollId}`, 'PUT', {
                 status: newStatus
@@ -1031,7 +1118,7 @@
                 showNotification('Generating payroll report...', 'info');
 
                 // In a real implementation, this would call the backend to generate a report
-                const response = await fetch(`api/payroll.php?export=pdf&month=${selectedMonth}`);
+                const response = await fetch(`payroll.php?export=pdf&month=${selectedMonth}`);
 
                 if (response.ok) {
                     const blob = await response.blob();
@@ -1113,6 +1200,7 @@
             font-weight: 500;
             z-index: 1000;
             animation: slideInRight 0.3s ease;
+            max-width: 300px;
         `;
 
             const colors = {
@@ -1157,6 +1245,15 @@
                 }
             });
         });
+
+        // Make functions available globally for onclick handlers
+        window.testAPI = testAPI;
+        window.viewPayroll = viewPayroll;
+        window.updatePayrollStatus = updatePayrollStatus;
+        window.runPayroll = runPayroll;
+        window.closePayrollDialog = closePayrollDialog;
+        window.updatePayrollFromDialog = updatePayrollFromDialog;
+        window.generatePayStub = generatePayStub;
 
         // Add modal and payroll details styles
         const payrollStyles = document.createElement('style');

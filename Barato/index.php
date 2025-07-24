@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -199,7 +198,7 @@
             z-index: 1;
         }
 
-        .main-content>* {
+        .main-content > * {
             position: relative;
             z-index: 2;
         }
@@ -489,23 +488,14 @@
             animation: typingPulse 1.4s infinite ease-in-out;
         }
 
-        .typing-dot:nth-child(1) {
-            animation-delay: -0.32s;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: -0.16s;
-        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
 
         @keyframes typingPulse {
-
-            0%,
-            80%,
-            100% {
+            0%, 80%, 100% {
                 transform: scale(0);
                 opacity: 0.5;
             }
-
             40% {
                 transform: scale(1);
                 opacity: 1;
@@ -517,7 +507,6 @@
                 opacity: 0;
                 transform: translateY(8px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -528,7 +517,7 @@
             .sidebar {
                 width: 240px;
             }
-
+            
             .main-content {
                 padding: 2rem;
             }
@@ -538,29 +527,29 @@
             .header {
                 padding: 0 1rem;
             }
-
+            
             .main-layout {
                 flex-direction: column;
             }
-
+            
             .sidebar {
                 width: 100%;
                 padding: 1rem;
                 border-right: none;
                 border-bottom: 1px solid #e2e8f0;
             }
-
+            
             .welcome-title {
                 font-size: 2rem;
             }
-
+            
             .chatbot-container {
                 width: calc(100vw - 40px);
                 right: 20px;
                 bottom: 90px;
                 height: 480px;
             }
-
+            
             .chatbot-toggle {
                 right: 20px;
                 bottom: 20px;
@@ -568,7 +557,6 @@
         }
     </style>
 </head>
-
 <body>
     <!-- Header -->
     <div class="header">
@@ -597,7 +585,7 @@
                     Dashboard
                 </a>
             </div>
-
+            
             <div class="nav-section">
                 <a href="inventory.html" class="nav-item" data-page="inventory">
                     <div class="nav-icon">📦</div>
@@ -615,10 +603,6 @@
                     <div class="nav-icon">💬</div>
                     Communication & Support
                 </a>
-                <a href="logistics.html" class="nav-item">
-                    <div class="nav-icon">🚚</div>
-                    Logistics & Suppliers
-                </a>
             </div>
         </div>
 
@@ -627,7 +611,7 @@
             <div class="dashboard-welcome">
                 <h1 class="welcome-title">Welcome to Your Dashboard</h1>
                 <p class="welcome-subtitle">
-                    Get a comprehensive overview of your business operations. Monitor key metrics,
+                    Get a comprehensive overview of your business operations. Monitor key metrics, 
                     manage your inventory, track expenses, and streamline your workflow all in one place.
                 </p>
                 <div class="action-buttons">
@@ -663,57 +647,26 @@
 
     <!-- Chatbot -->
     <button class="chatbot-toggle" id="chatbotToggle">💬</button>
-
+    
     <div class="chatbot-container" id="chatbotContainer">
         <div class="chatbot-header">
             <div class="chatbot-title">Business Assistant</div>
             <button class="chatbot-close" id="chatbotClose">×</button>
         </div>
-
+        
         <div class="chatbot-messages" id="chatbotMessages">
             <div class="message bot">
                 Hello! I'm here to help you navigate your business dashboard. What would you like to know about?
             </div>
         </div>
-
+        
         <div class="chatbot-input-container">
-            <input type="text" class="chatbot-input" id="chatbotInput"
-                placeholder="Ask me anything about your business...">
+            <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Ask me anything about your business...">
             <button class="chatbot-send" id="chatbotSend">→</button>
         </div>
     </div>
 
-    // Add this JavaScript to your landing.html file (replace the existing script section)
-
     <script>
-        // API Helper Functions
-        async function fetchAPI(endpoint, method = 'GET', data = null) {
-            try {
-                const options = {
-                    method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                };
-
-                if (data) {
-                    options.body = JSON.stringify(data);
-                }
-
-                const response = await fetch(`api/${endpoint}`, options);
-                const result = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(result.error || 'API request failed');
-                }
-
-                return result;
-            } catch (error) {
-                console.error('API Error:', error);
-                return null;
-            }
-        }
-
         // Update time every second
         function updateTime() {
             const now = new Date();
@@ -731,161 +684,15 @@
             const timeInfo = document.querySelector('.time-info');
             if (timeInfo) {
                 timeInfo.innerHTML = `
-                <div>Philippine Standard Time</div>
-                <div>${timeString}</div>
-            `;
-            }
-        }
-
-        // Load dashboard data from backend
-        async function loadDashboardData() {
-            const data = await fetchAPI('dashboard.php');
-            if (data) {
-                updateDashboardStats(data);
-            }
-        }
-
-        // Update dashboard statistics
-        function updateDashboardStats(data) {
-            // Update main stats cards
-            const statsCards = document.querySelectorAll('.stat-card');
-            if (statsCards.length >= 4) {
-                // Revenue card
-                statsCards[0].querySelector('.stat-value').textContent = `₱${formatNumber(data.total_revenue)}`;
-                statsCards[0].querySelector('.stat-change').textContent = data.revenue_change || '+12.5% from last month';
-
-                // Orders card
-                statsCards[1].querySelector('.stat-value').textContent = formatNumber(data.active_orders);
-                statsCards[1].querySelector('.stat-change').textContent = data.orders_change || '+8.2% from last week';
-
-                // Expenses card
-                statsCards[2].querySelector('.stat-value').textContent = `₱${formatNumber(data.monthly_expenses)}`;
-                statsCards[2].querySelector('.stat-change').textContent = data.expenses_change || '-3.1% from last month';
-
-                // Inventory health card
-                statsCards[3].querySelector('.stat-value').textContent = `${data.inventory_health}%`;
-                statsCards[3].querySelector('.stat-change').textContent = data.inventory_status || 'Optimal levels maintained';
-            }
-
-            // Show alerts if any
-            if (data.alerts && data.alerts.length > 0) {
-                showDashboardAlerts(data.alerts);
-            }
-        }
-
-        // Format numbers with commas
-        function formatNumber(num) {
-            if (!num) return '0';
-            return parseFloat(num).toLocaleString('en-US', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            });
-        }
-
-        // Show dashboard alerts
-        function showDashboardAlerts(alerts) {
-            // Create alerts container if it doesn't exist
-            let alertsContainer = document.getElementById('dashboard-alerts');
-            if (!alertsContainer) {
-                alertsContainer = document.createElement('div');
-                alertsContainer.id = 'dashboard-alerts';
-                alertsContainer.style.cssText = `
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                max-width: 350px;
-                z-index: 1000;
-            `;
-                document.body.appendChild(alertsContainer);
-            }
-
-            // Clear existing alerts
-            alertsContainer.innerHTML = '';
-
-            // Show up to 3 most important alerts
-            alerts.slice(0, 3).forEach((alert, index) => {
-                setTimeout(() => {
-                    const alertDiv = document.createElement('div');
-                    alertDiv.className = `alert alert-${alert.type}`;
-                    alertDiv.style.cssText = `
-                    background: white;
-                    border: 1px solid ${getAlertBorderColor(alert.type)};
-                    border-left: 4px solid ${getAlertBorderColor(alert.type)};
-                    border-radius: 8px;
-                    padding: 1rem;
-                    margin-bottom: 0.5rem;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                    animation: slideIn 0.3s ease;
-                    cursor: pointer;
+                    <div>Philippine Standard Time</div>
+                    <div>${timeString}</div>
                 `;
-
-                    alertDiv.innerHTML = `
-                    <div style="display: flex; justify-content: between; align-items: flex-start;">
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem;">
-                                ${getAlertIcon(alert.type)} ${alert.title}
-                            </div>
-                            <div style="font-size: 14px; color: #64748b; margin-bottom: 0.5rem;">
-                                ${alert.message}
-                            </div>
-                            <div style="font-size: 12px; color: #4f46e5; font-weight: 500;">
-                                ${alert.action}
-                            </div>
-                        </div>
-                        <button onclick="this.parentElement.parentElement.remove()" style="
-                            background: none; border: none; color: #64748b; cursor: pointer;
-                            font-size: 18px; padding: 0; margin-left: 0.5rem;
-                        ">×</button>
-                    </div>
-                `;
-
-                    // Auto remove after 10 seconds
-                    setTimeout(() => {
-                        if (alertDiv.parentElement) {
-                            alertDiv.remove();
-                        }
-                    }, 10000);
-
-                    alertsContainer.appendChild(alertDiv);
-                }, index * 500); // Stagger alerts
-            });
-        }
-
-        function getAlertBorderColor(type) {
-            const colors = {
-                'info': '#3b82f6',
-                'warning': '#f59e0b',
-                'danger': '#ef4444',
-                'success': '#10b981'
-            };
-            return colors[type] || '#64748b';
-        }
-
-        function getAlertIcon(type) {
-            const icons = {
-                'info': 'ℹ️',
-                'warning': '⚠️',
-                'danger': '🚨',
-                'success': '✅'
-            };
-            return icons[type] || 'ℹ️';
-        }
-
-        // Add CSS for alert animations
-        const alertStyles = document.createElement('style');
-        alertStyles.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
             }
         }
-    `;
-        document.head.appendChild(alertStyles);
+
+        // Update time immediately and then every second
+        updateTime();
+        setInterval(updateTime, 1000);
 
         // Chatbot functionality
         const chatbotToggle = document.getElementById('chatbotToggle');
@@ -896,28 +703,10 @@
         const chatbotSend = document.getElementById('chatbotSend');
 
         let isTyping = false;
-        let sessionId = 'session_' + Date.now();
 
         function openChatbot() {
             chatbotContainer.classList.add('active');
             chatbotInput.focus();
-            loadChatHistory();
-        }
-
-        // Load chat history from backend
-        async function loadChatHistory() {
-            const messages = await fetchAPI(`support.php?endpoint=chat&session_id=${sessionId}&limit=10`);
-            if (messages && messages.length > 0) {
-                chatbotMessages.innerHTML = '';
-                messages.forEach(msg => {
-                    if (msg.message) {
-                        addMessage(msg.message, 'user', false);
-                    }
-                    if (msg.response) {
-                        addMessage(msg.response, 'bot', false);
-                    }
-                });
-            }
         }
 
         // Toggle chatbot
@@ -928,44 +717,31 @@
         });
 
         // Send message function
-        async function sendMessage() {
+        function sendMessage() {
             const message = chatbotInput.value.trim();
             if (message && !isTyping) {
                 addMessage(message, 'user');
                 chatbotInput.value = '';
                 chatbotSend.disabled = true;
-
+                
                 // Show typing indicator
                 showTypingIndicator();
-
-                // Send to backend
-                const response = await fetchAPI('support.php?endpoint=chat', 'POST', {
-                    message: message,
-                    session_id: sessionId
-                });
-
-                hideTypingIndicator();
-
-                if (response && response.response) {
-                    addMessage(response.response, 'bot');
-                } else {
-                    addMessage('Sorry, I encountered an error. Please try again.', 'bot');
-                }
-
-                chatbotSend.disabled = false;
+                
+                // Simulate bot response
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = getBotResponse(message);
+                    addMessage(response, 'bot');
+                    chatbotSend.disabled = false;
+                }, 800 + Math.random() * 1500);
             }
         }
 
         // Add message to chat
-        function addMessage(text, sender, animate = true) {
+        function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}`;
-            messageDiv.innerHTML = text; // Allow HTML in bot responses
-
-            if (animate) {
-                messageDiv.style.animation = 'messageSlideIn 0.3s ease';
-            }
-
+            messageDiv.textContent = text;
             chatbotMessages.appendChild(messageDiv);
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
         }
@@ -990,15 +766,43 @@
             }
         }
 
-        // Enhanced bot responses with backend integration
-        async function getBotResponse(message) {
-            // This is now handled by the backend
-            return null;
+        // Get bot response
+        function getBotResponse(message) {
+            const responses = {
+                'dashboard': 'Your dashboard shows key metrics like revenue (₱125,400), active orders (342), and expenses (₱45,230). Everything looks healthy! What specific metric would you like to explore?',
+                'revenue': 'Great news! Your total revenue is ₱125,400, up 12.5% from last month. This shows strong business growth. Would you like to see a breakdown by product or service?',
+                'orders': 'You currently have 342 active orders, which is 8.2% higher than last week. Your order processing seems to be running smoothly!',
+                'expenses': 'Your monthly expenses are ₱45,230, down 3.1% from last month. This is excellent cost management! Need help identifying areas for further optimization?',
+                'inventory': 'Your inventory health is at 89%, which means optimal stock levels are maintained. I can help you with inventory management, reorder alerts, or stock analysis.',
+                'payroll': 'I can help you with payroll processing, employee payments, tax calculations, and compliance reporting. What payroll task do you need assistance with?',
+                'help': 'I can assist you with dashboard navigation, business metrics analysis, inventory management, payroll questions, expense tracking, and general business insights. What would you like to explore?',
+                'hello': 'Hello! Welcome to your business dashboard. I can see your business is performing well with strong revenue growth. How can I help you today?',
+                'hi': 'Hi there! Your dashboard shows some great metrics. What aspect of your business would you like to discuss?'
+            };
+
+            const lowerMessage = message.toLowerCase();
+            
+            // Check for keyword matches
+            for (const [keyword, response] of Object.entries(responses)) {
+                if (lowerMessage.includes(keyword)) {
+                    return response;
+                }
+            }
+
+            // Default responses
+            const defaultResponses = [
+                'That\'s a great question! Based on your current dashboard metrics, I can provide more specific insights. What particular area interests you most?',
+                'I\'d be happy to help you with that. Your business seems to be performing well with ₱125,400 in revenue this month. Would you like me to dive deeper into any specific metric?',
+                'Interesting! Looking at your dashboard, I can see several areas where I might be able to assist. Could you be more specific about what you need help with?',
+                'I understand what you\'re looking for. Your current business performance shows positive trends. Let me know which aspect you\'d like to explore further!'
+            ];
+
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
         }
 
         // Event listeners
         chatbotSend.addEventListener('click', sendMessage);
-
+        
         chatbotInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendMessage();
@@ -1015,6 +819,7 @@
                     item.classList.add('active');
                 }
                 // For all other links with actual hrefs, let the browser navigate normally
+                // Don't prevent default - this allows normal navigation to work
             });
         });
 
@@ -1024,27 +829,6 @@
                 chatbotContainer.classList.remove('active');
             }
         });
-
-        // Initialize everything when page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            updateTime();
-            setInterval(updateTime, 1000);
-
-            // Load dashboard data
-            loadDashboardData();
-
-            // Refresh dashboard data every 5 minutes
-            setInterval(loadDashboardData, 5 * 60 * 1000);
-        });
-
-        // Add some utility functions for other pages to use
-        window.BusinessHub = {
-            fetchAPI,
-            formatNumber,
-            updateTime,
-            openChatbot
-        };
     </script>
 </body>
-
 </html>

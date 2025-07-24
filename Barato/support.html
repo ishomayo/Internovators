@@ -510,26 +510,26 @@
         <div class="sidebar">
             <div class="nav-section">
                 <div class="nav-title">Home</div>
-                <a href="landing.html" class="nav-item">
+                <a href="#" class="nav-item" data-page="dashboard">
                     <div class="nav-icon">📊</div>
                     Dashboard
                 </a>
             </div>
 
             <div class="nav-section">
-                <a href="inventory.html" class="nav-item">
+                <a href="inventory.html" class="nav-item" data-page="inventory">
                     <div class="nav-icon">📦</div>
                     Inventory Management
                 </a>
-                <a href="payroll.html" class="nav-item">
+                <a href="payroll.html" class="nav-item" data-page="payroll">
                     <div class="nav-icon">💰</div>
                     Payroll
                 </a>
-                <a href="expenses.html" class="nav-item">
+                <a href="expenses.php" class="nav-item" data-page="expenses">
                     <div class="nav-icon">📈</div>
                     Expense Tracker
                 </a>
-                <a href="support.html" class="nav-item active">
+                <a href="support.html" class="nav-item active" data-page="support">
                     <div class="nav-icon">💬</div>
                     Communication & Support
                 </a>
@@ -740,41 +740,23 @@
             // Enhanced bot responses
             function getBotResponse(message) {
                 const responses = {
-                    'payroll': 'Hello ka-SangkAI! 😀🚀!I can help you with payroll processing! Here are the main steps:<br><br>1. Go to the Payroll section from your dashboard<br>2. Click "Run Payroll" to start processing<br>3. Review employee hours and deductions<br>4. Approve and process payments<br><br>If you\'re experiencing specific issues, let me know what error messages you\'re seeing.',
+                    'payroll': 'I can help you with payroll processing! Here are the main steps:<br><br>1. Go to the Payroll section from your dashboard<br>2. Click "Run Payroll" to start processing<br>3. Review employee hours and deductions<br>4. Approve and process payments<br><br>If you\'re experiencing specific issues, let me know what error messages you\'re seeing.',
 
-                    'inventory': 'Hello ka-SangkAI! 😀🚀 For inventory management issues, let\'s troubleshoot step by step:<br><br>1. First, try refreshing your browser<br>2. Check if you\'ve recently imported data<br>3. Verify your stock levels in the Inventory section<br><br>If numbers still look incorrect, I can help you run a stock audit. What specific discrepancies are you seeing?',
+                    'inventory': 'For inventory management issues, let\'s troubleshoot step by step:<br><br>1. First, try refreshing your browser<br>2. Check if you\'ve recently imported data<br>3. Verify your stock levels in the Inventory section<br><br>If numbers still look incorrect, I can help you run a stock audit. What specific discrepancies are you seeing?',
 
-                    'export': 'Hello ka-SangkAI! 😀🚀 To export your expense reports:<br><br>1. Navigate to the Expense Tracker<br>2. Use the filter options to select your date range<br>3. Click the "Export" button in the toolbar<br>4. Choose your preferred format (PDF, CSV, or Excel)<br><br>The report will download automatically. Need help with a specific format?',
+                    'export': 'To export your expense reports:<br><br>1. Navigate to the Expense Tracker<br>2. Use the filter options to select your date range<br>3. Click the "Export" button in the toolbar<br>4. Choose your preferred format (PDF, CSV, or Excel)<br><br>The report will download automatically. Need help with a specific format?',
 
-                    'technical': 'Hello ka-SangkAI! 😀🚀 I\'m here to help with technical issues! To provide the best support:<br><br>1. What specific problem are you experiencing?<br>2. What browser are you using?<br>3. Are you seeing any error messages?<br><br>Common solutions:<br>• Clear your browser cache<br>• Try an incognito/private window<br>• Check your internet connection<br><br>Let me know the details and I\'ll guide you through the solution!',
+                    'technical': 'I\'m here to help with technical issues! To provide the best support:<br><br>1. What specific problem are you experiencing?<br>2. What browser are you using?<br>3. Are you seeing any error messages?<br><br>Common solutions:<br>• Clear your browser cache<br>• Try an incognito/private window<br>• Check your internet connection<br><br>Let me know the details and I\'ll guide you through the solution!',
 
-                    'account': 'Hello ka-SangkAI! 😀🚀 Para sa account settings, you can:<br><br>1. Click your profile icon in the top right<br>2. Select "Account Settings"<br>3. Update your information as needed<br><br>You can modify:<br>• Personal information<br>• Password and security<br>• Notification preferences<br>• Billing details<br><br>What specific setting would you like to change?',
+                    'account': 'For account settings, you can:<br><br>1. Click your profile icon in the top right<br>2. Select "Account Settings"<br>3. Update your information as needed<br><br>You can modify:<br>• Personal information<br>• Password and security<br>• Notification preferences<br>• Billing details<br><br>What specific setting would you like to change?',
 
-                    'features': 'Hello ka-SangkAI! 😀🚀 Ito ang mga latest features:<br><br>✨ <strong>New This Month:</strong><br>• Enhanced expense categorization<br>• Real-time inventory alerts<br>• Improved payroll dashboard<br>• Mobile app updates<br><br>🔄 <strong>Coming Soon:</strong><br>• Advanced reporting tools<br>• Automated tax calculations<br>• Integration with QuickBooks<br><br>Would you like details about any of these features?',
+                    'features': 'Here are our latest features:<br><br>✨ <strong>New This Month:</strong><br>• Enhanced expense categorization<br>• Real-time inventory alerts<br>• Improved payroll dashboard<br>• Mobile app updates<br><br>🔄 <strong>Coming Soon:</strong><br>• Advanced reporting tools<br>• Automated tax calculations<br>• Integration with QuickBooks<br><br>Would you like details about any of these features?',
 
-                    'hello': 'Hello ka-SangkAI! 😀🚀 I\'m excited to help you with your business needs today. Whether you need assistance with payroll, inventory, expenses, or technical support, I\'m here for you 24/7. What can I help you with?',
+                    'hello': 'Hello! I\'m excited to help you with your business needs today. Whether you need assistance with payroll, inventory, expenses, or technical support, I\'m here for you 24/7. What can I help you with?',
 
-                    'help': 'Hello ka-SangkAI! 😀🚀 Nandito ako para magprovide ng comprehensive support for all aspects of your business platform:<br><br>📊 <strong>Dashboard & Analytics</strong><br>💰 <strong>Payroll Processing</strong><br>📦 <strong>Inventory Management</strong><br>📈 <strong>Expense Tracking</strong><br>🔧 <strong>Technical Support</strong><br>⚙️ <strong>Account Management</strong><br><br>Just describe what you need help with, and I\'ll provide detailed guidance!',
+                    'help': 'I\'m here to provide comprehensive support for all aspects of your business platform:<br><br>📊 <strong>Dashboard & Analytics</strong><br>💰 <strong>Payroll Processing</strong><br>📦 <strong>Inventory Management</strong><br>📈 <strong>Expense Tracking</strong><br>🔧 <strong>Technical Support</strong><br>⚙️ <strong>Account Management</strong><br><br>Just describe what you need help with, and I\'ll provide detailed guidance!',
 
-                    'billing': 'Hello ka-SangkAI! 😀🚀 For billing and subscription questions:<br><br>💳 <strong>Current Plan:</strong> Business Pro<br>📅 <strong>Next Billing:</strong> July 20, 2025<br>💰 <strong>Amount:</strong> ₱2,999/month<br><br>You can:<br>• View detailed invoices<br>• Update payment methods<br>• Change subscription plans<br>• Download receipts<br><br>Need help with a specific billing issue?',
-                    'sourcing_materials': 'Hello ka-SangkAI! 🚀 Maari ko bang malaman kung saan ang iyong negosyo? [Chatbot should prompt for user\’s location] 😀\n\nKapag nasabi mo na ang iyong lokasyon, narito ang ilang mga suppliers o tindahan kung saan ka makakabili ng [name of raw materials]:\n📍 [Nearby Supplier 1 with link]\n📍 [Nearby Supplier 2 with link]\n📍 [Online Marketplaces like Lazada, Shopee, or Facebook Marketplace]\n\n💡 Tip: Pwede ka ring sumali sa mga FB Groups ng local entrepreneurs para magtanong ng direct suppliers sa inyong lugar.',
-
-                    'sales_optimization': 'Hello ka-SangkAI! 😀🚀 Ito ang mga maaari mong gawin para maimprove ang iyong sales:\n\n✅ Mag-offer ng promos o bundles\n✅ Gumamit ng social media marketing\n✅ Gumamit ng customer feedback para i-refine ang produkto o serbisyo\n✅ I-post ang customer reviews to build trust\n\nGusto mo bang gumawa tayo ng sales calendar together? 😃',
-
-                    'inventory_management': 'Hello ka-SangkAI! 😀🚀 Para mapamahalaan nang mas maayos ang iyong inventory:\n\n📦 Gumamit ng inventory system tulad ng spreadsheet, Loyverse, o SalesBinder\n📊 I-categorize ang stocks: fast-moving, slow-moving, at seasonal\n🔁 Gamitin ang First-In First-Out (FIFO) method\n📉 Iwasan ang overstock at i-audit monthly\n\nPwede kitang bigyan ng free inventory tracker template! 😃',
-
-                    'payslip_online': 'Hello ka-SangkAI! 😀🚀 Depende ito sa system na gamit mo:\n\n💼 Kung manual pa, kailangang ikaw ang magbigay ng payslip\n💻 Kung automated (Sprout, Salarium, GCash Payroll), may portal ang staff para makita ang payslip nila\n\nGusto mo bang i-check kung may self-service feature ang payroll system mo?',
-
-                    'business_consultation': 'Hello ka-SangkAI! 😀🚀 Maraming libreng consultation services para sa mga MSMEs! Narito ang mga pwede mong lapitan:\n\n🧠 DTI Negosyo Center – business counselors for strategy & compliance\n🌐 Go Negosyo – mentorship programs for entrepreneurs\n💼 PhilDev, StartUp PH – para sa tech or innovative businesses\n📱 FB groups like "Online Negosyo PH" for peer advice\n\nGusto mo bang hanapan kita ng pinakamalapit na DTI Negosyo Center?',
-
-                    'online_presence': 'Hello ka-SangkAI! 😀🚀 Pwede mong gawin ito para lumakas ang online presence ng business mo:\n\n🌐 Gumawa ng FB Page at Google Business Profile\n📸 Mag-post ng high-quality photos ng produkto mo\n📅 Maging consistent sa posting schedule (kahit 3x/week)\n📈 Gumamit ng trending hashtags at sumali sa seller groups\n🎁 Mag-offer ng promos or giveaways for engagement\n\nPwede kitang bigyan ng content calendar template kung gusto mo!',
-
-                    'customer_complaint': 'Hello ka-SangkAI! 😀🚀 Ito ang tamang gawin kapag may reklamo ang customer:\n\n👂 Pakinggan ang concern nang buo at may respeto\n🙏 Magpakita ng empathy, kahit hindi ikaw ang may pagkukulang\n🔧 Magbigay ng mabilis at malinaw na solusyon\n📝 I-record ang complaint para ma-review sa future\n\nGusto mo bang gumawa tayo ng simple complaint tracker?',
-
-                    'pricing_strategy': 'Hello ka-SangkAI! 😀🚀 Narito ang steps para siguraduhing tama ang presyo mo:\n\n🧮 I-compute ang total cost (materials, labor, overhead)\n📈 Magdagdag ng profit margin (20–40%)\n📊 I-compare sa competitors para sa competitive edge\n📦 Magdagdag ng value—hal. free delivery o eco-packaging\n\nGusto mo ba ng pricing calculator worksheet?',
-
-                    'product_ideas': 'Hello ka-SangkAI! 😀🚀 Heto ang paraan para makaisip ng bagong produkto:\n\n📋 Mangolekta ng feedback mula sa customers\n📱 Gamitin ang social media polls para malaman ang demand\n🧠 Obserbahan ang trending products sa ibang stores\n🌱 Mag-test ng small batches bago mag-scale up\n\nPwede kitang tulungan gumawa ng survey form or poll!',
-
+                    'billing': 'For billing and subscription questions:<br><br>💳 <strong>Current Plan:</strong> Business Pro<br>📅 <strong>Next Billing:</strong> July 20, 2025<br>💰 <strong>Amount:</strong> ₱2,999/month<br><br>You can:<br>• View detailed invoices<br>• Update payment methods<br>• Change subscription plans<br>• Download receipts<br><br>Need help with a specific billing issue?'
                 };
 
                 const lowerMessage = message.toLowerCase();
