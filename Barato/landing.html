@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARATO - Dashboard Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            background: #3f51b5;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 24px;
+            letter-spacing: -1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .time-info {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: #f44336;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 0;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-section {
+            padding: 20px 0 10px 0;
+        }
+
+        .nav-title {
+            padding: 0 24px 12px;
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 24px;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .nav-item.active {
+            background: #3f51b5;
+            color: white;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            background: currentColor;
+            border-radius: 3px;
+            opacity: 0.8;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 32px;
+            background: #f8fafc;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .welcome-text {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .revenue-icon {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .users-icon {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .customers-icon {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .feedback-icon {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .tools-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 24px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            min-height: 200px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+
+
+        @media (max-width: 1200px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+            
+            .content-area {
+                order: 1;
+                padding: 20px;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">BARATO</div>
+        <div class="header-right">
+            <div class="time-info">
+                <div>Philippine Standard Time</div>
+                <div>Friday, June 20, 2025, 9:29:45 AM</div>
+            </div>
+            <div class="user-section">
+                <div class="user-avatar">U</div>
+                <span>User</span>
+                <span>▼</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <nav class="sidebar">
+            <div class="nav-section">
+                <div class="nav-title">Home</div>
+                <a href="#" class="nav-item active">
+                    <div class="nav-icon"></div>
+                    Dashboard
+                </a>
+            </div>
+            
+            <a href="#" class="nav-item">
+                <div class="nav-icon"></div>
+                Financial Management
+            </a>
+            
+            <a href="#" class="nav-item">
+                <div class="nav-icon"></div>
+                Operations & Productivity
+            </a>
+            
+            <a href="#" class="nav-item">
+                <div class="nav-icon"></div>
+                Sales
+            </a>
+            
+            <a href="#" class="nav-item">
+                <div class="nav-icon"></div>
+                Communication & Support
+            </a>
+            
+            <a href="#" class="nav-item">
+                <div class="nav-icon"></div>
+                Analytics
+            </a>
+        </nav>
+
+        <main class="content-area">
+            <div class="page-header">
+                <h1 class="page-title">Dashboard Overview</h1>
+                <p class="welcome-text">Welcome back, Julius!</p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon revenue-icon">💰</div>
+                    <div class="metric-value">P287K</div>
+                    <div class="metric-label">Monthly Revenue</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon users-icon">👥</div>
+                    <div class="metric-value">24</div>
+                    <div class="metric-label">Active Users</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon customers-icon">👤</div>
+                    <div class="metric-value">1,248</div>
+                    <div class="metric-label">Total Customers</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon feedback-icon">💬</div>
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">Feedback Given</div>
+                </div>
+            </div>
+
+            <div class="tools-section">
+                <h2 class="section-title">Tools</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Financial Management</h3>
+                        <p style="color: #64748b; font-size: 14px; line-height: 1.5;">Track expenses, manage cash flow, and get AI-powered insights for your business finances.</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Operations & Productivity</h3>
+                        <p style="color: #64748b; font-size: 14px; line-height: 1.5;">Manage calendars, tasks, and digital documents with seamless integration.</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Sales</h3>
+                        <p style="color: #64748b; font-size: 14px; line-height: 1.5;">CRM system with review management and reputation monitoring tools.</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Communication & Support</h3>
+                        <p style="color: #64748b; font-size: 14px; line-height: 1.5;">SangkAI chatbot and automated FAQ system for customer support.</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Analytics</h3>
+                        <p style="color: #64748b; font-size: 14px; line-height: 1.5;">Data analytics dashboard with utility tracker and AI insights.</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </main>
+    </div>
+
+    <script>
+        // Add click handlers for navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Log navigation
+                const module = this.textContent.trim();
+                console.log(`Navigating to: ${module}`);
+            });
+        });
+
+        // Add click handlers for tool cards
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('h3').textContent;
+                console.log(`Opening: ${title}`);
+                
+                // Add visual feedback
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Animate metrics on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const metrics = document.querySelectorAll('.metric-value');
+            metrics.forEach(metric => {
+                const originalValue = metric.textContent;
+                metric.textContent = '0';
+                
+                setTimeout(() => {
+                    metric.style.transition = 'all 0.8s ease';
+                    metric.textContent = originalValue;
+                }, 200);
+            });
+        });
+
+        // Real-time time update
+        function updateTime() {
+            const now = new Date();
+            const options = {
+                timeZone: 'Asia/Manila',
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const timeString = now.toLocaleDateString('en-US', options);
+            document.querySelector('.time-info div:last-child').textContent = timeString;
+        }
+        
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>
