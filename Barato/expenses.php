@@ -6,9 +6,20 @@
 
   $sql = $db->query("SELECT * FROM expenses");
   $month_expenses_sql = $db->query("SELECT SUM(amount) AS total_this_month FROM expenses WHERE created_at >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND created_at < DATE_FORMAT(CURRENT_DATE + INTERVAL 1 MONTH, '%Y-%m-01')");
+  $budget_sql = $db->query("SELECT budget FROM monthly_budget");
   $total_expenses_sql = $db->query("SELECT SUM(amount) AS total FROM expenses");
   $categories_sql = $db->query("SELECT DISTINCT category FROM expenses");
-  $budget_sql = $db->query("SELECT budget FROM monthly_budget");
+  $remaining_budget = 0;
+  $budget_percentage = 0;
+  $monthly_budget = 0;
+
+  foreach($budget_sql as $row) {
+    $monthly_budget = $row["budget"];
+    foreach($month_expenses_sql as $month_row) {
+      $remaining_budget = $row["budget"] - $month_row["total_this_month"];
+    }
+  }
+  $budget_percentage = ($remaining_budget / $monthly_budget) * 100;
 ?>
 
 <!DOCTYPE html>
@@ -90,7 +101,9 @@
 
                 <div class="stat-card">
                     <div class="stat-value">
-                        ₱<?php 
+                        ₱<?php
+                        $month_expenses_sql = $db->query("SELECT SUM(amount) AS total_this_month FROM expenses WHERE created_at >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND created_at < DATE_FORMAT(CURRENT_DATE + INTERVAL 1 MONTH, '%Y-%m-01')");
+   
                         foreach($month_expenses_sql as $row) { 
                             ?> 
                             <?= $row["total_this_month"] ?>
@@ -101,16 +114,30 @@
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-value">₱32,000</div>
+                    <div class="stat-value">
+                        ₱<?= $remaining_budget ?>
+                    </div>
                     <div class="stat-label">Budget Remaining</div>
-                    <div class="stat-change">64% of monthly budget</div>
+                    <div class="stat-change"><?= $budget_percentage ?>% of monthly budget</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">₱<?php foreach($budget_sql as $row){
-                        ?> <?= $row["budget"] ?>
-                    <?php } ?></div>
-                    <div class="stat-label">Initial Budget of the Month</div>
-                </div>
+                <form action="edit-budget.php" method="POST">
+                    
+                    <div class="stat-card">
+                        <div class="stat-value" style="display: flex; align-items: center; gap: 8px;">
+                        <?php
+                            $budget_sql = $db->query("SELECT budget FROM monthly_budget");
+  
+                            foreach($budget_sql as $row) { ?>
+                               <input name="budget" type="number" min=0 step=0.01 value="<?= $current_budget = $row["budget"]; ?>" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <?php } ?>                                                    
+                        </div>
+                        <div class="stat-label">Initial Budget of the Month</div>
+                        <div style="display: flex; gap: 8px; margin-top: 10px;">
+                            <input type="hidden" name="current_budget" value="<?= $current_budget ?>">
+                            <button type="submit" class="btn-primary" style="flex: 1;">Confirm Change</button>
+                        </div>
+                    </div>
+                </form>
             </div>
 
             <div class="expense-grid">
