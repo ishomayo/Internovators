@@ -75,7 +75,7 @@ $chartData = [
 <body>
     <!-- Header -->
     <div class="header">
-        <div class="logo">B</div>
+        <img class="logo" src="assets/logo.png" alt="barato logo">
         <div class="header-right">
             <div class="time-info">
                 <div>Philippine Standard Time</div>

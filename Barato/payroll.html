@@ -33,10 +33,8 @@
         }
 
         .logo {
-            background: #4f46e5;
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 150px;
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -483,7 +481,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <div class="logo">B</div>
+        <img class="logo" src="assets/logo.png" alt="barato logo">
         <div class="header-right">
             <div class="time-info">
                 <div>Philippine Standard Time</div>
@@ -544,8 +542,9 @@
                 <div class="payroll-panel">
                     <div class="toolbar">
                         <div class="toolbar-left">
+                            <button class="btn-primary" id="openEmployeeModal">+ Add Employee</button>
                             <button class="btn-primary">Run Payroll</button>
-                            <button class="btn-secondary">Export Report</button>
+                            <button id="exportBtn" class="btn-secondary">Export Report</button>
                             <select class="filter-select">
                                 <option>This Month</option>
                                 <option>Last Month</option>
@@ -735,6 +734,82 @@
         </div>
     </div>
 
+
+    <!-- Add Employee Modal -->
+    <div id="employeeModal" style="display: none;" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>Add New Employee</h3>
+                <button class="modal-close" onclick="closeEmployeeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addEmployeeForm" action="add-employee.php" method="POST">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Employee ID</label>
+                        <input type="text" name="employee_id" required
+                            style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Full Name</label>
+                        <input type="text" name="full_name" required
+                            style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Position</label>
+                        <input type="text" name="position" required
+                            style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Department</label>
+                        <select name="department" required
+                            style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                            <option value="">Select Department</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Human Resources">Human Resources</option>
+                            <option value="Finance">Finance</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Gross Salary</label>
+                        <input type="number" name="gross_salary" required min="0" step="0.01"
+                            style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Deductions</label>
+                        <input type="number" name="deductions" min="0" step="0.01"
+                            style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Hire Date</label>
+                        <input type="date" name="hire_date" required
+                            style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Status</label>
+                        <select name="status" required
+                            style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeEmployeeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Add Employee</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         // API Helper Functions - Updated for root directory APIs
@@ -1116,6 +1191,12 @@
             }
         }
 
+        //Export Functionality
+        
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            window.location.href = 'export_payroll.php';
+        });
+        
         // Update payroll from dialog
         async function updatePayrollFromDialog(payrollId) {
             await updatePayrollStatus(payrollId, 'paid');
@@ -1134,15 +1215,17 @@
                 showNotification('Generating payroll report...', 'info');
 
                 // In a real implementation, this would call the backend to generate a report
-                const response = await fetch(`payroll.php?export=pdf&month=${selectedMonth}`);
+                const response = await fetch(`payroll.php?export=csv&month=${selectedMonth}`);
 
                 if (response.ok) {
                     const blob = await response.blob();
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `payroll_report_${selectedMonth}.pdf`;
+                    a.download = `payroll_report_${selectedMonth}.csv`;
+                    document.body.appendChild(a);
                     a.click();
+                    document.body.removeChild(a);
                     window.URL.revokeObjectURL(url);
                     showNotification('Payroll report exported successfully!', 'success');
                 } else {
@@ -1407,6 +1490,42 @@
         }
     `;
         document.head.appendChild(payrollStyles);
+
+        // Close employee modal
+        function closeEmployeeModal() {
+            const modal = document.getElementById('employeeModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Open employee modal
+        document.getElementById('openEmployeeModal').addEventListener('click', function () {
+            const modal = document.getElementById('employeeModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        });
+
+        // Add employee form submission
+        // document.getElementById('addEmployeeForm').addEventListener('submit', async function (e) {
+        //     e.preventDefault();
+
+        //     const formData = new FormData(this);
+        //     const employeeData = Object.fromEntries(formData);
+
+        //     // Send data to API
+        //     const result = await fetchAPI('payroll.php', 'POST', {
+        //         action: 'add_employee',
+        //         employee: employeeData
+        //     });
+
+        //     if (result) {
+        //         showNotification('Employee added successfully!', 'success');
+        //         closeEmployeeModal();
+        //         loadPayrollData();
+        //     }
+        // });
     </script>
 </body>
 
